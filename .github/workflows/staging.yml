@@ -20,4 +20,4 @@ jobs:
                   chmod 700 ~/.ssh/id_rsa
                   eval $(ssh-agent -s)
                   rsync -avzr -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' ./ $USER_NAME@$HOST_NAME:/home/ubuntu/gmb-reactjs-2/
-                  ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $USER_NAME@$HOST_NAME "bash deploy.sh"
+                  # ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $USER_NAME@$HOST_NAME "bash deploy.sh"
