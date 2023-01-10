@@ -1,6 +1,6 @@
 // ** React Imports
-import { Link } from 'react-router-dom'
-import { Fragment, useEffect, useState } from 'react'
+import {Link} from 'react-router-dom'
+import {Fragment, useEffect, useState} from 'react'
 
 // ** Third Party Components
 import * as Icon from 'react-feather'
@@ -17,16 +17,16 @@ import {
   DropdownItem,
   DropdownToggle,
   UncontrolledTooltip,
-  UncontrolledDropdown
+  UncontrolledDropdown,
 } from 'reactstrap'
 
 // ** Store & Actions
-import { useDispatch, useSelector } from 'react-redux'
-import { getBookmarks, updateBookmarked, handleSearchQuery } from '@store/navbar'
+import {useDispatch, useSelector} from 'react-redux'
+import {getBookmarks, updateBookmarked, handleSearchQuery} from '@store/navbar'
 
 const NavbarBookmarks = props => {
   // ** Props
-  const { setMenuVisibility } = props
+  const {setMenuVisibility} = props
 
   // ** State
   const [value, setValue] = useState('')
@@ -37,9 +37,9 @@ const NavbarBookmarks = props => {
   const store = useSelector(state => state.navbar)
 
   // ** ComponentDidMount
-  useEffect(() => {
-    dispatch(getBookmarks())
-  }, [])
+  // useEffect(() => {
+  //   dispatch(getBookmarks())
+  // }, [])
 
   // ** Loops through Bookmarks Array to return Bookmarks
   const renderBookmarks = () => {
@@ -48,10 +48,12 @@ const NavbarBookmarks = props => {
         .map(item => {
           const IconTag = Icon[item.icon]
           return (
-            <NavItem key={item.target} className='d-none d-lg-block'>
+            <NavItem key={item.target} className="d-none d-lg-block">
               <NavLink tag={Link} to={item.link} id={item.target}>
-                <IconTag className='ficon' />
-                <UncontrolledTooltip target={item.target}>{item.title}</UncontrolledTooltip>
+                <IconTag className="ficon" />
+                <UncontrolledTooltip target={item.target}>
+                  {item.title}
+                </UncontrolledTooltip>
               </NavLink>
             </NavItem>
           )
@@ -66,11 +68,11 @@ const NavbarBookmarks = props => {
   const renderExtraBookmarksDropdown = () => {
     if (store.bookmarks.length && store.bookmarks.length >= 11) {
       return (
-        <NavItem className='d-none d-lg-block'>
-          <NavLink tag='span'>
+        <NavItem className="d-none d-lg-block">
+          <NavLink tag="span">
             <UncontrolledDropdown>
-              <DropdownToggle tag='span'>
-                <Icon.ChevronDown className='ficon' />
+              <DropdownToggle tag="span">
+                <Icon.ChevronDown className="ficon" />
               </DropdownToggle>
               <DropdownMenu end>
                 {store.bookmarks
@@ -78,8 +80,8 @@ const NavbarBookmarks = props => {
                     const IconTag = Icon[item.icon]
                     return (
                       <DropdownItem tag={Link} to={item.link} key={item.id}>
-                        <IconTag className='me-50' size={14} />
-                        <span className='align-middle'>{item.title}</span>
+                        <IconTag className="me-50" size={14} />
+                        <span className="align-middle">{item.title}</span>
                       </DropdownItem>
                     )
                   })
@@ -141,14 +143,17 @@ const NavbarBookmarks = props => {
 
   return (
     <Fragment>
-      <ul className='navbar-nav d-xl-none'>
-        <NavItem className='mobile-menu me-auto'>
-          <NavLink className='nav-menu-main menu-toggle hidden-xs is-active' onClick={() => setMenuVisibility(true)}>
-            <Icon.Menu className='ficon' />
+      <ul className="navbar-nav d-xl-none">
+        <NavItem className="mobile-menu me-auto">
+          <NavLink
+            className="nav-menu-main menu-toggle hidden-xs is-active"
+            onClick={() => setMenuVisibility(true)}
+          >
+            <Icon.Menu className="ficon" />
           </NavLink>
         </NavItem>
       </ul>
-      <ul className='nav navbar-nav bookmark-icons align-items-center'>
+      {/* <ul className='nav navbar-nav bookmark-icons align-items-center'>
         {renderBookmarks()}
         {renderExtraBookmarksDropdown()}
         <NavItem className='nav-item d-none d-lg-block'>
@@ -223,7 +228,7 @@ const NavbarBookmarks = props => {
             ) : null}
           </div>
         </NavItem>
-      </ul>
+      </ul> */}
     </Fragment>
   )
 }

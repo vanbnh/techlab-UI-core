@@ -1,6 +1,7 @@
 import {DefaultRoute} from '../router/routes'
 import LogoPng from '@src/assets/images/logo/logo_main.png'
 import BlankAvatar from '@src/assets/images/avatars/avatar-blank.png'
+import moment from 'moment'
 
 // ** Checks if an object is empty (returns boolean)
 export const isObjEmpty = obj => Object.keys(obj).length === 0
@@ -31,13 +32,13 @@ const isToday = date => {
  * @param {String} value date to format
  * @param {Object} formatting Intl object to format with
  */
-export const formatDate = (
-  value,
-  formatting = {month: 'short', day: 'numeric', year: 'numeric'},
-) => {
-  if (!value) return value
-  return new Intl.DateTimeFormat('en-US', formatting).format(new Date(value))
-}
+// export const formatDate = (
+//   value,
+//   formatting = {month: 'short', day: 'numeric', year: 'numeric'},
+// ) => {
+//   if (!value) return value
+//   return new Intl.DateTimeFormat('en-US', formatting).format(new Date(value))
+// }
 
 // ** Returns short month of passed date
 export const formatDateToMonthShort = (value, toTimeForCurrentDay = true) => {
@@ -78,9 +79,9 @@ export const selectThemeColors = theme => ({
   ...theme,
   colors: {
     ...theme.colors,
-    primary25: '#7367f01a', // for option hover bg-color
-    primary: '#7367f0', // for selected option bg-color
-    neutral10: '#7367f0', // for tags bg-color
+    primary25: '#2c652f1a', // for option hover bg-color
+    primary: '#2c652f', // for selected option bg-color
+    neutral10: '#2c652f', // for tags bg-color
     neutral20: '#ededed', // for input border-color
     neutral30: '#ededed', // for input hover border-color
   },
@@ -90,3 +91,4 @@ export const getAppTitle = () => import.meta.env.VITE_APP_TITLE
 export const getBrandName = () => import.meta.env.VITE_APP_BRAND
 export const getBrandLogo = () => LogoPng
 export const getAvatarBlank = () => BlankAvatar
+export const formatDate = date => moment(date).format('YYYY-MM-DD')

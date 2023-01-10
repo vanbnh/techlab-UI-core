@@ -1,11 +1,78 @@
-/*================================================================================
-	Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
-	Version: 2.0
-	Author: PIXINVENT
-	Author URL: http://www.themeforest.net/user/pixinvent
-================================================================================
-
-NOTE:
-------
-PLACE HERE YOUR OWN SCSS CODES AND IF NEEDED, OVERRIDE THE STYLES FROM THE OTHER STYLESHEETS.
-WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BETTER LIKE THIS.  */
+.grid-table {
+  .form-control:disabled,
+  .form-control[readonly] {
+    background-color: #e9ecef;
+    opacity: 1;
+  }
+  .popover-inner {
+    padding: 0.6rem 1rem;
+  }
+  .dropdown-item {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  .text-right {
+    text-align: right;
+  }
+  .text-left {
+    text-align: left;
+  }
+  .border-right {
+    border-right: var(--bs-border-width) var(--bs-border-style)
+      var(--bs-border-color) !important;
+  }
+  .border-left {
+    border-left: var(--bs-border-width) var(--bs-border-style)
+      var(--bs-border-color) !important;
+  }
+  .table thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #dee2e6;
+  }
+  .table td,
+  .table th {
+    padding: 0.75rem;
+    vertical-align: middle;
+    border-top: 1px solid #dee2e6;
+    background-color: #fff;
+    .row-detail {
+      overflow: auto;
+    }
+  }
+  .dx-g-bs4-table-summary-item {
+    font-weight: bold;
+  }
+  .dropdown-item {
+    min-height: 2.2rem;
+  }
+  .input-group-prepend {
+    margin-right: -1px;
+  }
+  .input-group-append,
+  .input-group-prepend {
+    display: flex;
+  }
+  .input-group > .input-group-prepend > .btn {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  .form-select:focus {
+    border-color: #2c652f;
+    outline: 0;
+    box-shadow: 0 3px 10px 0 rgb(34 41 47 / 10%);
+  }
+}
+.table-setting {
+  td.input-cell {
+    // padding: 0;
+    input[type='text'] {
+      outline: none;
+      border: none;
+      width: 100%;
+      height: 100%;
+      background-color: transparent;
+      // padding: 15px 25px;
+      cursor: text;
+    }
+  }
+}

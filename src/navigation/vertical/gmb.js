@@ -1,5 +1,6 @@
 // ** Icons Import
 import {Home, Users} from 'react-feather'
+import menuConfigs from '../../configs/menu'
 
 export default [
   {
@@ -18,6 +19,6 @@ export default [
     id: 'gmb-account',
     title: 'Accounts',
     icon: <Users size={20} />,
-    navLink: '/gmb/accounts',
+    navLink: menuConfigs.account.path,
   },
 ]

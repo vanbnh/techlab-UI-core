@@ -1,0 +1,15 @@
+.popover {
+	max-width: 100vw !important;
+}
+[data-popper-reference-hidden='true'] {
+	visibility: hidden;
+	pointer-events: none;
+}
+.rdrInputRange {
+	span {
+		color: #2c652f;
+	}
+}
+// .rdrDateRangePickerWrapper {
+// 	margin: 0 auto;
+// }

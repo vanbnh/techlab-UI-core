@@ -6,6 +6,8 @@ import {BrowserRouter} from 'react-router-dom'
 // ** Redux Imports
 import {store} from './redux/store'
 import {Provider} from 'react-redux'
+import {QueryClient, QueryClientProvider} from 'react-query'
+import {ReactQueryDevtools} from 'react-query/devtools'
 
 // ** Intl, CASL & ThemeColors Context
 import ability from './configs/acl/ability'
@@ -54,20 +56,24 @@ const LazyApp = lazy(() => import('./App'))
 
 const container = document.getElementById('root')
 const root = createRoot(container)
+const queryClient = new QueryClient()
 
 root.render(
   <BrowserRouter>
     <Provider store={store}>
       <Suspense fallback={<Spinner />}>
-        <AbilityContext.Provider value={ability}>
-          <ThemeContext>
-            <LazyApp />
-            <Toaster
-              position={themeConfig.layout.toastPosition}
-              toastOptions={{className: 'react-hot-toast'}}
-            />
-          </ThemeContext>
-        </AbilityContext.Provider>
+        <QueryClientProvider client={queryClient}>
+          <AbilityContext.Provider value={ability}>
+            <ThemeContext>
+              <LazyApp />
+              <Toaster
+                position={themeConfig.layout.toastPosition}
+                toastOptions={{className: 'react-hot-toast'}}
+              />
+            </ThemeContext>
+          </AbilityContext.Provider>
+          <ReactQueryDevtools />
+        </QueryClientProvider>
       </Suspense>
     </Provider>
   </BrowserRouter>,
