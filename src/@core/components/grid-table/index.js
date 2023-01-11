@@ -28,8 +28,8 @@ import {
   PagingPanel,
   TableColumnVisibility,
 } from '@devexpress/dx-react-grid-bootstrap4'
-import {GridExporter} from '@devexpress/dx-react-grid-export'
 import '@devexpress/dx-react-grid-bootstrap4/dist/dx-react-grid-bootstrap4.css'
+import {GridExporter} from '@devexpress/dx-react-grid-export'
 import LinkNavigateProvider from './format/LinkNavigate'
 import NumberProvider from './format/Number'
 import {
@@ -116,32 +116,37 @@ const GridTableComponent = ({
 
   // *** REACT QUERY ***
   const queryClient = useQueryClient()
-  const handleCallApi = useCallback(
-    async page => {
-      const params = {
-        ...query.params,
-        page,
-        limit: perPage,
-      }
-      const data = filters.map(f => ({
-        key: f.key,
-        value: f.value,
-        expr: f.condition,
-      }))
+  const handleCallApi = async page => {
+    const params = {
+      ...query.params,
+      page,
+      limit: perPage,
+    }
+    const data = filters.map(f => ({
+      key: f.key,
+      value: f.value,
+      expr: f.condition,
+    }))
 
-      return await axios.post(query.url, data, {params}).then(res => res.data)
-    },
-    [query.params, query.url, perPage, filters],
-  )
+    return await axios.post(query.url, data, {params}).then(res => res.data)
+  }
+
   const {data: dataQuery, isLoading} = useQuery(
-    [query.key, currentPage, perPage, filters.map(f => f.key), query.params],
+    [
+      query.key,
+      {
+        page: currentPage,
+        limit: perPage,
+        f: filters.map(f => ({[f.key]: f.value})),
+      },
+      query.params,
+    ],
     () => handleCallApi(currentPage),
     {
-      refetchOnWindowFocus: false,
-      refetchOnMount: false,
-      refetchOnReconnect: false,
-      retry: false,
       enabled: !!query.url,
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
     },
   )
   // *** Prefetch
@@ -153,7 +158,15 @@ const GridTableComponent = ({
       if (currentPage < maxPostPage) {
         const nextPage = currentPage + 1
         queryClient.prefetchQuery(
-          [query.key, nextPage, perPage, filters.map(f => f.key), query.params],
+          [
+            query.key,
+            {
+              page: nextPage,
+              limit: perPage,
+              f: filters.map(f => ({[f.key]: f.value})),
+            },
+            query.params,
+          ],
           () => handleCallApi(nextPage),
         )
       }
@@ -313,22 +326,20 @@ const GridTableComponent = ({
   // *** ================================ END LOCAL STORAGE ==================================== ***
 
   // *** PERMISSION ***
-  const canSummary = true
-  const canPagination = true
-  const canSelect = true
-  const canReOrdering = true
-  const canExport = true
-  const canUpload = true
-  const canVisibility = true
+  const canSummary = permissionState.includes('summary')
+  const canPagination = permissionState.includes('pagination')
+  const canSelect = permissionState.includes('select')
+  const canReOrdering = permissionState.includes('reordering')
+  const canExport = permissionState.includes('export')
+  const canUpload = permissionState.includes('upload')
 
   // *** COMPONENTS ***
   const ExportButtonComponent = ({onToggle, buttonRef, ...restProps}) => (
     <div className="d-flex">
       <div className="ms-2">
-        <Button
+        <button
           ref={buttonRef}
-          color="warning"
-          size="sm"
+          className="btn btn-warning btn-sm"
           onClick={() => {
             if (onExport) {
               if (rowSelects.length > 0) {
@@ -343,20 +354,19 @@ const GridTableComponent = ({
               onToggle()
             }
           }}
-          download
           {...restProps}
         >
           <ArrowDownCircle size={16} />
           <span className="align-middle ms-25">Export</span>
-        </Button>
+        </button>
       </div>
       {canUpload && (
         <div className="ms-50">
           <Button
             color="info"
-            isLight
-            tag="a"
-            onClick={() => {}}
+            onClick={() => {
+              alert('upload')
+            }}
             target="_blank"
             size="sm"
           >
@@ -513,12 +523,10 @@ const GridTableComponent = ({
           {TableRowDetailComponent && (
             <TableRowDetail contentComponent={TableRowDetailComponent} />
           )}
-          {canVisibility && (
-            <TableColumnVisibility
-              hiddenColumnNames={hiddenColumnNames}
-              onHiddenColumnNamesChange={cols => setHiddenColumnNames(cols)}
-            />
-          )}
+          <TableColumnVisibility
+            hiddenColumnNames={hiddenColumnNames}
+            onHiddenColumnNamesChange={cols => setHiddenColumnNames(cols)}
+          />
 
           {canSelect && (
             <TableSelection showSelectAll selectByRowClick highlightRow />

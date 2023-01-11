@@ -1,6 +1,13 @@
 export const configs = {
   entries: 'Accounts',
-  settings: ['export', 'select', 'filter', 'search', 'pagination'],
+  settings: [
+    'export',
+    'select',
+    'reordering',
+    'filter',
+    'search',
+    'pagination',
+  ],
 }
 export const formatAccountData = data =>
   data.map(d => ({

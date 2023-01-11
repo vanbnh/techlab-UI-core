@@ -604,7 +604,7 @@ const ToolbarFilterProvider = ({
                         </Popover>
                       </span>
                     ))}
-                  <span className="position-relative">
+                  <span className="position-relative ms-50">
                     <Button
                       color="flat-primary"
                       // className="ms-1"
