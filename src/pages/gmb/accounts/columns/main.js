@@ -1,4 +1,4 @@
-import {Button} from 'reactstrap'
+import {Link} from 'react-router-dom'
 import menuConfigs from '../../../../configs/menu'
 import {formatDate} from '../../../../utility/Utils'
 
@@ -30,13 +30,12 @@ const COLUMN_MAIN = [
     filterKey: 'client__client_name',
     // Detail page
     cell: row => (
-      <Button
-        tag="a"
+      <Link
         to={`${menuConfigs.client.path}/${row.client.client_id}`}
         className="cursor-pointer text-decoration-underline text-primary border-0 bg-transparent"
       >
         {row.client.client_name}
-      </Button>
+      </Link>
     ),
   },
   {

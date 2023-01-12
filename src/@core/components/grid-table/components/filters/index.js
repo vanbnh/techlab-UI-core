@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 
 import {
   Template,
@@ -31,7 +31,6 @@ import {
   ModalHeader,
   Popover,
   PopoverBody,
-  PopoverHeader,
 } from 'reactstrap'
 import {Plus, Search, XCircle} from 'react-feather'
 import 'react-date-range/dist/styles.css'
@@ -172,8 +171,12 @@ const DatePickerForm = ({onSave, onCancel, onClose, setting}) => {
         >
           Cancel{' '}
         </Button>
-        <Button size="sm" color="info" onClick={handleSave}>
-          Add{' '}
+        <Button
+          size="sm"
+          color={onClose ? 'primary' : 'info'}
+          onClick={handleSave}
+        >
+          {onClose ? 'Save' : 'Add'}
         </Button>
       </div>
     </div>
@@ -481,73 +484,6 @@ const ToolbarFilterProvider = ({
                         className="mx-25 position-relative cursor-pointer"
                         key={f.id}
                       >
-                        {/* {popoverTargetId === f.id ? (
-                          <Popover
-                            desc={
-                              f.type === 'date' ? (
-                                <DatePickerForm
-                                  onSave={onSaveDatePicker}
-                                  onCancel={() => setShowPickerForm(false)}
-                                  onClose={() => {
-                                    setPopoverTargetId(null)
-                                  }}
-                                  setting={f}
-                                />
-                              ) : (
-                                <FilterItemForm
-                                  type={f.type}
-                                  selectValue={selectValue}
-                                  selectCondition={selectCondition}
-                                  onClose={() => setPopoverTargetId(null)}
-                                  isEdit
-                                  onReset={onReset}
-                                  onSave={onSave}
-                                />
-                              )
-                            }
-                            isOpen
-                            placement={
-                              f.type === 'date' ? 'auto' : 'bottom-start'
-                            }
-                          >
-                            <Badge
-                              className="p-50 mb-50"
-                              outline
-                              size="sm"
-                              color="light-primary"
-                              id={f.id}
-                              onClick={() => setPopoverTargetId(null)}
-                            >
-                              <FilterChipContent item={f} />
-                              <XCircle
-                                className="cursor-pointer ms-1"
-                                size={14}
-                                onClick={() => onDelete(f.id)}
-                              />
-                            </Badge>
-                          </Popover>
-                        ) : (
-                          <Badge
-                            className="p-50 mb-50"
-                            outline
-                            size="sm"
-                            color="light-primary"
-                            id={f.id}
-                            onClick={() => {
-                              setPopoverTargetId(f.id)
-                              setSelectField(f.key)
-                              setSelectCondition(f.condition)
-                              setSelectValue(f.value)
-                            }}
-                          >
-                            <FilterChipContent item={f} />
-                            <XCircle
-                              className="cursor-pointer ms-1"
-                              size={14}
-                              onClick={() => onDelete(f.id)}
-                            />
-                          </Badge>
-                        )} */}
                         <Badge
                           className="p-50 mb-50"
                           outline
@@ -631,7 +567,7 @@ const ToolbarFilterProvider = ({
               <Modal
                 isOpen={showFilters}
                 scrollable
-                className="modal-dialog-centered modal-xl"
+                className="modal-dialog-centered"
               >
                 <ModalHeader toggle={() => setShowFilters(false)}>
                   Filter {entries}
@@ -679,43 +615,33 @@ const ToolbarFilterProvider = ({
                       <Accordion
                         open={selectField}
                         toggle={id => {
-                          if (selectField === id) {
-                            setSelectField('')
-                          } else {
+                          if (id.includes('_date')) {
                             setSelectField(id)
+                            setShowFilters(false)
+                            setShowPickerForm(true)
+                          } else {
+                            if (selectField === id) {
+                              setSelectField('')
+                            } else {
+                              setSelectField(id)
+                            }
                           }
                         }}
                         className="accordion-border"
                       >
                         {filterResult.map(item => (
-                          <AccordionItem
-                            key={item.name}
-                            // onClick={() => {
-                            //   if (selectField === item.id) {
-                            //     setSelectField('')
-                            //   } else {
-                            //     setSelectField(item.id)
-                            //   }
-                            // }}
-                          >
+                          <AccordionItem key={item.name}>
                             <AccordionHeader targetId={item.name}>
                               {item.title}
                             </AccordionHeader>
                             <AccordionBody accordionId={item.name}>
-                              {item.isDate ? (
-                                <DatePickerForm
-                                  onSave={onSaveDatePicker}
-                                  onCancel={() => setSelectField('')}
-                                />
-                              ) : (
-                                <FilterItemForm
-                                  type={item.isNumber ? 'number' : 'text'}
-                                  selectValue={selectValue}
-                                  selectCondition={selectCondition}
-                                  onReset={onReset}
-                                  onSave={onSave}
-                                />
-                              )}
+                              <FilterItemForm
+                                type={item.isNumber ? 'number' : 'text'}
+                                selectValue={selectValue}
+                                selectCondition={selectCondition}
+                                onReset={onReset}
+                                onSave={onSave}
+                              />
                             </AccordionBody>
                           </AccordionItem>
                         ))}
@@ -725,71 +651,6 @@ const ToolbarFilterProvider = ({
                         <td>No result found for query: {searchValue}</td>
                       </div>
                     )}
-
-                    {/* {filterResult.length ? (
-                      filterResult.map(item => (
-                        <div key={item.id} className="fw-semibold ">
-                          <div className="p-50 py-50 cursor-pointer">
-                            <div
-                              className="d-flex justify-content-between"
-                              aria-hidden="true"
-                              onClick={() => {
-                                if (item.isDate) {
-                                  setSelectField(item.name)
-                                  setShowFilters(false)
-                                  setShowPickerForm(true)
-                                } else {
-                                  setSelectField(
-                                    item.name === selectField ? '' : item.name,
-                                  )
-                                  setSelectCondition('')
-                                  setSelectValue(
-                                    item.name !== selectField
-                                      ? ''
-                                      : selectValue,
-                                  )
-                                }
-                              }}
-                            >
-                              <div
-                                className={`${
-                                  item.name === selectField
-                                    ? 'text-primary'
-                                    : ''
-                                }`}
-                              >
-                                {item.title}
-                              </div>
-                              <div className="cursor-pointer">
-                                {item.name === selectField ? (
-                                  <ArrowUp size={14} />
-                                ) : (
-                                  <ArrowDown size={14} />
-                                )}
-                              </div>
-                            </div>
-
-                            {item.name === selectField && !item.isDate && (
-                              <Card className="mt-1">
-                                <CardBody>
-                                  <FilterItemForm
-                                    type={item.isNumber ? 'number' : 'text'}
-                                    selectValue={selectValue}
-                                    selectCondition={selectCondition}
-                                    onReset={onReset}
-                                    onSave={onSave}
-                                  />
-                                </CardBody>
-                              </Card>
-                            )}
-                          </div>
-                        </div>
-                      ))
-                    ) : (
-                      <div className="mt-1">
-                        <td>No result found for query: {searchValue}</td>
-                      </div>
-                    )} */}
                   </div>
                 </ModalBody>
                 <ModalFooter>
@@ -820,10 +681,9 @@ const ToolbarFilterProvider = ({
               </Modal>
 
               <Modal
-                isCentered
-                setIsOpen={setShowPickerForm}
                 isOpen={showPickerForm}
-                size="xl"
+                className="modal-dialog-centered modal-xl"
+                scrollable
               >
                 <ModalBody>
                   <DatePickerForm

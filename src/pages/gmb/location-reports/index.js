@@ -2,10 +2,10 @@ import React from 'react'
 import GridTableComponent from '../../../@core/components/grid-table'
 import columns from './columns/main'
 import {formatRowData, configs} from './configs'
+import DownloadCSVCellProvider from './provider/DownloadCSV'
 
-const AccountPage = () => {
-  const {entries, settings, urls, keys} = configs
-
+const LocationReportPage = () => {
+  const {entries, settings, keys, urls, fixedColumns} = configs
   const QUERY = {
     url: urls.list,
     key: keys.list,
@@ -18,8 +18,11 @@ const AccountPage = () => {
       formatData={formatRowData}
       entries={entries}
       settings={settings}
+      columnExports={columns.filter(c => c.name !== 'download_csv')}
+      providerComponents={[DownloadCSVCellProvider]}
+      fixedCols={fixedColumns}
     />
   )
 }
 
-export default AccountPage
+export default LocationReportPage

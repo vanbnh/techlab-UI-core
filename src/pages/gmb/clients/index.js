@@ -3,9 +3,8 @@ import GridTableComponent from '../../../@core/components/grid-table'
 import columns from './columns/main'
 import {formatRowData, configs} from './configs'
 
-const AccountPage = () => {
-  const {entries, settings, urls, keys} = configs
-
+const ClientPage = () => {
+  const {entries, settings, keys, urls} = configs
   const QUERY = {
     url: urls.list,
     key: keys.list,
@@ -22,4 +21,4 @@ const AccountPage = () => {
   )
 }
 
-export default AccountPage
+export default ClientPage

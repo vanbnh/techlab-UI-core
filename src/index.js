@@ -56,7 +56,16 @@ const LazyApp = lazy(() => import('./App'))
 
 const container = document.getElementById('root')
 const root = createRoot(container)
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      retry: false,
+    },
+  },
+})
 
 root.render(
   <BrowserRouter>

@@ -77,11 +77,15 @@
   }
 }
 
-.popover.show.bs-popover-bottom{
-  .py-2{
+.popover.show.bs-popover-bottom {
+  .py-2 {
     padding-top: 1rem !important;
     padding-bottom: 1rem !important;
     padding-left: 1rem !important;
     padding-right: 1rem !important;
   }
+}
+[dir='ltr'] .select__multi-value,
+[dir='ltr'] .react-select__multi-value {
+  margin: 0 0.2rem 0.2rem 0 !important;
 }

@@ -1,5 +1,5 @@
 export const configs = {
-  entries: 'Accounts',
+  entries: 'Clients',
   settings: [
     'export',
     'select',
@@ -9,16 +9,16 @@ export const configs = {
     'pagination',
   ],
   keys: {
-    list: 'GMB_ACCOUNTS',
-    detail: 'GMB_ACCOUNT_DETAIL',
+    list: 'GMB_CLIENTS',
+    detail: 'GMB_CLIENT_DETAIL',
   },
   urls: {
-    list: '/gmb-account/',
-    detail: '/gmb-account/',
+    list: '/client/',
+    detail: '/client/',
   },
 }
 export const formatRowData = data =>
   data.map(d => ({
     ...d,
-    client_name: d.client?.client_name,
+    client_name: d.client_name,
   }))

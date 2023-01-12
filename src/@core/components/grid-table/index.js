@@ -74,6 +74,11 @@ const GridTableComponent = ({
   formatData,
   entries = 'data',
   settings = [],
+  fixedCols = {
+    left: [],
+    right: [],
+  },
+  loading = false,
 }) => {
   const groupCols = columns.filter(col => col.isGroup)
   const isGrouping = groupCols.length > 0
@@ -87,19 +92,19 @@ const GridTableComponent = ({
   const [total, setTotal] = useState(0)
 
   // *** CONTROLS ***
+  const [currentPage, setCurrentPage] = useState(1)
   const [perPage, setPerPage] = useState(10)
   const [pageSizes, setPageSizes] = useState([10, 20, 50, 100])
+  const START = perPage * (currentPage - 1) + 1
+  const END = perPage * currentPage
+
   const [rowSelects, setRowSelects] = useState([])
-  const [currentPage, setCurrentPage] = useState(1)
   const [columnOrders, setColumnOrders] = useState([])
   const [columnWidths, setColumnWidths] = useState([])
   const [filters, setFilters] = useState([])
   const [filterColumns, setFilterColumns] = useState([])
   const [columnResizingMode, setColumnResizingMode] = useState('widget')
-  const [fixedColumns, setFixedColumns] = useState({
-    left: [],
-    right: [],
-  })
+  const [fixedColumns, setFixedColumns] = useState(fixedCols)
   const [permissionState, setPermissionState] = useState(settings)
   const [hiddenColumnNames, setHiddenColumnNames] = useState([])
   const [columnCustomizer, setColumnCustomizer] = useState([
@@ -142,12 +147,6 @@ const GridTableComponent = ({
       query.params,
     ],
     () => handleCallApi(currentPage),
-    {
-      enabled: !!query.url,
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-    },
   )
   // *** Prefetch
   useEffect(() => {
@@ -173,6 +172,7 @@ const GridTableComponent = ({
     }
   }, [dataQuery])
 
+  // *** SET DATA ROWS ***
   useEffect(() => {
     if (dataQuery?.data) {
       let rows = dataQuery.data.map(d => ({
@@ -183,7 +183,9 @@ const GridTableComponent = ({
       if (formatData) {
         rows = formatData(rows)
       }
+      const total = dataQuery?.metadata?.total || 0
       setDataRows(rows)
+      setTotal(total)
     }
   }, [dataQuery])
 
@@ -348,7 +350,7 @@ const GridTableComponent = ({
                 )
                 onExport(dataExport)
               } else {
-                toast.error('Please select rows to export')
+                toast.error('You must select at least one row to export')
               }
             } else {
               onToggle()
@@ -421,11 +423,13 @@ const GridTableComponent = ({
   const toggleModalSetting = () =>
     setModalOpen({...modalOpen, setting: !modalOpen.setting})
 
+  // console.log(dataRows)
+
   return (
     <>
       <Card className="grid-table">
         <Row className="p-1" style={{marginBottom: '-1.2rem'}}>
-          <Col md={4} xs={12} className="d-flex pe-xl-1 p-0 mt-xl-0 mt-1">
+          <Col md={6} xs={12} className="d-flex pe-xl-1 p-0 mt-xl-0 mt-1">
             <div className="d-flex align-items-center me-1">
               <Input
                 className="mx-50"
@@ -442,9 +446,25 @@ const GridTableComponent = ({
                 ))}
               </Input>
             </div>
+            <div className="d-flex align-items-center">
+              {dataRows.length > 0 && (
+                <div className="ms-50 d-flex flex-column">
+                  <span>
+                    <small>
+                      Total: {total} {entries}
+                    </small>
+                  </span>
+                  <span style={{marginTop: '-5px'}}>
+                    <small className="text-muted" style={{fontSize: '10px'}}>
+                      Showing {START} to {END > total ? total : END} of {total}{' '}
+                    </small>
+                  </span>
+                </div>
+              )}
+            </div>
           </Col>
           <Col
-            md={8}
+            md={6}
             xs={12}
             className="d-flex justify-content-end pe-xl-1 p-0 mt-xl-0 mt-1"
           >
@@ -487,19 +507,10 @@ const GridTableComponent = ({
           {canPagination && <CustomPaging totalCount={total} />}
 
           {/* INTEGRATED */}
-          {canSummary && (
-            <CustomSummary
-              totalValues={getTotalSummaryValues({
-                data: dataRows,
-                columns: columnStates,
-                rowSelects,
-                IntegratedSummary,
-              })}
-            />
-          )}
+          {canSummary && <IntegratedSummary />}
           {canSelect && <IntegratedSelection />}
           <VirtualTable
-            height="60vh"
+            height={isLoading ? '40vh' : 'auto'}
             columnExtensions={columnStates
               .filter(col => col.align)
               .map(col => ({columnName: col.name, align: col.align}))}
@@ -567,7 +578,7 @@ const GridTableComponent = ({
             onSave={onExportExcel}
           />
         )}
-        {isLoading && <LoadingGridTable />}
+        {(isLoading || loading) && <LoadingGridTable />}
       </Card>
       {/* Modal setting */}
       <ModalSettingGridTable

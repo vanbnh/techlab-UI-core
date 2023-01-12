@@ -2,6 +2,8 @@ import {DefaultRoute} from '../router/routes'
 import LogoPng from '@src/assets/images/logo/logo_main.png'
 import BlankAvatar from '@src/assets/images/avatars/avatar-blank.png'
 import moment from 'moment'
+import axios from 'axios'
+import {saveAs} from 'file-saver'
 
 // ** Checks if an object is empty (returns boolean)
 export const isObjEmpty = obj => Object.keys(obj).length === 0
@@ -92,3 +94,37 @@ export const getBrandName = () => import.meta.env.VITE_APP_BRAND
 export const getBrandLogo = () => LogoPng
 export const getAvatarBlank = () => BlankAvatar
 export const formatDate = date => moment(date).format('YYYY-MM-DD')
+export const searchParamtoObject = search => {
+  const searchString = search.substring(1)
+  return JSON.parse(
+    // eslint-disable-next-line prefer-template
+    '{"' +
+      decodeURI(searchString)
+        .replace(/"/g, '\\"')
+        .replace(/&/g, '","')
+        .replace(/=/g, '":"') +
+      '"}',
+  )
+}
+export const downloadFileFromApi = async ({
+  url,
+  params,
+  fileName,
+  setLoading,
+}) => {
+  setLoading(true)
+  try {
+    const response = await axios.get(url, {
+      params,
+      responseType: 'blob',
+    })
+
+    const blob = new Blob([response.data], {
+      type: response.data.type,
+    })
+    saveAs(blob, fileName)
+    setLoading(false)
+  } catch (error) {
+    setLoading(false)
+  }
+}

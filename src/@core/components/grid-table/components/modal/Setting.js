@@ -7,10 +7,11 @@ import {
   CardBody,
   CardHeader,
   CardTitle,
+  Col,
   FormGroup,
   Input,
-  InputGroup,
   Label,
+  Row,
 } from 'reactstrap'
 import CheckField from '../../../form-field/CheckField'
 import SelectField from '../../../form-field/SelectField'
@@ -276,7 +277,7 @@ const ColumnForm = ({
         <CardTitle>Columns</CardTitle>
       </CardHeader>
 
-      <CardBody>
+      <CardBody className="overflow-auto">
         <FormGroup>
           <Label className="fw-bolder">Customizers:</Label>
           <div className="d-flex gap-2">
@@ -323,7 +324,7 @@ const ColumnForm = ({
         </FormGroup>
         <FormGroup>
           <Label>Display:</Label>
-          <table className="table table-bordered table-sm table-hover table-setting">
+          <table className="table table-responsive table-bordered table-sm table-hover table-setting">
             <thead>
               <tr>
                 <th scope="col">Num</th>
@@ -488,21 +489,21 @@ const FormBody = ({setDataSave, config}) => {
   )
 
   return (
-    <div className="row">
-      <div className="col-6">
+    <Row>
+      <Col sm={6} xs={12}>
         <SettingForm
           values={permissionValues}
           setValues={setPermissionValues}
           options={permissionOptions}
         />
-      </div>
-      <div className="col-6">
+      </Col>
+      <Col sm={6} xs={12}>
         <PagingForm
           pageSizeValues={pageSizeValues}
           setPageSizeValues={setPageSizeValues}
         />
-      </div>
-      <div className="col-12">
+      </Col>
+      <Col sm={12}>
         <ColumnForm
           customizerValue={columnCustomizerValues}
           setCustomizerValue={setColumnCustomizerValues}
@@ -517,8 +518,8 @@ const FormBody = ({setDataSave, config}) => {
           filterCols={filterCols}
           setFilterCols={setFilterCols}
         />
-      </div>
-    </div>
+      </Col>
+    </Row>
   )
 }
 
@@ -545,6 +546,7 @@ const ModalSettingGridTable = ({
       toggle={close}
       title={`Setting ${entries}`}
       size="xl"
+      scrollable
       Body={
         <FormBody close={close} setDataSave={setDataSave} config={config} />
       }
