@@ -77,8 +77,8 @@ const ToastContent = ({t, name, role}) => {
 }
 
 const defaultValues = {
-  password: 'Strangerthing1',
-  username: 'vanbnh',
+  username: 'opetech_1',
+  password: '6BMEf8HnbrDA8v7',
 }
 
 const LoginPage = () => {
@@ -113,7 +113,7 @@ const LoginPage = () => {
         .then(res => {
           const user = res.data
           const userData = {
-            ...user,
+            // ...user,
             role: 'admin',
             fullName:
               user?.first_name && user?.last_name
@@ -186,12 +186,12 @@ const LoginPage = () => {
             </CardText>
             <Alert color="primary">
               <div className="alert-body font-small-2">
-                <p>
+                {/* <p>
                   <small className="me-50">
                     <span className="fw-bold">Admin:</span> vanbnh |
                     Strangerthing1
                   </small>
-                </p>
+                </p> */}
                 <p>
                   <small className="me-50">
                     <span className="fw-bold">Client:</span> opetech_1 |

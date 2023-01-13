@@ -35,7 +35,7 @@ module.exports = {
     // 'init-declarations': 'error',
     'no-use-before-define': 'error',
 
-    'no-unused-vars': ['warn', {varsIgnorePattern: '^[A-Z]'}],
+    'no-unused-vars': 'warn',
 
     // Stylistic Issues
     'array-bracket-newline': ['error', {multiline: true, minItems: null}],
@@ -50,14 +50,14 @@ module.exports = {
     // 'implicit-arrow-linebreak': ['error', 'beside'],
     // indent: ['error', 4],
     'keyword-spacing': 'error',
-    'multiline-ternary': ['error', 'never'],
+    // 'multiline-ternary': ['error', 'never'],
     // 'no-lonely-if': 'error',
-    'no-mixed-operators': 'error',
+    // 'no-mixed-operators': 'error',
     'no-multiple-empty-lines': ['error', {max: 2, maxEOF: 1}],
     'no-tabs': 'error',
     'no-unneeded-ternary': 'error',
     'no-whitespace-before-property': 'error',
-    'nonblock-statement-body-position': 'error',
+    // 'nonblock-statement-body-position': 'error',
     'object-property-newline': ['error', {allowAllPropertiesOnSameLine: true}],
     'quote-props': ['error', 'as-needed'],
     // quotes: ['error', 'prefer-single'],
@@ -80,7 +80,7 @@ module.exports = {
     'no-var': 'error',
     'object-shorthand': 'error',
     'prefer-const': 'error',
-    'prefer-template': 'error',
+    // 'prefer-template': 'error',
   },
 
   // rules: {
