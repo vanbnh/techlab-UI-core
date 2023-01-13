@@ -83,6 +83,9 @@
     padding-bottom: 1rem !important;
     padding-left: 1rem !important;
     padding-right: 1rem !important;
+    button {
+      padding: 0.6rem 0.5rem;
+    }
   }
 }
 [dir='ltr'] .select__multi-value,

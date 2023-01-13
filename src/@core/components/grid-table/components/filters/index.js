@@ -282,7 +282,6 @@ const ToolbarFilterProvider = ({
   entries = '',
 }) => {
   const pluginDependencies = [{name: 'Toolbar'}]
-  const refSearchInput = useRef(null)
   const refFillterAll = useRef(null)
 
   const [filterTemps, setFilterTemps] = useState([])
@@ -411,6 +410,61 @@ const ToolbarFilterProvider = ({
   }
 
   const onDelete = id => setFilters(filters.filter(f => f.id !== id))
+
+  const renderFilterField = () => (
+    <Accordion
+      open={selectField}
+      toggle={id => {
+        if (selectField === id) {
+          setSelectField('')
+        } else {
+          setSelectField(id)
+        }
+      }}
+      className="accordion-border"
+    >
+      {filterResult
+        .filter(f => !f.isDate)
+        .map(item => (
+          <AccordionItem key={item.name}>
+            <AccordionHeader targetId={item.name}>{item.title}</AccordionHeader>
+            <AccordionBody accordionId={item.name}>
+              <FilterItemForm
+                type={item.isNumber ? 'number' : 'text'}
+                selectValue={selectValue}
+                selectCondition={selectCondition}
+                onReset={onReset}
+                onSave={onSave}
+              />
+            </AccordionBody>
+          </AccordionItem>
+        ))}
+    </Accordion>
+  )
+
+  const renderFilterDateField = () => (
+    <Accordion
+      open={selectField}
+      toggle={id => {
+        if (selectField === id) {
+          setSelectField('')
+        } else {
+          setSelectField(id)
+          setShowFilters(false)
+          setShowPickerForm(true)
+        }
+      }}
+      className="accordion-border mt-1"
+    >
+      {filterResult
+        .filter(f => f.isDate)
+        .map(item => (
+          <AccordionItem key={item.name}>
+            <AccordionHeader targetId={item.name}>{item.title}</AccordionHeader>
+          </AccordionItem>
+        ))}
+    </Accordion>
+  )
 
   return (
     <Plugin name="ToolbarFilterProvider" dependencies={pluginDependencies}>
@@ -567,7 +621,7 @@ const ToolbarFilterProvider = ({
               <Modal
                 isOpen={showFilters}
                 scrollable
-                className="modal-dialog-centered"
+                className="modal-dialog-centered modal-lg"
               >
                 <ModalHeader toggle={() => setShowFilters(false)}>
                   Filter {entries}
@@ -585,7 +639,10 @@ const ToolbarFilterProvider = ({
                       />
                     </InputGroup>
                   </div>
-                  <div className="position-sticky" style={{top: -13}}>
+                  <div
+                    className="position-sticky overflow-auto"
+                    style={{top: -13}}
+                  >
                     {filterTemps.length > 0 && (
                       <div className="d-flex mb-50">
                         {filterTemps.map(f => (
@@ -612,40 +669,10 @@ const ToolbarFilterProvider = ({
                   </div>
                   <div className="d-flex flex-column mb-0">
                     {filterResult.length > 0 ? (
-                      <Accordion
-                        open={selectField}
-                        toggle={id => {
-                          if (id.includes('_date')) {
-                            setSelectField(id)
-                            setShowFilters(false)
-                            setShowPickerForm(true)
-                          } else {
-                            if (selectField === id) {
-                              setSelectField('')
-                            } else {
-                              setSelectField(id)
-                            }
-                          }
-                        }}
-                        className="accordion-border"
-                      >
-                        {filterResult.map(item => (
-                          <AccordionItem key={item.name}>
-                            <AccordionHeader targetId={item.name}>
-                              {item.title}
-                            </AccordionHeader>
-                            <AccordionBody accordionId={item.name}>
-                              <FilterItemForm
-                                type={item.isNumber ? 'number' : 'text'}
-                                selectValue={selectValue}
-                                selectCondition={selectCondition}
-                                onReset={onReset}
-                                onSave={onSave}
-                              />
-                            </AccordionBody>
-                          </AccordionItem>
-                        ))}
-                      </Accordion>
+                      <>
+                        {renderFilterField()}
+                        {renderFilterDateField()}
+                      </>
                     ) : (
                       <div className="mt-1">
                         <td>No result found for query: {searchValue}</td>

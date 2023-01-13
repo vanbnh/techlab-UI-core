@@ -5,6 +5,7 @@ import {
   Home,
   Layers,
   MapPin,
+  Monitor,
   Star,
   Users,
 } from 'react-feather'
@@ -63,6 +64,19 @@ export default [
         title: 'Post Reports',
         icon: <Circle size={12} />,
         navLink: menuConfigs.report.post.path,
+      },
+    ],
+  },
+  {
+    id: 'gmb-monitoring',
+    title: 'Monitoring',
+    icon: <Monitor size={20} />,
+    children: [
+      {
+        id: 'gmb-monitoring-task-log',
+        title: 'Task Logs',
+        icon: <Circle size={12} />,
+        navLink: menuConfigs.monitoring.task_log.path,
       },
     ],
   },

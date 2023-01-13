@@ -27,6 +27,18 @@ const LocationReportDetailPage = lazy(() =>
   import('../../pages/gmb/location-reports/detail'),
 )
 
+// *** POST REPORT ***
+const PostReportPage = lazy(() => import('../../pages/gmb/post-reports'))
+const PostReportDetailPage = lazy(() =>
+  import('../../pages/gmb/post-reports/detail'),
+)
+
+// *** MONITORING TASK LOGS ***
+const MonitoringTaskLogsPage = lazy(() => import('../../pages/gmb/task-logs'))
+const MonitoringTaskLogDetailPage = lazy(() =>
+  import('../../pages/gmb/task-logs/detail'),
+)
+
 const GMBRoutes = [
   {
     element: <></>,
@@ -80,6 +92,25 @@ const GMBRoutes = [
   {
     element: <LocationReportDetailPage />,
     path: `${menuConfigs.report.location.path}/details`,
+  },
+
+  // *** POST REPORT ***
+  {
+    element: <PostReportPage />,
+    path: menuConfigs.report.post.path,
+  },
+  {
+    element: <PostReportDetailPage />,
+    path: `${menuConfigs.report.post.path}/details`,
+  },
+  // *** MONITORING TASK LOGS ***
+  {
+    element: <MonitoringTaskLogsPage />,
+    path: menuConfigs.monitoring.task_log.path,
+  },
+  {
+    element: <MonitoringTaskLogDetailPage />,
+    path: `${menuConfigs.monitoring.task_log.path}/:id`,
   },
 ]
 

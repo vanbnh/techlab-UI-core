@@ -29,7 +29,7 @@ export default function useDetailPage({columns, key, url, params}) {
   const {id} = useParams()
   const [detail, setDetail] = useState(null)
   const [notFound, setNotFound] = useState(false)
-  const {data, isLoading, isError} = useQuery([key, id], async () => {
+  const {data, isLoading, isError} = useQuery([key, id, params], async () => {
     let d = null
     if (params) {
       const response = await axios
@@ -66,5 +66,5 @@ export default function useDetailPage({columns, key, url, params}) {
     }
   }, [isError])
 
-  return {detail, isLoading, notFound}
+  return {detail, data, isLoading, notFound}
 }

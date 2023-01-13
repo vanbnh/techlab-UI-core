@@ -2,7 +2,6 @@ import React, {useCallback, useEffect, useRef, useState} from 'react'
 import {Button, Card, Col, Input, Row} from 'reactstrap'
 import {
   CustomPaging,
-  CustomSummary,
   IntegratedSelection,
   IntegratedSummary,
   PagingState,
@@ -34,7 +33,7 @@ import LinkNavigateProvider from './format/LinkNavigate'
 import NumberProvider from './format/Number'
 import {
   getDataLocalStorage,
-  getTotalSummaryValues,
+  // getTotalSummaryValues,
   renderTotalItems,
   saveDataLocalStorage,
 } from './func'
@@ -543,7 +542,7 @@ const GridTableComponent = ({
             <TableSelection showSelectAll selectByRowClick highlightRow />
           )}
           {isGrouping && <TableGroupRow />}
-          {canSummary && !isLoading && <TableSummaryRow />}
+          {canSummary && dataRows.length && !isLoading && <TableSummaryRow />}
 
           {/* PANEL */}
           <Toolbar />
