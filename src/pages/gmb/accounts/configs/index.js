@@ -1,3 +1,4 @@
+import columns from '../columns/main'
 export const configs = {
   entries: 'Accounts',
   settings: [
@@ -15,6 +16,12 @@ export const configs = {
   urls: {
     list: '/gmb-account/',
     detail: '/gmb-account/',
+  },
+  columns,
+  path: '/gmb/accounts',
+  fixedColumns: {
+    left: ['account_id', 'account_name'],
+    right: [],
   },
 }
 export const formatRowData = data =>

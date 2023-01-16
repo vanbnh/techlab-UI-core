@@ -1,3 +1,4 @@
+import columns from '../columns/main'
 export const configs = {
   entries: 'Location Reports',
   settings: [
@@ -17,6 +18,8 @@ export const configs = {
     list: '/location-report/',
     detail: '/location-report/',
   },
+  columns,
+  path: '/gmb/reports/locations',
   fixedColumns: {
     left: ['location_name', 'client_name'],
     right: ['download_csv'],

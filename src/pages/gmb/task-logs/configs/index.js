@@ -1,3 +1,4 @@
+import columns from '../columns/main'
 export const configs = {
   entries: 'Task Logs',
   settings: [
@@ -16,6 +17,8 @@ export const configs = {
     list: '/monitoring-task-log/',
     detail: '/monitoring-task-log/',
   },
+  columns,
+  path: '/gmb/monitoring/task-logs',
   fixedColumns: {
     left: ['task_name'],
     right: [],

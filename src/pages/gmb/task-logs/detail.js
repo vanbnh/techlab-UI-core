@@ -23,8 +23,6 @@ const MonitoringTaskLogDetailPage = () => {
   if ((isLoading || !data) && !notFound)
     return <CardLoadingDetail rows={Object.keys(columns).length} />
 
-  console.log(data)
-
   return (
     <>
       <div className="mb-1">

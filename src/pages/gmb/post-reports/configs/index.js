@@ -1,3 +1,4 @@
+import columns from '../columns/main'
 export const configs = {
   entries: 'Post Reports',
   settings: [
@@ -17,6 +18,8 @@ export const configs = {
     list: '/post-report/',
     detail: '/post-report/',
   },
+  columns,
+  path: '/gmb/reports/posts',
   fixedColumns: {
     left: ['post_id', 'client_name'],
     right: ['download_csv'],

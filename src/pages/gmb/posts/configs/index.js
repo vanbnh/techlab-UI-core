@@ -1,4 +1,5 @@
 import {formatDate} from '../../../../utility/Utils'
+import columns from '../columns/main'
 
 export const configs = {
   entries: 'Posts',
@@ -18,6 +19,8 @@ export const configs = {
     list: '/post/',
     detail: '/post/',
   },
+  columns,
+  path: '/gmb/accounts',
   fixedColumns: {
     left: ['post_id'],
     right: [],

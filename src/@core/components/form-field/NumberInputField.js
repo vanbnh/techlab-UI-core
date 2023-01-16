@@ -4,7 +4,7 @@ import InputNumber from 'rc-input-number'
 import {Plus, Minus} from 'react-feather'
 
 // ** Styles
-import '@core/scss/react/libs/input-number/input-number.scss'
+import '@src/@core/scss/react/libs/input-number/input-number.scss'
 import {Label} from 'reactstrap'
 
 const NumberInputField = ({
