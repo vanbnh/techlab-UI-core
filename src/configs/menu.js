@@ -1,4 +1,7 @@
 const menuConfigs = {
+  dashboard: {
+    path: '/dashboard',
+  },
   account: {
     path: '/gmb/accounts',
   },

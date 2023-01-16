@@ -1,6 +1,9 @@
 import {lazy} from 'react'
 import menuConfigs from '../../configs/menu'
 
+// *** DASHBOARD ***
+const DashboardPage = lazy(() => import('../../pages/dashboard'))
+
 // *** ACCOUNT ***
 const AccountPage = lazy(() => import('../../pages/gmb/accounts'))
 const AccountDetailPage = lazy(() => import('../../pages/gmb/accounts/detail'))
@@ -41,7 +44,7 @@ const MonitoringTaskLogDetailPage = lazy(() =>
 
 const GMBRoutes = [
   {
-    element: <></>,
+    element: <DashboardPage />,
     path: '/dashboard',
   },
   // *** ACCOUNT ***

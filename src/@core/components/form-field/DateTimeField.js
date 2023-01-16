@@ -3,7 +3,7 @@ import {FormFeedback, Label} from 'reactstrap'
 import Flatpickr from 'react-flatpickr'
 
 // ** Styles
-import '@core/scss/react/libs/flatpickr/flatpickr.scss'
+import '@src/@core/scss/react/libs/flatpickr/flatpickr.scss'
 import classnames from 'classnames'
 
 const DateTimeField = ({

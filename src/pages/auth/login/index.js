@@ -147,7 +147,7 @@ const LoginPage = () => {
           setIsLoading(false)
           setError('username', {
             type: 'manual',
-            message: err.response.data.error,
+            message: err.response?.data?.error,
           })
         })
     } else {

@@ -1,5 +1,5 @@
 import {Badge} from 'reactstrap'
-
+import columns from '../columns/main'
 export const configs = {
   entries: 'Locations',
   settings: [
@@ -18,6 +18,8 @@ export const configs = {
     list: '/location/',
     detail: '/location/',
   },
+  columns,
+  path: '/gmb/locations',
   fixedColumns: {
     left: ['location_id', 'location_name'],
     right: [],

@@ -1,10 +1,12 @@
 import {Label} from 'reactstrap'
 // ** Third Party Components
-import {convertToRaw} from 'draft-js'
+import {EditorState, convertToRaw, ContentState} from 'draft-js'
 import {Editor} from 'react-draft-wysiwyg'
 import draftToHtml from 'draftjs-to-html'
+import htmlToDraft from 'html-to-draftjs'
 
-import '@core/scss/react/libs/editor/editor.scss'
+import '@src/@core/scss/react/libs/editor/editor.scss'
+import {useEffect, useState} from 'react'
 
 function myBlockRenderer(contentBlock) {
   const type = contentBlock.getType()
@@ -22,31 +24,31 @@ const EditorField = ({
   required,
   onChange = () => {},
   value,
-  options = [
-    'inline',
-    'blockType',
-    'fontSize',
-    'fontFamily',
-    'list',
-    'textAlign',
-    'colorPicker',
-    'link',
-    'embedded',
-    'emoji',
-    'image',
-    'remove',
-    'history',
-  ],
   maximum = 10000,
-  feedback,
 }) => {
   // ** State
 
-  const htmlValue =
-    draftToHtml(convertToRaw(value.getCurrentContent())).replace(
-      /(<([^>]+)>)/gi,
-      '',
-    ).length - 1
+  const [state, setState] = useState(() => {
+    if (value) {
+      const blocksFromHtml = htmlToDraft(value)
+      const {contentBlocks, entityMap} = blocksFromHtml
+      const contentState = ContentState.createFromBlockArray(
+        contentBlocks,
+        entityMap,
+      )
+      return EditorState.createWithContent(contentState)
+    }
+    return EditorState.createEmpty()
+  })
+
+  useEffect(() => {
+    if (state) {
+      const html = draftToHtml(convertToRaw(state.getCurrentContent()))
+      if (html !== '<p></p>') {
+        onChange(html)
+      }
+    }
+  }, [state])
 
   return (
     <>
@@ -67,26 +69,14 @@ const EditorField = ({
         </Label>
       )}
       <Editor
-        editorState={value}
-        onEditorStateChange={onChange}
-        toolbar={{
-          options,
-          inline: {inDropdown: true},
-          list: {inDropdown: true},
-          textAlign: {inDropdown: true},
-          link: {inDropdown: true},
-        }}
+        editorState={state}
+        onEditorStateChange={data => setState(data)}
         blockRendererFn={myBlockRenderer}
       />
       {required && (
-        <div className="text-danger w-100 text-end mt-50">
-          {htmlValue > 0 && (
-            <span className="text-muted fst-italic me-1">
-              Typing:{htmlValue}
-            </span>
-          )}{' '}
+        <small className="text-muted w-100 mt-1">
           (Maximum {maximum} characters)
-        </div>
+        </small>
       )}
     </>
   )
