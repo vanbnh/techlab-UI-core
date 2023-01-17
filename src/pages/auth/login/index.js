@@ -11,7 +11,7 @@ import useJwt from '@src/auth/jwt/useJwt'
 import toast from 'react-hot-toast'
 import {useDispatch} from 'react-redux'
 import {useForm, Controller} from 'react-hook-form'
-import {HelpCircle, Coffee, X} from 'react-feather'
+import {Coffee, X} from 'react-feather'
 
 // ** Actions
 import {handleLogin} from '@store/authentication'
@@ -77,8 +77,8 @@ const ToastContent = ({t, name, role}) => {
 }
 
 const defaultValues = {
-  username: 'opetech_1',
-  password: '6BMEf8HnbrDA8v7',
+  username: 'gmb_admin',
+  password: 'pmzq123456789',
 }
 
 const LoginPage = () => {
@@ -185,29 +185,29 @@ const LoginPage = () => {
               Please sign-in to your account and start the adventure
             </CardText>
             <Alert color="primary">
-              <div className="alert-body font-small-2">
-                {/* <p>
+              {/* <div className="alert-body font-small-2">
+                <p>
                   <small className="me-50">
                     <span className="fw-bold">Admin:</span> vanbnh |
                     Strangerthing1
                   </small>
-                </p> */}
+                </p>
                 <p>
                   <small className="me-50">
                     <span className="fw-bold">Client:</span> opetech_1 |
                     6BMEf8HnbrDA8v7
                   </small>
                 </p>
-              </div>
-              <HelpCircle
+              </div> */}
+              {/* <HelpCircle
                 id="login-tip"
                 className="position-absolute"
                 size={18}
-                style={{top: '10px', right: '10px'}}
+                style={{top: '0px', right: '5px'}}
               />
               <UncontrolledTooltip target="login-tip" placement="left">
                 This is just for ACL demo purpose.
-              </UncontrolledTooltip>
+              </UncontrolledTooltip> */}
             </Alert>
             <Form
               className="auth-login-form mt-2"
