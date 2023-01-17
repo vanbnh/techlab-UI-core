@@ -28,35 +28,31 @@ export default function useDetailPage({columns, key, url, params}) {
   // *** HOOKS ***
   const {id} = useParams()
   const [detail, setDetail] = useState(null)
+  const [versions, setVersions] = useState([])
   const [notFound, setNotFound] = useState(false)
   const {data, isLoading, isError} = useQuery([key, id, params], async () => {
-    let d = null
     if (params) {
-      const response = await axios
-        .get(`${url}details/`, {params})
-        .then(res => res.data)
-      if (response) {
-        d = response.data
-      }
+      return await axios.get(`${url}details/`, {params}).then(res => res.data)
     } else {
-      const response = await axios.get(`${url}${id}/`).then(res => res.data)
-      if (response) {
-        d = response.data
-      }
+      return await axios.get(`${url}${id}/`).then(res => res.data)
     }
-
-    return d
   })
 
   useEffect(() => {
-    if (data) {
-      if (!data.updated_at) {
-        data.updated_at = data.created_at
+    if (data?.data) {
+      const d = data.data
+      const v = data.versions
+      if (!d.updated_at) {
+        d.updated_at = d.created_at
       }
 
-      const dataSerializer = serializerFunc(data, columns)
+      const dataSerializer = serializerFunc(d, columns)
 
       setDetail(dataSerializer)
+
+      if (v) {
+        setVersions(v)
+      }
     }
   }, [data])
 
@@ -66,5 +62,5 @@ export default function useDetailPage({columns, key, url, params}) {
     }
   }, [isError])
 
-  return {detail, data, isLoading, notFound}
+  return {detail, setDetail, versions, data: data?.data, isLoading, notFound}
 }

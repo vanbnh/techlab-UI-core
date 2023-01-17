@@ -2,6 +2,7 @@ import React from 'react'
 import GridTableComponent from '../../../@core/components/grid-table'
 import columns from './columns/main'
 import {formatRowData, configs} from './configs'
+import ActionsProvider from './provider/Actions'
 import DownloadCSVCellProvider from './provider/DownloadCSV'
 
 const LocationReportPage = () => {
@@ -18,8 +19,8 @@ const LocationReportPage = () => {
       formatData={formatRowData}
       entries={entries}
       settings={settings}
-      columnExports={columns.filter(c => c.name !== 'download_csv')}
-      providerComponents={[DownloadCSVCellProvider]}
+      columnExports={columns.filter(c => !c.isDetailHidden)}
+      providerComponents={[ActionsProvider, DownloadCSVCellProvider]}
       fixedCols={fixedColumns}
     />
   )

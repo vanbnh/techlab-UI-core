@@ -9,13 +9,13 @@ export const DownloadCSVComponent = ({row}) => {
 
   const downloadCSV = data =>
     downloadFileFromApi({
-      url: '/location-report/export/',
+      url: '/post-report/export/',
       params: {
         start_date: data.report_date ? formatDate(data.report_date) : '',
         end_date: formatDate(new Date()),
-        id: data?.location_id,
+        id: data?.post_id,
       },
-      fileName: `location-report-${data?.location_id}.csv`,
+      fileName: `post-report-${data?.post_id}.csv`,
       setLoading: val => setLoading(val),
     })
 

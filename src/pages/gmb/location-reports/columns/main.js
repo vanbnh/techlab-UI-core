@@ -4,6 +4,11 @@ import {formatDate} from '../../../../utility/Utils'
 
 const COLUMN_MAIN = [
   {
+    title: 'Actions',
+    name: 'actions',
+    isDetailHidden: true,
+  },
+  {
     title: 'location',
     name: 'location_name',
     isLink: true,
@@ -33,15 +38,6 @@ const COLUMN_MAIN = [
         {row.location?.gmb_account?.client?.client_name}
       </Link>
     ),
-  },
-  {
-    title: 'path',
-    name: 'location_report_path',
-    isLink: true,
-    to: row =>
-      `${menuConfigs.report.location.path}/details?path=${row.location_report_path}`,
-    summaries: ['count'],
-    width: 540,
   },
   {
     title: 'queries direct',

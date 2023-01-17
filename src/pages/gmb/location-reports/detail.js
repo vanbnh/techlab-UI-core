@@ -10,6 +10,8 @@ import NotFoundDetail from '../../common/detail/NotFound'
 import columns from './columns/main'
 import {configs} from './configs'
 
+const parentTo = menuConfigs.report.location.path
+
 const LocationReportDetailPage = () => {
   const {urls, keys, entries} = configs
   const {search} = useLocation()
@@ -24,8 +26,6 @@ const LocationReportDetailPage = () => {
 
   if ((isLoading || !detail) && !notFound)
     return <CardLoadingDetail rows={Object.keys(columns).length} />
-
-  const parentTo = menuConfigs.report.location.path
 
   return (
     <>

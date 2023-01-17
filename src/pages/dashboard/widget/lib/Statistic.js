@@ -18,9 +18,10 @@ import moment from 'moment'
 import {Copy, Settings, Trash2} from 'react-feather'
 import {getIcon} from '../../store/function'
 import Avatar from '@components/avatar'
+import {useQuery} from 'react-query'
+import DatePickerComponent from '../../../../@core/components/date-picker'
 
 const Statistic = ({item, isEdit, onDuplicateItem, onRemoveItem}) => {
-  const {title} = item
   const [data, setData] = useState({
     client: 0,
     gmb_account: 0,
@@ -30,7 +31,34 @@ const Statistic = ({item, isEdit, onDuplicateItem, onRemoveItem}) => {
     post: 0,
     post_report: 0,
   })
-  const [loading, setLoading] = useState(false)
+
+  // *** DATE PICKER ***
+  const [datePicker, setDatePicker] = useState({
+    start_date: moment().startOf('week').add('-8', 'week').format('YYYY-MM-DD'),
+    end_date: moment().endOf('week').format('YYYY-MM-DD'),
+  })
+
+  // *** REACT QUERY ***
+  const {data: dataQuery, isLoading} = useQuery(
+    ['STATISTIC_WIDGET', datePicker],
+    async () => {
+      return await axios
+        .get('/statistic/all/', {
+          params: {
+            start_date: datePicker.start_date,
+            end_date: datePicker.end_date,
+          },
+        })
+        .then(response => response.data)
+    },
+  )
+
+  useEffect(() => {
+    if (dataQuery) {
+      setData(dataQuery)
+    }
+  }, [dataQuery])
+
   const statisticCards = [
     {
       name: 'Location',
@@ -69,35 +97,6 @@ const Statistic = ({item, isEdit, onDuplicateItem, onRemoveItem}) => {
       color: 'secondary',
     },
   ]
-
-  const getData = async date => {
-    setLoading(true)
-    try {
-      const response = await axios.get('/statistic/all/', {
-        params: {
-          start_date:
-            date?.startDate ||
-            moment().startOf('week').add('-8', 'week').format('YYYY-MM-DD'),
-          end_date:
-            date?.endDate || moment().endOf('week').format('YYYY-MM-DD'),
-        },
-      })
-      if (response.data) {
-        setData(response.data)
-      }
-      setLoading(false)
-    } catch (error) {
-      setLoading(false)
-    }
-  }
-
-  useEffect(() => {
-    getData()
-  }, [])
-
-  const onChangeDate = date => {
-    getData(date)
-  }
 
   const renderCardActions = useCallback(
     () => (
@@ -170,18 +169,16 @@ const Statistic = ({item, isEdit, onDuplicateItem, onRemoveItem}) => {
       <CommonCardHeader isEdit={isEdit} item={item}>
         {renderCardActions()}
       </CommonCardHeader>
-      {title && <div className="text-center fw-bolder fs-2 mb-2">{title}</div>}
-      {/* <div className="w-50 ms-2">
-        <PickerButton
-          onSubmit={onChangeDate}
-          months={1}
-          position={{top: 0, left: 0}}
+      <div className="w-100 ms-1 mb-2">
+        <DatePickerComponent
+          datePicker={datePicker}
+          setDatePicker={setDatePicker}
         />
-      </div> */}
+      </div>
 
       <CardBody className="overflow-auto">
         <Row>{renderData()}</Row>
-        {loading && <Loading />}
+        {isLoading && <Loading />}
       </CardBody>
     </Card>
   )

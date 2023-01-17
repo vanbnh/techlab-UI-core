@@ -29,6 +29,9 @@ const LocationReportPage = lazy(() =>
 const LocationReportDetailPage = lazy(() =>
   import('../../pages/gmb/location-reports/detail'),
 )
+const LocationReportStatisticlPage = lazy(() =>
+  import('../../pages/gmb/location-reports/statistic'),
+)
 
 // *** POST REPORT ***
 const PostReportPage = lazy(() => import('../../pages/gmb/post-reports'))
@@ -95,6 +98,10 @@ const GMBRoutes = [
   {
     element: <LocationReportDetailPage />,
     path: `${menuConfigs.report.location.path}/details`,
+  },
+  {
+    element: <LocationReportStatisticlPage />,
+    path: `${menuConfigs.report.location.path}/statistic`,
   },
 
   // *** POST REPORT ***

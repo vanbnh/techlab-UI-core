@@ -245,6 +245,7 @@ const CommonTableWidgetItem = ({
         <CommonCardHeader
           item={item}
           isEdit={isEdit}
+          path={path}
           pageSizeComp={
             <div className="d-flex align-items-center me-1">
               <Input

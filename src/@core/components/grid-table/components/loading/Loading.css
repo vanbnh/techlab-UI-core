@@ -10,7 +10,7 @@
 .loading-icon {
   position: absolute;
   font-size: 25px;
-  top: calc(54% - 10px);
+  top: calc(50% - 10px);
   left: calc(50% - 10px);
 
   -animation: spin .7s infinite linear;
