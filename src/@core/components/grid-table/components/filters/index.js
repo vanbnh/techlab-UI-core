@@ -130,8 +130,6 @@ const DatePickerForm = ({onSave, onCancel, onClose, setting}) => {
     onSave({type, date: d})
   }
 
-  // console.log(item);
-
   const ref = useRef(null)
 
   useClickOutside(ref, () => onClose && onClose())

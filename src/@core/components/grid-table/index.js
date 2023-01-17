@@ -1,5 +1,14 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react'
-import {Button, Card, Col, Input, Row} from 'reactstrap'
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  Button,
+  Card,
+  CardFooter,
+  Col,
+  Input,
+  Row,
+} from 'reactstrap'
 import {
   CustomPaging,
   IntegratedSelection,
@@ -51,13 +60,14 @@ import {
   LOCAL_REORDER_COLUMNS,
   LOCAL_RESIZE_COLUMNS,
 } from './config'
-import {useLocation} from 'react-router-dom'
+import {Link, useLocation} from 'react-router-dom'
 import {useQuery, useQueryClient} from 'react-query'
 import axios from 'axios'
 import {formatDate} from '../../../utility/Utils'
 import LoadingGridTable from './components/loading/Loading'
 import ModalSettingGridTable from './components/modal/Setting'
 import ToolbarFilterProvider from './components/filters'
+import ReactPaginate from 'react-paginate'
 
 const GridTableComponent = ({
   providerComponents = [],
@@ -88,14 +98,12 @@ const GridTableComponent = ({
   // *** STATE CORE ***
   const [dataRows, setDataRows] = useState([])
   const [columnStates, setColumnStates] = useState([])
-  const [total, setTotal] = useState(0)
+  const [totalPage, setTotalPage] = useState(1)
 
   // *** CONTROLS ***
-  const [currentPage, setCurrentPage] = useState(1)
+  const [currentPage, setCurrentPage] = useState(0)
   const [perPage, setPerPage] = useState(10)
   const [pageSizes, setPageSizes] = useState([10, 20, 50, 100])
-  const START = perPage * (currentPage - 1) + 1
-  const END = perPage * currentPage
 
   const [rowSelects, setRowSelects] = useState([])
   const [columnOrders, setColumnOrders] = useState([])
@@ -123,7 +131,7 @@ const GridTableComponent = ({
   const handleCallApi = async page => {
     const params = {
       ...query.params,
-      page,
+      page: page + 1,
       limit: perPage,
     }
     const data = filters.map(f => ({
@@ -182,9 +190,9 @@ const GridTableComponent = ({
       if (formatData) {
         rows = formatData(rows)
       }
-      const total = dataQuery?.metadata?.total || 0
+      const totalPage = dataQuery?.metadata?.total_page || 0
       setDataRows(rows)
-      setTotal(total)
+      setTotalPage(totalPage)
     }
   }, [dataQuery])
 
@@ -422,62 +430,59 @@ const GridTableComponent = ({
   const toggleModalSetting = () =>
     setModalOpen({...modalOpen, setting: !modalOpen.setting})
 
-  // console.log(dataRows)
+  const handlePagination = page => {
+    setCurrentPage(page.selected)
+  }
+
+  const CustomPagination = () => (
+    <ReactPaginate
+      nextLabel=""
+      breakLabel="..."
+      previousLabel=""
+      pageRangeDisplayed={2}
+      forcePage={currentPage}
+      marginPagesDisplayed={2}
+      activeClassName="active"
+      pageClassName="page-item"
+      breakClassName="page-item"
+      nextLinkClassName="page-link"
+      pageLinkClassName="page-link"
+      breakLinkClassName="page-link"
+      previousLinkClassName="page-link"
+      nextClassName="page-item next-item"
+      previousClassName="page-item prev-item"
+      pageCount={totalPage}
+      onPageChange={handlePagination}
+      containerClassName="pagination react-paginate separated-pagination pagination-sm justify-content-end pe-1 mt-1"
+    />
+  )
 
   return (
     <>
-      <Card className="grid-table">
-        <Row className="p-1" style={{marginBottom: '-1.2rem'}}>
-          <Col md={6} xs={12} className="d-flex pe-xl-1 p-0 mt-xl-0 mt-1">
-            <div className="d-flex align-items-center me-1">
-              <Input
-                className="mx-50"
-                type="select"
-                id="rows-per-page"
-                value={perPage}
-                onChange={e => setPerPage(+e.target.value)}
-                style={{width: '5rem'}}
-              >
-                {pageSizes.map(num => (
-                  <option key={num} value={num}>
-                    {num}
-                  </option>
-                ))}
-              </Input>
-            </div>
-            <div className="d-flex align-items-center">
-              {dataRows.length > 0 && (
-                <div className="ms-50 d-flex flex-column">
-                  <span>
-                    <small>
-                      Total: {total} {entries}
-                    </small>
-                  </span>
-                  <span style={{marginTop: '-5px'}}>
-                    <small className="text-muted" style={{fontSize: '10px'}}>
-                      Showing {START} to {END > total ? total : END} of {total}{' '}
-                    </small>
-                  </span>
-                </div>
-              )}
-            </div>
-          </Col>
-          <Col
-            md={6}
-            xs={12}
-            className="d-flex justify-content-end pe-xl-1 p-0 mt-xl-0 mt-1"
+      <div className="d-flex justify-content-between">
+        <div>
+          <Breadcrumb>
+            <BreadcrumbItem>
+              <Link to="/"> Home </Link>
+            </BreadcrumbItem>
+
+            <BreadcrumbItem active>
+              <span> {entries} </span>
+            </BreadcrumbItem>
+          </Breadcrumb>
+        </div>
+        <div className="d-flex align-items-center justify-content-end me-1 mb-1">
+          <Button.Ripple
+            className="btn-icon"
+            color="primary"
+            onClick={toggleModalSetting}
           >
-            <div className="d-flex align-items-center me-1">
-              <Button.Ripple
-                className="btn-icon"
-                color="primary"
-                onClick={toggleModalSetting}
-              >
-                <Settings size={16} />
-              </Button.Ripple>
-            </div>
-          </Col>
-        </Row>
+            <Settings size={16} />
+          </Button.Ripple>
+        </div>
+      </div>
+
+      <Card className="grid-table">
         <Grid rows={dataRows} columns={columnStates}>
           <DragDropProvider />
           <LinkNavigateProvider
@@ -493,17 +498,17 @@ const GridTableComponent = ({
             onSelectionChange={r => setRowSelects(r)}
           />
           {TableRowDetailComponent && <RowDetailState />}
-          <PagingState
+          {/* <PagingState
             currentPage={currentPage - 1}
             onCurrentPageChange={val => {
               setCurrentPage(val + 1)
             }}
-          />
+          /> */}
           {canSummary && (
             <SummaryState totalItems={renderTotalItems(columnStates)} />
           )}
 
-          {canPagination && <CustomPaging totalCount={total} />}
+          {/* {canPagination && <CustomPaging totalCount={total} />} */}
 
           {/* INTEGRATED */}
           {canSummary && <IntegratedSummary />}
@@ -529,7 +534,7 @@ const GridTableComponent = ({
           />
 
           <TableHeaderRow showGroupingControls={isGrouping} />
-          <PagingPanel />
+          {/* <PagingPanel /> */}
           {TableRowDetailComponent && (
             <TableRowDetail contentComponent={TableRowDetailComponent} />
           )}
@@ -542,7 +547,9 @@ const GridTableComponent = ({
             <TableSelection showSelectAll selectByRowClick highlightRow />
           )}
           {isGrouping && <TableGroupRow />}
-          {canSummary && dataRows.length && !isLoading && <TableSummaryRow />}
+          {canSummary && dataRows.length > 0 && !isLoading && (
+            <TableSummaryRow />
+          )}
 
           {/* PANEL */}
           <Toolbar />
@@ -578,6 +585,29 @@ const GridTableComponent = ({
           />
         )}
         {(isLoading || loading) && <LoadingGridTable />}
+        {canPagination && (
+          <CardFooter>
+            <div className="d-flex justify-content-between align-item-center ">
+              <div className="mt-50">
+                <Input
+                  className="mx-50"
+                  type="select"
+                  id="rows-per-page"
+                  value={perPage}
+                  onChange={e => setPerPage(+e.target.value)}
+                  style={{width: '5rem'}}
+                >
+                  {pageSizes.map(num => (
+                    <option key={num} value={num}>
+                      {num}
+                    </option>
+                  ))}
+                </Input>
+              </div>
+              <div>{CustomPagination()}</div>
+            </div>
+          </CardFooter>
+        )}
       </Card>
       {/* Modal setting */}
       <ModalSettingGridTable

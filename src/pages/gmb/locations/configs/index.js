@@ -13,10 +13,12 @@ export const configs = {
   keys: {
     list: 'GMB_LOCATIONS',
     detail: 'GMB_LOCATION_DETAIL',
+    version: 'GMB_LOCATION_VERSION',
   },
   urls: {
     list: '/location/',
     detail: '/location/',
+    version: '/version/',
   },
   columns,
   path: '/gmb/locations',

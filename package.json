@@ -1,5 +1,5 @@
 {
-  "name": "vuexy-react-admin-dashboard",
+  "name": "gmb-admin-dashboard",
   "version": "9.0.0",
   "private": true,
   "dependencies": {
@@ -52,7 +52,6 @@
     "rc-input-number": "^7.3.11",
     "react": "^18.2.0",
     "react-apexcharts": "^1.4.0",
-    "react-chartjs-2": "^5.0.1",
     "react-copy-to-clipboard": "^5.1.0",
     "react-country-flag": "^3.0.2",
     "react-data-table-component": "^7.5.2",
@@ -80,7 +79,6 @@
     "react-sortablejs": "6.0.0",
     "react-use": "^17.4.0",
     "reactstrap": "^9.1.5",
-    "recharts": "^2.1.9",
     "redux": "^4.2.0",
     "redux-debounced": "0.5.0",
     "redux-thunk": "^2.4.1",

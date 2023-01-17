@@ -1,0 +1,5 @@
+export {default as BreadcrumbDetail} from './Breadcrumb'
+export {default as CardLoadingDetail} from './CardLoading'
+export {default as CardTableDetail} from './CardTable'
+export {default as NotFoundDetail} from './NotFound'
+export {default as VersionDetail} from './Version'

@@ -14,10 +14,12 @@ export const configs = {
   keys: {
     list: 'GMB_POSTS',
     detail: 'GMB_POST_DETAIL',
+    version: 'GMB_POST_VERSION',
   },
   urls: {
     list: '/post/',
     detail: '/post/',
+    version: '/version/',
   },
   columns,
   path: '/gmb/accounts',

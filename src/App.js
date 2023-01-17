@@ -10,17 +10,17 @@ const App = () => {
   const dispatch = useDispatch()
 
   // ** Check token invalid or expired
-  const accessToken = localStorage.getItem('accessToken')
+  const refreshToken = localStorage.getItem('refreshToken')
   useEffect(() => {
-    if (accessToken) {
-      const decodedToken = jwtDecode(accessToken)
+    if (refreshToken) {
+      const decodedToken = jwtDecode(refreshToken)
       if (decodedToken.exp * 1000 < new Date().getTime()) {
         dispatch(handleLogout())
       } else {
         // navigate('/dashboard');
       }
     }
-  }, [accessToken])
+  }, [refreshToken])
 
   return (
     <Suspense fallback={null}>
