@@ -25,13 +25,13 @@ const calculateChange = (first, last) => {
 const calculateAverage = array =>
   Math.round(array.reduce((acc, cur) => acc + cur, 0) / array.length)
 
-const parentTo = menuConfigs.report.location.path
+const parentTo = menuConfigs.report.post.path
 
-const LocationReportStatisticPage = () => {
+const PostReportStatisticPage = () => {
   const {urls, keys, entries, statistic} = configs
   const {search} = useLocation()
   const params = searchParamtoObject(search)
-  const locationId = params?.path?.split('/')[3]
+  const postId = params?.path?.split('/')[5]
 
   // *** REACT QUERY ***
   const [datePicker, setDatePicker] = useState({
@@ -44,7 +44,7 @@ const LocationReportStatisticPage = () => {
       await axios
         .get(urls.statistic, {
           params: {
-            location_id: locationId,
+            post_id: postId,
             start_date: datePicker.start_date,
             end_date: datePicker.end_date,
           },
@@ -93,20 +93,20 @@ const LocationReportStatisticPage = () => {
           data={{
             parentName: entries,
             parentTo,
-            activeName: locationId,
+            activeName: postId,
           }}
         />
       </div>
       <Card>
         <div className="p-1">
           <Row>
-            <Col sm="3">
+            <Col sm="4">
               <DatePickerComponent
                 datePicker={datePicker}
                 setDatePicker={setDatePicker}
               />
             </Col>
-            <Col sm="9">
+            <Col sm="8">
               <div className="w-100">
                 <SelectField
                   name="location_report_chart"
@@ -184,4 +184,4 @@ const LocationReportStatisticPage = () => {
   )
 }
 
-export default LocationReportStatisticPage
+export default PostReportStatisticPage

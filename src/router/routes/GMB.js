@@ -38,6 +38,9 @@ const PostReportPage = lazy(() => import('../../pages/gmb/post-reports'))
 const PostReportDetailPage = lazy(() =>
   import('../../pages/gmb/post-reports/detail'),
 )
+const PostReportStatisticlPage = lazy(() =>
+  import('../../pages/gmb/post-reports/statistic'),
+)
 
 // *** MONITORING TASK LOGS ***
 const MonitoringTaskLogsPage = lazy(() => import('../../pages/gmb/task-logs'))
@@ -112,6 +115,10 @@ const GMBRoutes = [
   {
     element: <PostReportDetailPage />,
     path: `${menuConfigs.report.post.path}/details`,
+  },
+  {
+    element: <PostReportStatisticlPage />,
+    path: `${menuConfigs.report.post.path}/statistic`,
   },
   // *** MONITORING TASK LOGS ***
   {

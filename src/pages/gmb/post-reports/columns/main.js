@@ -4,6 +4,11 @@ import {formatDate} from '../../../../utility/Utils'
 
 const COLUMN_MAIN = [
   {
+    title: 'Actions',
+    name: 'actions',
+    isDetailHidden: true,
+  },
+  {
     title: 'post id',
     name: 'post_id',
     isLink: true,
@@ -32,15 +37,6 @@ const COLUMN_MAIN = [
         {row.post?.location?.gmb_account?.client?.client_name}
       </Link>
     ),
-  },
-  {
-    title: 'Path',
-    name: 'post_report_path',
-    isLink: true,
-    to: row =>
-      `${menuConfigs.report.post.path}/details?path=${row.post_report_path}`,
-    summaries: ['count'],
-    width: 540,
   },
   {
     title: 'local post views search',
