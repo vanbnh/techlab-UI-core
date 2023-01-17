@@ -53,7 +53,7 @@ const LocationReportStatisticPage = () => {
   const [chartData, setChartData] = useState({})
   useEffect(() => {
     let chartObj = {}
-    if (data.length > 0) {
+    if (data?.length > 0) {
       chartObj = selectCharts.reduce((acc, cur) => {
         acc[cur.key] = {
           ...cur,
