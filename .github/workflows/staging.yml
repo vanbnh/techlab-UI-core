@@ -19,5 +19,5 @@ jobs:
                   echo "$PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
                   chmod 700 ~/.ssh/id_rsa
                   eval $(ssh-agent -s)
-                  rsync -avzr -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' ./ $USER_NAME@$HOST_NAME:/home/ubuntu/gmb-reactjs-2/
+                  rsync -avzr --delete -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' ./ $USER_NAME@$HOST_NAME:/home/ubuntu/gmb-reactjs-2/
                 #   ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $USER_NAME@$HOST_NAME "cd gmb-reactjs-2 && yarn && yarn build"
