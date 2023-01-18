@@ -1,0 +1,1 @@
+import{j as t,B as a}from"./index.945d01c7.js";import{D as o}from"./index.4f0d5f8a.js";const r={success:"success",error:"danger",failed:"secondary",done:"info"},e=({row:s})=>t(a,{color:`light-${r[s.task_status]}`,children:s.task_status}),d=s=>t(o,{for:["task_status"],formatterComponent:e,...s});export{d as T};
