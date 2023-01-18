@@ -1,3 +1,4 @@
+import cn from 'classnames'
 import {Input, Label} from 'reactstrap'
 
 const CheckField = ({
@@ -8,12 +9,19 @@ const CheckField = ({
   color = 'primary',
   required,
   value,
+  className,
   ...rest
 }) => {
   return (
     <>
       <div className={`form-check form-check-${color} `}>
-        <Input type={type} id={id || name} checked={value} {...rest} />
+        <Input
+          type={type}
+          id={id || name}
+          checked={value}
+          {...rest}
+          className={cn('mt-25', className)}
+        />
         {label && (
           <Label className="form-check-label" for={id || name}>
             {label}{' '}
@@ -22,7 +30,6 @@ const CheckField = ({
                 style={{
                   color: '#FF0000',
                   fontSize: '1rem',
-                  top: '0',
                 }}
               >
                 *

@@ -40,21 +40,7 @@ import ToolbarFilterProvider from '../../../../../../@core/components/grid-table
 import {useQuery} from 'react-query'
 import {formatDate} from '../../../../../../utility/Utils'
 import ModalSettingColumn from '../../modal/ModalSettingColumn'
-
-const ExportButtonComponent = ({onToggle, buttonRef, ...restProps}) => (
-  <div className="d-flex">
-    <div>
-      <button
-        ref={buttonRef}
-        className="btn btn-warning btn-sm"
-        onClick={onToggle}
-        {...restProps}
-      >
-        Export
-      </button>
-    </div>
-  </div>
-)
+import {useTranslation} from 'react-i18next'
 
 const CommonTableWidgetItem = ({
   configs,
@@ -68,6 +54,9 @@ const CommonTableWidgetItem = ({
   columnExports = [],
   formatData = d => d,
 }) => {
+  // *** HOOKS ***
+  const {t} = useTranslation()
+
   const {columns, path, fixedColumns, entries, urls} = configs
 
   // *** STATE CORE TABLE ***
@@ -75,7 +64,7 @@ const CommonTableWidgetItem = ({
   const [columnStates] = useState(
     columns.map(column => ({
       ...column,
-      title: column.title.toUpperCase(),
+      title: t(column.title),
       width: column.width || column.title.length * DEFAULT_WIDTH_MULTIPLICATION,
     })),
   )
@@ -234,6 +223,21 @@ const CommonTableWidgetItem = ({
     setColumnOrder(cols.map(col => col.name))
     setHiddenColumnNames(cols.filter(col => !col.checked).map(col => col.name))
   }
+
+  const ExportButtonComponent = ({onToggle, buttonRef, ...restProps}) => (
+    <div className="d-flex">
+      <div>
+        <button
+          ref={buttonRef}
+          className="btn btn-warning btn-sm"
+          onClick={onToggle}
+          {...restProps}
+        >
+          {t('Export')}
+        </button>
+      </div>
+    </div>
+  )
 
   return (
     <>

@@ -4,14 +4,14 @@ import {formatDate} from '../../../../utility/Utils'
 
 const COLUMN_MAIN = [
   {
-    title: 'id',
+    title: 'ID',
     name: 'post_id',
     isLink: true,
     width: 210,
     to: row => `${menuConfigs.post.path}/${row.post_id}`,
   },
   {
-    title: 'location',
+    title: 'LOCATION NAME',
     name: 'location_name',
     align: 'left',
     isLink: true,
@@ -26,7 +26,7 @@ const COLUMN_MAIN = [
     ),
   },
   {
-    title: 'client',
+    title: 'CLIENT NAME',
     name: 'client_name',
     isLink: true,
     align: 'left',
@@ -43,27 +43,27 @@ const COLUMN_MAIN = [
     ),
   },
   {
-    title: 'action type',
+    title: 'ACTION TYPE',
     name: 'action_type',
   },
   {
-    title: 'action url',
+    title: 'ACTION URL',
     name: 'action_url',
   },
   {
-    title: 'post path',
+    title: 'POST PATH',
     name: 'post_path',
   },
   {
-    title: 'search url',
+    title: 'SEARCH URL',
     name: 'search_url',
   },
   {
-    title: 'post state',
+    title: 'POST STATE',
     name: 'post_state',
   },
   {
-    title: 'summary',
+    title: 'SUMMARY',
     name: 'summary',
     cell: row =>
       row.summary && row.summary.length > 50
@@ -71,73 +71,73 @@ const COLUMN_MAIN = [
         : row.summary,
   },
   {
-    title: 'topic type',
+    title: 'TOPIC TYPE',
     name: 'topic_type',
   },
   {
-    title: 'alert type',
+    title: 'ALERT TYPE',
     name: 'alert_type',
   },
   {
-    title: 'media format',
+    title: 'MEDIA FORMAT',
     name: 'media_format',
   },
   {
-    title: 'source url',
+    title: 'SOURCE URL',
     name: 'source_url',
   },
   {
-    title: 'data ref',
+    title: 'DATA REFERENCE',
     name: 'data_ref',
   },
   {
-    title: 'event title',
+    title: 'EVENT TITLE',
     name: 'event_title',
   },
   {
-    title: 'start date',
+    title: 'START DATE',
     name: 'start_date',
     isDate: true,
     cell: row => row.start_date && formatDate(row.start_date),
   },
   {
-    title: 'start time',
+    title: 'START TIME',
     name: 'start_time',
     // cell: (row) => row.start_time && formatDate(row.start_time),
   },
   {
-    title: 'end date',
+    title: 'END DATE',
     name: 'end_date',
     isDate: true,
     cell: row => row.end_date && formatDate(row.end_date),
   },
   {
-    title: 'end time',
+    title: 'END TIME',
     name: 'end_time',
     // cell: (row) => row.end_time && formatDate(row.end_time),
   },
   {
-    title: 'post create time',
+    title: 'POST CREATE TIME',
     name: 'post_create_time',
     isDate: true,
     cell: row => formatDate(row.post_create_time),
   },
   {
-    title: 'post update time',
+    title: 'POST UPDATE TIME',
     name: 'post_update_time',
     isDate: true,
     cell: row => formatDate(row.post_update_time),
   },
   {
-    title: 'coupon code',
+    title: 'COUPON CODE',
     name: 'coupon_code',
   },
   {
-    title: 'coupon url',
+    title: 'COUNPON URL',
     name: 'coupon_url',
   },
   {
-    title: 'coupon terms',
+    title: 'COUPON TERMS',
     name: 'coupon_terms',
   },
 ]

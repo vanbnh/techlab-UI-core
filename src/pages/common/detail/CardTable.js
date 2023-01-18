@@ -3,6 +3,7 @@ import {Card, CardBody} from 'reactstrap'
 import cn from 'classnames'
 import Loading from '@src/@core/components/grid-table/components/loading/Loading'
 import {useMedia} from 'react-use'
+import {useTranslation} from 'react-i18next'
 
 const CardTableDetail = ({
   data,
@@ -11,6 +12,7 @@ const CardTableDetail = ({
   isLoadingVersion,
 }) => {
   // *** STATE ***
+  const {t} = useTranslation()
   const [checkDataChange, setCheckDataChange] = useState({})
   const isWide = useMedia('(max-width: 480px)')
 
@@ -27,6 +29,8 @@ const CardTableDetail = ({
   }, [dataVersionCurrent, dataVersionCompare])
 
   const renderCell = value => (isWide ? <small>{value}</small> : value)
+  const renderTitleCell = value =>
+    isWide ? <small>{t(value)}</small> : t(value)
 
   const renderBody = () =>
     dataVersionCompare ? (
@@ -34,7 +38,7 @@ const CardTableDetail = ({
         <tbody>
           {Object.keys(dataVersionCurrent).map(key => (
             <tr key={key}>
-              <td className="fw-bolder text-nowrap">{renderCell(key)}</td>
+              <td className="fw-bolder text-nowrap">{renderTitleCell(key)}</td>
               <td
                 className={cn('text-nowrap', {
                   'bg-light-danger': checkDataChange[key],
@@ -60,7 +64,7 @@ const CardTableDetail = ({
         <tbody>
           {Object.keys(data).map(key => (
             <tr key={key}>
-              <td className="fw-bold text-nowrap">{renderCell(key)}</td>
+              <td className="fw-bold text-nowrap">{renderTitleCell(key)}</td>
               <td
                 className="text-nowrap"
                 style={{maxWidth: '50vw', overflow: 'auto'}}

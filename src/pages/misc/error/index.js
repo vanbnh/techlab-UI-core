@@ -14,10 +14,12 @@ import illustrationsDark from '@src/assets/images/pages/error-dark.svg'
 // ** Styles
 import '@styles/base/pages/page-misc.scss'
 import {getBrandLogo} from '../../../utility/Utils'
+import {useTranslation} from 'react-i18next'
 
 const ErrorPage = () => {
   // ** Hooks
   const {skin} = useSkin()
+  const {t} = useTranslation()
 
   const source = skin === 'dark' ? illustrationsDark : illustrationsLight
 
@@ -28,9 +30,9 @@ const ErrorPage = () => {
       </a>
       <div className="misc-inner p-2 p-sm-3">
         <div className="w-100 text-center">
-          <h2 className="mb-1">Page Not Found 🕵🏻‍♀️</h2>
+          <h2 className="mb-1">{t('Page Not Found')} 🕵🏻‍♀️</h2>
           <p className="mb-2">
-            Oops! 😖 The requested URL was not found on this server.
+            {t('Oops! 😖 The requested URL was not found on this server.')}
           </p>
           <Button
             tag={Link}
@@ -38,7 +40,7 @@ const ErrorPage = () => {
             color="primary"
             className="btn-sm-block mb-2"
           >
-            Back to home
+            {t('Back to home')}
           </Button>
           <img className="img-fluid" src={source} alt="Not authorized page" />
         </div>

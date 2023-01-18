@@ -44,7 +44,7 @@ const PostDetailPage = () => {
             data={{
               parentName: entries,
               parentTo,
-              activeName: notFound ? id : detail.id,
+              activeName: notFound ? id : detail['ID'],
             }}
           />
         </Col>

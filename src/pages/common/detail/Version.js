@@ -1,5 +1,6 @@
 import React from 'react'
 import {X} from 'react-feather'
+import {useTranslation} from 'react-i18next'
 import {Button, Input, InputGroup, InputGroupText} from 'reactstrap'
 
 const VersionDetail = ({
@@ -10,6 +11,8 @@ const VersionDetail = ({
   versionSelect,
   setVersionSelect,
 }) => {
+  const {t} = useTranslation()
+
   return (
     <div className="d-flex justify-content-end align-items-center">
       {isShowCompare && versions.length > 0 && (
@@ -20,7 +23,7 @@ const VersionDetail = ({
             size="sm"
             onClick={onSetDataVersionCompare}
           >
-            Compare with v.{versions[0]}
+            {t('Compare with')} {versions[0]}
           </Button>
           <Button.Ripple
             className="btn-icon"
@@ -36,7 +39,7 @@ const VersionDetail = ({
       <div style={{maxWidth: '240px'}}>
         {versions.length > 0 && (
           <InputGroup>
-            <InputGroupText>version</InputGroupText>
+            <InputGroupText>{t('version')}</InputGroupText>
             <Input
               type="select"
               name="version"

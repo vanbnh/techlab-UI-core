@@ -4,7 +4,7 @@ import {formatDate} from '../../../../utility/Utils'
 
 const COLUMN_MAIN = [
   {
-    title: 'id',
+    title: 'ID',
     name: 'task_id',
     isLink: true,
     validLink: row => {
@@ -22,12 +22,12 @@ const COLUMN_MAIN = [
     width: 100,
   },
   {
-    title: 'name',
+    title: 'TASK NAME',
     name: 'task_name',
     width: 200,
   },
   {
-    title: 'status',
+    title: 'STATUS',
     name: 'task_status',
     cell: row => (
       <Badge
@@ -40,32 +40,32 @@ const COLUMN_MAIN = [
     ),
   },
   {
-    title: 'user',
+    title: 'TASK USER',
     name: 'task_user',
     width: 100,
   },
   {
-    title: 'client',
+    title: 'TASK CLIENT',
     name: 'task_client',
     width: 120,
   },
   {
-    title: 'account',
+    title: 'TASK ACCOUNT',
     name: 'task_account',
   },
   {
-    title: 'celery',
+    title: 'CELERY ID',
     name: 'task_celery_id',
     width: 100,
   },
   {
-    title: 'update date',
+    title: 'UPDATED DATE',
     name: 'updated_at',
     isDate: true,
     cell: row => formatDate(row.updated_at),
   },
   {
-    title: 'created date',
+    title: 'CREATED DATE',
     name: 'created_at',
     isDate: true,
     cell: row => formatDate(row.created_at),

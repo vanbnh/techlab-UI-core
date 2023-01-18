@@ -12,7 +12,7 @@ const COLUMN_MAIN = [
     width: 200,
   },
   {
-    title: 'NAME',
+    title: 'ACCOUNT NAME',
     name: 'account_name',
     isLink: true,
     to: row => `${menuConfigs.account.path}/${row.account_id}`,
@@ -20,7 +20,7 @@ const COLUMN_MAIN = [
     width: 120,
   },
   {
-    title: 'CLIENT',
+    title: 'CLIENT NAME',
     name: 'client_name',
     isLink: true,
     // isGroup: true,
@@ -39,13 +39,13 @@ const COLUMN_MAIN = [
     ),
   },
   {
-    title: 'Update date',
+    title: 'UPDATED DATE',
     name: 'updated_at',
     isDate: true,
     cell: row => row.updated_at && formatDate(row.updated_at),
   },
   {
-    title: 'Created date',
+    title: 'CREATED DATE',
     name: 'created_at',
     isDate: true,
     cell: row => row.created_at && formatDate(row.created_at),

@@ -4,12 +4,12 @@ import {formatDate} from '../../../../utility/Utils'
 
 const COLUMN_MAIN = [
   {
-    title: 'Actions',
+    title: 'ACTIONS',
     name: 'actions',
     isDetailHidden: true,
   },
   {
-    title: 'location',
+    title: 'LOCATION NAME',
     name: 'location_name',
     isLink: true,
     align: 'left',
@@ -23,7 +23,7 @@ const COLUMN_MAIN = [
     ),
   },
   {
-    title: 'client',
+    title: 'CLIENT NAME',
     name: 'client_name',
     isLink: true,
     align: 'left',
@@ -40,7 +40,7 @@ const COLUMN_MAIN = [
     ),
   },
   {
-    title: 'queries direct',
+    title: 'QUERIES DIRECT',
     name: 'queries_direct',
     align: 'right',
     summaries: ['min', 'max', 'avg', 'sum'],
@@ -48,7 +48,7 @@ const COLUMN_MAIN = [
     width: 150,
   },
   {
-    title: 'queries chain',
+    title: 'QUERIES CHAIN',
     name: 'queries_chain',
     align: 'right',
     summaries: ['min', 'max', 'avg', 'sum'],
@@ -56,7 +56,7 @@ const COLUMN_MAIN = [
     width: 150,
   },
   {
-    title: 'views search',
+    title: 'VIEWS SEARCH',
     name: 'views_search',
     align: 'right',
     summaries: ['min', 'max', 'avg', 'sum'],
@@ -64,7 +64,7 @@ const COLUMN_MAIN = [
     width: 150,
   },
   {
-    title: 'views maps',
+    title: 'VIEWS MAPS',
     name: 'views_maps',
     align: 'right',
     summaries: ['min', 'max', 'avg', 'sum'],
@@ -72,7 +72,7 @@ const COLUMN_MAIN = [
     width: 150,
   },
   {
-    title: 'Views search',
+    title: 'LOCAL POST VIEWS SEARCH',
     name: 'local_post_views_search',
     align: 'right',
     summaries: ['min', 'max', 'avg', 'sum'],
@@ -80,7 +80,7 @@ const COLUMN_MAIN = [
     width: 150,
   },
   {
-    title: 'Actions call to action',
+    title: 'LOCAL POST ACTIONS CTA',
     name: 'local_post_actions_call_to_action',
     align: 'right',
     summaries: ['min', 'max', 'avg', 'sum'],
@@ -88,7 +88,7 @@ const COLUMN_MAIN = [
     width: 150,
   },
   {
-    title: 'actions website',
+    title: 'ACTIONS WEBSITE',
     name: 'actions_website',
     align: 'right',
     summaries: ['min', 'max', 'avg', 'sum'],
@@ -96,7 +96,7 @@ const COLUMN_MAIN = [
     width: 150,
   },
   {
-    title: 'actions driving directions',
+    title: 'ACTIONS DRIVING DIRECTIONS',
     name: 'actions_driving_directions',
     align: 'right',
     summaries: ['min', 'max', 'avg', 'sum'],
@@ -104,7 +104,7 @@ const COLUMN_MAIN = [
     width: 150,
   },
   {
-    title: 'actions phone',
+    title: 'ACTIONS PHONE',
     name: 'actions_phone',
     align: 'right',
     summaries: ['min', 'max', 'avg', 'sum'],
@@ -112,7 +112,7 @@ const COLUMN_MAIN = [
     width: 150,
   },
   {
-    title: 'photos views merchant',
+    title: 'PHOTOS VIEWS MERCHANT',
     name: 'photos_views_merchant',
     align: 'right',
     summaries: ['min', 'max', 'avg', 'sum'],
@@ -120,7 +120,7 @@ const COLUMN_MAIN = [
     width: 150,
   },
   {
-    title: 'photos views customers',
+    title: 'PHOTOS VIEWS CUSTOMER',
     name: 'photos_views_customers',
     align: 'right',
     summaries: ['min', 'max', 'avg', 'sum'],
@@ -128,7 +128,7 @@ const COLUMN_MAIN = [
     width: 150,
   },
   {
-    title: 'photos count merchant',
+    title: 'PHOTOS COUNT MERCHANT',
     name: 'photos_count_merchant',
     align: 'right',
     summaries: ['min', 'max', 'avg', 'sum'],
@@ -136,7 +136,7 @@ const COLUMN_MAIN = [
     width: 150,
   },
   {
-    title: 'photos count customers',
+    title: 'PHOTOS COUNT CUSTOMER',
     name: 'photos_count_customers',
     align: 'right',
     summaries: ['min', 'max', 'avg', 'sum'],
@@ -144,24 +144,24 @@ const COLUMN_MAIN = [
     width: 150,
   },
   {
-    title: 'report date',
+    title: 'REPORT DATE',
     name: 'report_date',
     isDate: true,
   },
   {
-    title: 'update date',
+    title: 'UPDATED DATE',
     name: 'updated_at',
     isDate: true,
     cell: row => formatDate(row.updated_at),
   },
   {
-    title: 'created date',
+    title: 'CREATED DATE',
     name: 'created_at',
     isDate: true,
     cell: row => formatDate(row.created_at),
   },
   {
-    title: 'download',
+    title: 'DOWNLOAD',
     name: 'download_csv',
     width: 100,
     isDetailHidden: true,

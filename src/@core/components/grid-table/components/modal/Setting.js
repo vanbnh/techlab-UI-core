@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import {Plus, Save, Trash, X} from 'react-feather'
+import {useTranslation} from 'react-i18next'
 import {ReactSortable} from 'react-sortablejs'
 import {
   Button,
@@ -36,18 +37,21 @@ const serializerFixedColumns = (fixedColumns, columns) => {
 }
 
 const SettingForm = ({values, setValues, options}) => {
+  const {t} = useTranslation()
+  const OPTIONS = options.map(op => ({...op, label: t(op.label)}))
+  const VALUES = values.map(v => ({...v, label: t(v.label)}))
   return (
     <Card>
       <CardHeader className="pb-1">
-        <CardTitle>Permissions</CardTitle>
+        <CardTitle>{t('Permissions')}</CardTitle>
       </CardHeader>
 
       <CardBody>
         <SelectField
-          placeholder="Select permissions ..."
+          placeholder={t('Select permissions...')}
           isMulti
-          value={values}
-          options={options}
+          value={VALUES}
+          options={OPTIONS}
           isClearable={false}
           onChange={ops => setValues(ops)}
         />
@@ -57,6 +61,7 @@ const SettingForm = ({values, setValues, options}) => {
 }
 
 const PagingForm = ({pageSizeValues, setPageSizeValues}) => {
+  const {t} = useTranslation()
   const [pageIdx, setEditNum] = useState(-1)
   const [numVal, setNumVal] = useState(-1)
   const [invalidText, setInvalidText] = useState('')
@@ -101,22 +106,22 @@ const PagingForm = ({pageSizeValues, setPageSizeValues}) => {
     if (pageIdx === 0 && pageSizeValues.length > 1) {
       const max = pageSizeValues[1]
       if (numVal >= max) {
-        message = `The value must be less than ${max}`
+        message = `${t('The value must be less than')} ${max}`
       }
     }
     if (pageIdx > 0 && pageIdx < pageSizeValues.length - 1) {
       const min = pageSizeValues[pageIdx - 1]
       const max = pageSizeValues[pageIdx + 1]
       if (numVal <= min) {
-        message = `The value must be greater than ${min}`
+        message = `${t('The value must be greater than')} ${min}`
       } else if (numVal >= max) {
-        message = `The value must be less than ${max}`
+        message = `${t('The value must be less than')} ${max}`
       }
     }
     if (pageIdx === pageSizeValues.length) {
       const min = pageSizeValues[pageSizeValues.length - 1]
       if (numVal <= min) {
-        message = `The value must be greater than ${min}`
+        message = `${t('The value must be greater than')} ${min}`
       }
     }
 
@@ -126,7 +131,7 @@ const PagingForm = ({pageSizeValues, setPageSizeValues}) => {
   return (
     <Card stretch>
       <CardHeader className="pb-1">
-        <CardTitle>Pagings</CardTitle>
+        <CardTitle>{t('Pagings')}</CardTitle>
       </CardHeader>
 
       <CardBody>
@@ -202,7 +207,7 @@ const PagingForm = ({pageSizeValues, setPageSizeValues}) => {
               </div>
             </div>
             {invalidText && (
-              <div className="text-danger ms-2">{invalidText}</div>
+              <div className="text-danger mt-25 ms-25">{invalidText}</div>
             )}
           </div>
         )}
@@ -225,6 +230,7 @@ const ColumnForm = ({
   filterCols,
   setFilterCols,
 }) => {
+  const {t} = useTranslation()
   const onChangeCustomizer = e => {
     const {name, checked} = e.target
     setCustomizerValue(prev => {
@@ -274,17 +280,17 @@ const ColumnForm = ({
   return (
     <Card stretch>
       <CardHeader className="pb-1">
-        <CardTitle>Columns</CardTitle>
+        <CardTitle>{t('Columns')}</CardTitle>
       </CardHeader>
 
       <CardBody className="overflow-auto">
         <FormGroup>
-          <Label className="fw-bolder">Customizers:</Label>
+          <Label className="fw-bolder">{t('Customizers')}:</Label>
           <div className="d-flex gap-2">
             <CheckField
               type="switch"
               id="reordering"
-              label="Column Reordering"
+              label={t('Column Reordering')}
               name="reordering"
               onChange={onChangeCustomizer}
               checked={customizerValue.includes('reordering')}
@@ -292,7 +298,7 @@ const ColumnForm = ({
             <CheckField
               type="switch"
               id="visibility"
-              label="Column Visibility"
+              label={t('Column Visibility')}
               name="visibility"
               onChange={onChangeCustomizer}
               checked={customizerValue.includes('visibility')}
@@ -300,12 +306,12 @@ const ColumnForm = ({
           </div>
         </FormGroup>
         <FormGroup>
-          <Label className="fw-bolder">Resizing Mode:</Label>
+          <Label className="fw-bolder">{t('Resizing Mode')}:</Label>
           <div className="d-flex gap-2">
             <CheckField
               type="radio"
               id="widget"
-              label="Widget"
+              label={t('Widget')}
               name="widget"
               value="widget"
               onChange={onChangeResizingMode}
@@ -314,7 +320,7 @@ const ColumnForm = ({
             <CheckField
               type="radio"
               id="nextColumn"
-              label="Next Column"
+              label={t('Next Column')}
               name="nextColumn"
               value="nextColumn"
               onChange={onChangeResizingMode}
@@ -323,24 +329,24 @@ const ColumnForm = ({
           </div>
         </FormGroup>
         <FormGroup>
-          <Label>Display:</Label>
+          <Label>{t('Display')}:</Label>
           <table className="table table-responsive table-bordered table-sm table-hover table-setting">
             <thead>
               <tr>
-                <th scope="col">Num</th>
-                <th scope="col">KEY</th>
+                <th scope="col">{t('No')}</th>
+                <th scope="col">{t('KEY')}</th>
                 <th scope="col">
-                  TITLE
-                  <small className="text-muted ms-1">(can edit)</small>
+                  {t('TITLE')}
+                  {/* <small className="text-muted ms-1">({t('can edit')})</small> */}
                 </th>
-                <th scope="col" style={{textAlign: 'center'}}>
-                  FIXED
+                <th scope="col" style={{textAlign: 'left'}}>
+                  {t('FIXED')}
                 </th>
-                <th scope="col" style={{textAlign: 'center'}}>
-                  VISIBILITIES
+                <th scope="col" style={{textAlign: 'left'}}>
+                  {t('VISIBILITIES')}
                 </th>
-                <th scope="col" style={{textAlign: 'center'}}>
-                  FILTERS
+                <th scope="col" style={{textAlign: 'left'}}>
+                  {t('FILTERS')}
                 </th>
               </tr>
             </thead>
@@ -359,33 +365,34 @@ const ColumnForm = ({
                       type="text"
                       value={column.title}
                       onChange={e => onChangeTitle(e, column.name)}
+                      disabled
                     />
                   </td>
-                  <td>
+                  <td className="text-left">
                     <CheckField
                       type="checkbox"
                       id={`${column.name}_fixed`}
                       onChange={e => onChangeFixed(e, column.name)}
                       checked={fixedColumnValues.includes(column.name)}
-                      className="fs-5 ms-5 cursor-pointer"
+                      className="fs-5 cursor-pointer"
                     />
                   </td>
-                  <td className="text-center">
+                  <td className="text-left">
                     <CheckField
                       type="checkbox"
                       id={`${column.name}_visibility`}
                       onChange={e => onChangeVisibility(e, column.name)}
                       checked={!columnVisibilities.includes(column.name)}
-                      className="fs-5 ms-5 cursor-pointer"
+                      className="fs-5 cursor-pointer"
                     />
                   </td>
-                  <td className="text-center">
+                  <td className="text-left">
                     <CheckField
                       type="checkbox"
                       id={`${column.name}_filter`}
                       onChange={e => onChangeFilterCol(e, column.name)}
                       checked={filterCols.includes(column.name)}
-                      className="fs-5 ms-5 cursor-pointer"
+                      className="fs-5 cursor-pointer"
                     />
                   </td>
                 </tr>
@@ -530,9 +537,7 @@ const ModalSettingGridTable = ({
   config,
   saveConfig,
 }) => {
-  // const dispatch = useDispatch()
-  // const {onSaveSettings} = dataTableActions
-
+  const {t} = useTranslation()
   const [dataSave, setDataSave] = useState({})
 
   const onSave = () => {
@@ -544,7 +549,7 @@ const ModalSettingGridTable = ({
     <ModalComponent
       isOpen={isOpen}
       toggle={close}
-      title={`Setting ${entries}`}
+      title={t('Configs')}
       size="xl"
       scrollable
       Body={
@@ -552,16 +557,16 @@ const ModalSettingGridTable = ({
       }
       Footer={
         <div className="d-flex justify-content-end">
-          <Button color="primary" className="me-1" onClick={onSave}>
-            Save
-          </Button>
           <Button
             color="secondary"
-            isLight
-            className="border-0"
+            className="border-0 me-50"
             onClick={close}
+            outline
           >
-            Close
+            {t('Cancel')}
+          </Button>
+          <Button color="primary" onClick={onSave}>
+            {t('Save')}
           </Button>
         </div>
       }

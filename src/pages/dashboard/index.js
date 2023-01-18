@@ -28,10 +28,12 @@ import './styles.scss'
 import WidgetItem from './widget/WidgetItem'
 import {getIcon} from './store/function'
 import ModalEditQuickNote from './modal/EditQuickNote'
+import {useTranslation} from 'react-i18next'
 
 const DashboardPage = () => {
   // *** REDUX ***
   const dispatch = useDispatch()
+  const {t} = useTranslation()
   const {isEdit, items, itemDetail, types} = useSelector(state => state.widgets)
 
   // *** GET Width ***
@@ -68,13 +70,15 @@ const DashboardPage = () => {
     <>
       <div className="d-flex justify-content-between">
         <div className="d-flex">
-          <div className="text-muted me-2">{items.length} widgets</div>
+          <div className="text-muted me-2">
+            {items.length} {t('Widgets')}
+          </div>
           {items.length > 0 && (
             <div className="fs-4 fw-bold d-flex align-items-center justify-content-center">
               <div className="items-center">
                 <CheckField
                   checked={isEdit}
-                  label="Edit"
+                  label={t('Edit')}
                   name="edit"
                   onChange={() => dispatch(handleChangeEditAction(!isEdit))}
                   type="switch"
@@ -86,7 +90,7 @@ const DashboardPage = () => {
         <div>
           <UncontrolledButtonDropdown>
             <DropdownToggle color="primary" caret size="sm">
-              Add new widget
+              {t('Add new widget')}
             </DropdownToggle>
             <DropdownMenu end>
               {types.map(widget => (
@@ -97,7 +101,7 @@ const DashboardPage = () => {
                 >
                   <div className="col text-nowrap overflow-hidden text-overflow-ellipsis">
                     {getIcon(widget.icon)}
-                    <span className="ms-50">{widget.name}</span>
+                    <span className="ms-50">{t(widget.name)}</span>
                   </div>
                 </DropdownItem>
               ))}

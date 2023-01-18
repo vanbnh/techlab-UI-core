@@ -1,6 +1,7 @@
 // ** React Imports
 import {Link} from 'react-router-dom'
 import {useEffect, useState} from 'react'
+import {useTranslation} from 'react-i18next'
 
 // ** Custom Components
 import Avatar from '@components/avatar'
@@ -27,8 +28,9 @@ import {
 import defaultAvatar from '@src/assets/images/portrait/small/avatar-s-11.jpg'
 
 const UserDropdown = () => {
-  // ** Store Vars
+  // ** Hooks ***
   const dispatch = useDispatch()
+  const {t} = useTranslation()
 
   // ** State
   const [userData, setUserData] = useState(null)
@@ -56,7 +58,7 @@ const UserDropdown = () => {
             {(userData && userData['fullName']) || 'Admin'}
           </span>
           <span className="user-status">
-            {(userData && userData.role) || 'Admin'}
+            {t((userData && userData.role) || 'admin')}
           </span>
         </div>
         <Avatar img={userAvatar} imgHeight="40" imgWidth="40" status="online" />
@@ -68,7 +70,7 @@ const UserDropdown = () => {
           onClick={() => dispatch(handleLogout())}
         >
           <Power size={14} className="me-75" />
-          <span className="align-middle">Logout</span>
+          <span className="align-middle">{t('Logout')}</span>
         </DropdownItem>
       </DropdownMenu>
     </UncontrolledDropdown>

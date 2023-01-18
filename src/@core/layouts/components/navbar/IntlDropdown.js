@@ -12,12 +12,12 @@ import {
 
 const IntlDropdown = () => {
   // ** Hooks
-  const {i18n} = useTranslation()
+  const {i18n, t} = useTranslation()
 
   // ** Vars
   const langObj = {
-    en: 'English',
-    jp: 'Japan',
+    en: t('English'),
+    jp: t('Japan'),
   }
 
   // ** Function to switch Language
@@ -48,11 +48,11 @@ const IntlDropdown = () => {
       <DropdownMenu className="mt-0" end>
         <DropdownItem href="/" tag="a" onClick={e => handleLangUpdate(e, 'en')}>
           <ReactCountryFlag className="country-flag" countryCode="us" svg />
-          <span className="ms-1">English</span>
+          <span className="ms-1">{t('English')}</span>
         </DropdownItem>
         <DropdownItem href="/" tag="a" onClick={e => handleLangUpdate(e, 'jp')}>
           <ReactCountryFlag className="country-flag" countryCode="jp" svg />
-          <span className="ms-1">Japan</span>
+          <span className="ms-1">{t('Japan')}</span>
         </DropdownItem>
       </DropdownMenu>
     </UncontrolledDropdown>

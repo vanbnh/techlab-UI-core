@@ -3,27 +3,27 @@ import {formatDate} from '../../../../utility/Utils'
 
 const COLUMN_MAIN = [
   {
-    title: 'id',
+    title: 'ID',
     name: 'client_id',
     isLink: true,
     to: row => `${menuConfigs.client.path}/${row.client_id}`,
     width: 50,
   },
   {
-    title: 'Name',
+    title: 'CLIENT NAME',
     name: 'client_name',
     isLink: true,
     to: row => `${menuConfigs.client.path}/${row.client_id}`,
     width: 200,
   },
   {
-    title: 'Update date',
+    title: 'UPDATED DATE',
     name: 'updated_at',
     isDate: true,
     cell: row => row.updated_at && formatDate(row.updated_at),
   },
   {
-    title: 'Created date',
+    title: 'CREATED DATE',
     name: 'created_at',
     isDate: true,
     cell: row => row.created_at && formatDate(row.created_at),

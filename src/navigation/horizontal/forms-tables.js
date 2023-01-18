@@ -1,5 +1,15 @@
 // ** Icons Import
-import { Edit, Copy, Circle, Box, Package, AlertTriangle, RotateCw, Server, Grid } from 'react-feather'
+import {
+  Edit,
+  Copy,
+  Circle,
+  Box,
+  Package,
+  AlertTriangle,
+  RotateCw,
+  Server,
+  Grid,
+} from 'react-feather'
 
 export default [
   {
@@ -16,105 +26,105 @@ export default [
             id: 'input',
             title: 'Input',
             icon: <Circle />,
-            navLink: '/forms/elements/input'
+            navLink: '/forms/elements/input',
           },
           {
             id: 'inputGroup',
             title: 'Input Groups',
             icon: <Circle />,
-            navLink: '/forms/elements/input-group'
+            navLink: '/forms/elements/input-group',
           },
           {
             id: 'inputMask',
             title: 'Input Mask',
             icon: <Circle />,
-            navLink: '/forms/elements/input-mask'
+            navLink: '/forms/elements/input-mask',
           },
           {
             id: 'textarea',
             title: 'Textarea',
             icon: <Circle />,
-            navLink: '/forms/elements/textarea'
+            navLink: '/forms/elements/textarea',
           },
           {
             id: 'checkbox',
             title: 'Checkbox',
             icon: <Circle />,
-            navLink: '/forms/elements/checkbox'
+            navLink: '/forms/elements/checkbox',
           },
           {
             id: 'radio',
             title: 'Radio',
             icon: <Circle />,
-            navLink: '/forms/elements/radio'
+            navLink: '/forms/elements/radio',
           },
           {
             id: 'switch',
             title: 'Switch',
             icon: <Circle />,
-            navLink: '/forms/elements/switch'
+            navLink: '/forms/elements/switch',
           },
           {
-            id: 'select',
-            title: 'Select',
+            id: 'selecting',
+            title: 'selecting',
             icon: <Circle />,
-            navLink: '/forms/elements/select'
+            navLink: '/forms/elements/select',
           },
           {
             id: 'numberInput',
             title: 'Number Input',
             icon: <Circle />,
-            navLink: '/forms/elements/number-input'
+            navLink: '/forms/elements/number-input',
           },
           {
             id: 'fileUploader',
             title: 'File Uploader',
             icon: <Circle />,
-            navLink: '/forms/elements/file-uploader'
+            navLink: '/forms/elements/file-uploader',
           },
           {
             id: 'quillEditor',
             title: 'Editor',
             icon: <Circle />,
-            navLink: '/forms/elements/editor'
+            navLink: '/forms/elements/editor',
           },
           {
             id: 'date_&_timePicker',
             title: 'Date & Time Picker',
             icon: <Circle />,
-            navLink: '/forms/elements/pickers'
-          }
-        ]
+            navLink: '/forms/elements/pickers',
+          },
+        ],
       },
       {
         id: 'formLayouts',
         title: 'Form Layout',
         icon: <Box />,
-        navLink: '/forms/layout/form-layout'
+        navLink: '/forms/layout/form-layout',
       },
       {
         id: 'wizard',
         title: 'Form Wizard',
         icon: <Package />,
-        navLink: '/forms/wizard'
+        navLink: '/forms/wizard',
       },
       {
         id: 'formValidation',
         title: 'Form Validation',
         icon: <AlertTriangle size={12} />,
-        navLink: '/forms/form-validation'
+        navLink: '/forms/form-validation',
       },
       {
         id: 'formRepeater',
         title: 'Form Repeater',
         icon: <RotateCw />,
-        navLink: '/forms/form-repeater'
+        navLink: '/forms/form-repeater',
       },
       {
         id: 'tablesReactstrap',
         title: 'Table',
         icon: <Server />,
-        navLink: '/tables/reactstrap'
+        navLink: '/tables/reactstrap',
       },
       {
         id: 'dataTable',
@@ -125,16 +135,16 @@ export default [
             id: 'dtBasic',
             title: 'Basic',
             icon: <Circle />,
-            navLink: '/datatables/basic'
+            navLink: '/datatables/basic',
           },
           {
             id: 'dtAdvance',
             title: 'Advanced',
             icon: <Circle />,
-            navLink: '/datatables/advance'
-          }
-        ]
-      }
-    ]
-  }
+            navLink: '/datatables/advance',
+          },
+        ],
+      },
+    ],
+  },
 ]

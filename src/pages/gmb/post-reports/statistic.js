@@ -16,6 +16,7 @@ import Spinner from '@src/@core/components/spinner/Fallback-spinner'
 import SimpleSparklineLine from '../../../@core/components/chart/spark-line/SparkLineLine'
 import SimpleSparklineBar from '../../../@core/components/chart/spark-line/SparkLineBar'
 import ChartLineBrush from '../../../@core/components/chart/line/LineBrush'
+import {useTranslation} from 'react-i18next'
 
 const calculateChange = (first, last) => {
   if (!first) return 0
@@ -30,6 +31,7 @@ const parentTo = menuConfigs.report.post.path
 const PostReportStatisticPage = () => {
   const {urls, keys, entries, statistic} = configs
   const {search} = useLocation()
+  const {t} = useTranslation()
   const params = searchParamtoObject(search)
   const postId = params?.path?.split('/')[5]
 
@@ -56,8 +58,16 @@ const PostReportStatisticPage = () => {
     value: chart.key,
     label: chart.name,
   }))
+  const CHART_OPTIONS = chartOptions.map(chart => ({
+    ...chart,
+    label: t(chart.label),
+  }))
 
   const [selectCharts, setSelectCharts] = useState(chartOptions)
+  const SELECT_CHARTS = selectCharts.map(chart => ({
+    ...chart,
+    label: t(chart.label),
+  }))
   const [chartData, setChartData] = useState({})
   useEffect(() => {
     let chartObj = {}
@@ -65,6 +75,7 @@ const PostReportStatisticPage = () => {
       chartObj = selectCharts.reduce((acc, cur) => {
         acc[cur.key] = {
           ...cur,
+          name: t(cur.name),
           data: data.map(item => [
             new Date(item.report_date).getTime(),
             item[cur.key],
@@ -81,8 +92,6 @@ const PostReportStatisticPage = () => {
     }
     setChartData(chartObj)
   }, [data, selectCharts])
-
-  // console.log(chartData)
 
   if (isLoading) return <Spinner />
 
@@ -111,11 +120,11 @@ const PostReportStatisticPage = () => {
                 <SelectField
                   name="location_report_chart"
                   isMulti
-                  value={selectCharts}
+                  value={SELECT_CHARTS}
                   isClearable
                   closeMenuOnSelect={false}
                   onChange={options => setSelectCharts(options)}
-                  options={chartOptions}
+                  options={CHART_OPTIONS}
                 />
               </div>
             </Col>
@@ -137,15 +146,15 @@ const PostReportStatisticPage = () => {
         <table className=" table table-modern table-striped">
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Last</th>
-              <th>Average</th>
-              <th>Percentage</th>
+              <th>{t('Name')}</th>
+              <th>{t('Last')}</th>
+              <th>{t('Average')}</th>
+              <th>{t('Percentage')}</th>
               <th>
                 {moment(datePicker.start_date).format('DD/MM/YYYY')} -{' '}
                 {moment(datePicker.end_date).format('DD/MM/YYYY')}
               </th>
-              <th>Volume</th>
+              <th>{t('Volume')}</th>
             </tr>
           </thead>
           <tbody>

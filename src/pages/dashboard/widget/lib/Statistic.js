@@ -20,8 +20,10 @@ import {getIcon} from '../../store/function'
 import Avatar from '@components/avatar'
 import {useQuery} from 'react-query'
 import DatePickerComponent from '../../../../@core/components/date-picker'
+import {useTranslation} from 'react-i18next'
 
 const Statistic = ({item, isEdit, onDuplicateItem, onRemoveItem}) => {
+  const {t} = useTranslation()
   const [data, setData] = useState({
     client: 0,
     gmb_account: 0,
@@ -61,7 +63,7 @@ const Statistic = ({item, isEdit, onDuplicateItem, onRemoveItem}) => {
 
   const statisticCards = [
     {
-      name: 'Location',
+      name: 'Locations',
       data: data.location,
       icon: 'MapPin',
       color: 'primary',
@@ -115,16 +117,16 @@ const Statistic = ({item, isEdit, onDuplicateItem, onRemoveItem}) => {
                 })
               }}
             >
-              <Copy size={14} className="me-50" />
-              Duplicate
+              <Copy size={14} className="me-50 ms-1" />
+              {t('Duplicate')}
             </DropdownItem>
             <DropdownItem divider />
             <DropdownItem
               className="w-100 "
               onClick={() => onRemoveItem(item.id)}
             >
-              <Trash2 size={14} className="me-50 text-danger" />
-              Delete
+              <Trash2 size={14} className="me-50 ms-1 text-danger" />
+              {t('Delete')}
             </DropdownItem>
           </DropdownMenu>
         </UncontrolledButtonDropdown>
@@ -152,7 +154,7 @@ const Statistic = ({item, isEdit, onDuplicateItem, onRemoveItem}) => {
             />
             <div className="my-auto">
               <h4 className="fw-bolder mb-0">{item.data}</h4>
-              <CardText className="font-small-3 mb-0">{item.name}</CardText>
+              <CardText className="font-small-3 mb-0">{t(item.name)}</CardText>
             </div>
           </div>
         </Col>
