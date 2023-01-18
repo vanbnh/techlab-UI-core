@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react'
 import {Card, CardBody} from 'reactstrap'
 import cn from 'classnames'
 import Loading from '@src/@core/components/grid-table/components/loading/Loading'
+import {useMedia} from 'react-use'
 
 const CardTableDetail = ({
   data,
@@ -11,6 +12,7 @@ const CardTableDetail = ({
 }) => {
   // *** STATE ***
   const [checkDataChange, setCheckDataChange] = useState({})
+  const isWide = useMedia('(max-width: 480px)')
 
   useEffect(() => {
     if (dataVersionCompare) {
@@ -24,22 +26,22 @@ const CardTableDetail = ({
     }
   }, [dataVersionCurrent, dataVersionCompare])
 
+  const renderCell = value => (isWide ? <small>{value}</small> : value)
+
   const renderBody = () =>
     dataVersionCompare ? (
-      <table className="table table-bordered table-sm">
+      <table className="table table-responsive table-bordered table-sm">
         <tbody>
           {Object.keys(dataVersionCurrent).map(key => (
             <tr key={key}>
-              <td className="fw-bolder text-nowrap">
-                {key && key.toUpperCase()}
-              </td>
+              <td className="fw-bolder text-nowrap">{renderCell(key)}</td>
               <td
                 className={cn('text-nowrap', {
                   'bg-light-danger': checkDataChange[key],
                 })}
                 style={{maxWidth: '30vw', overflow: 'auto'}}
               >
-                {dataVersionCurrent[key]}
+                {renderCell(dataVersionCurrent[key])}
               </td>
               <td
                 className={cn('text-nowrap', {
@@ -47,25 +49,23 @@ const CardTableDetail = ({
                 })}
                 style={{maxWidth: '30vw', overflow: 'auto'}}
               >
-                {dataVersionCompare[key]}
+                {renderCell(dataVersionCompare[key])}
               </td>
             </tr>
           ))}
         </tbody>
       </table>
     ) : (
-      <table className="table table-modern table-striped">
+      <table className="table table-responsive table-modern table-striped">
         <tbody>
           {Object.keys(data).map(key => (
             <tr key={key}>
-              <td className="fw-bold text-nowrap">
-                {key && key.toUpperCase()}
-              </td>
+              <td className="fw-bold text-nowrap">{renderCell(key)}</td>
               <td
                 className="text-nowrap"
                 style={{maxWidth: '50vw', overflow: 'auto'}}
               >
-                {data[key]}
+                {renderCell(data[key])}
               </td>
             </tr>
           ))}
@@ -77,7 +77,7 @@ const CardTableDetail = ({
 
   return (
     <Card>
-      <CardBody className="p-0">{renderBody()}</CardBody>
+      <CardBody className="p-0 overflow-auto">{renderBody()}</CardBody>
       {isLoadingVersion && <Loading />}
     </Card>
   )

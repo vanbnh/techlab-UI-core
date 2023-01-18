@@ -13,16 +13,16 @@ import menuConfigs from '../../configs/menu'
 
 export default [
   {
-    header: 'Dashboard',
+    header: 'Dashboards',
   },
   {
     id: 'gmb-dashboard',
-    title: 'Dashboard',
+    title: 'Dashboards',
     icon: <Home size={20} />,
     navLink: '/dashboard',
   },
   {
-    header: 'Menu',
+    header: 'GMB',
   },
   {
     id: 'gmb-account',
@@ -69,7 +69,7 @@ export default [
   },
   {
     id: 'gmb-monitoring',
-    title: 'Monitoring',
+    title: 'Monitorings',
     icon: <Monitor size={20} />,
     children: [
       {
