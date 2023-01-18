@@ -38,7 +38,7 @@ import {
   CardText,
   CardTitle,
   FormFeedback,
-  UncontrolledTooltip,
+  // UncontrolledTooltip,
   Spinner,
 } from 'reactstrap'
 
@@ -77,8 +77,8 @@ const ToastContent = ({t, name, role}) => {
 }
 
 const defaultValues = {
-  username: 'gmb_admin',
-  password: 'pmzq123456789',
+  username: '',
+  password: '',
 }
 
 const LoginPage = () => {
