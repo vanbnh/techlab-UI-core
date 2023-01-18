@@ -1,5 +1,5 @@
 // ** Redux Imports
-import { createSlice } from '@reduxjs/toolkit'
+import {createSlice} from '@reduxjs/toolkit'
 
 // ** UseJWT import to get config
 import useJwt from '@src/auth/jwt/useJwt'
@@ -15,29 +15,38 @@ const initialUser = () => {
 export const authSlice = createSlice({
   name: 'authentication',
   initialState: {
-    userData: initialUser()
+    userData: initialUser(),
   },
   reducers: {
     handleLogin: (state, action) => {
       state.userData = action.payload
-      state[config.storageTokenKeyName] = action.payload[config.storageTokenKeyName]
-      state[config.storageRefreshTokenKeyName] = action.payload[config.storageRefreshTokenKeyName]
+      state[config.storageTokenKeyName] =
+        action.payload[config.storageTokenKeyName]
+      state[config.storageRefreshTokenKeyName] =
+        action.payload[config.storageRefreshTokenKeyName]
       localStorage.setItem('userData', JSON.stringify(action.payload))
-      localStorage.setItem(config.storageTokenKeyName, JSON.stringify(action.payload.accessToken))
-      localStorage.setItem(config.storageRefreshTokenKeyName, JSON.stringify(action.payload.refreshToken))
+      localStorage.setItem(
+        config.storageTokenKeyName,
+        JSON.stringify(action.payload.accessToken),
+      )
+      localStorage.setItem(
+        config.storageRefreshTokenKeyName,
+        JSON.stringify(action.payload.refreshToken),
+      )
     },
     handleLogout: state => {
       state.userData = {}
       state[config.storageTokenKeyName] = null
       state[config.storageRefreshTokenKeyName] = null
       // ** Remove user, accessToken & refreshToken from localStorage
-      localStorage.removeItem('userData')
-      localStorage.removeItem(config.storageTokenKeyName)
-      localStorage.removeItem(config.storageRefreshTokenKeyName)
-    }
-  }
+      // localStorage.removeItem('userData')
+      // localStorage.removeItem(config.storageTokenKeyName)
+      // localStorage.removeItem(config.storageRefreshTokenKeyName)
+      localStorage.clear()
+    },
+  },
 })
 
-export const { handleLogin, handleLogout } = authSlice.actions
+export const {handleLogin, handleLogout} = authSlice.actions
 
 export default authSlice.reducer
