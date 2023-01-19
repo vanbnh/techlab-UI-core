@@ -175,5 +175,13 @@
   "Errors": "エラー",
   "Edit Quick Note": "クイックノートを編集",
   "Title": "タイトル",
-  "Content": "コンテンツ"
+  "Content": "コンテンツ",
+  "Today": "今日",
+  "Yesterday": "昨日",
+  "This Week": "今週",
+  "Last Week": "先週",
+  "This Month": "今月",
+  "Last Month": "先月",
+  "days up to today": "過去の日数",
+  "days starting today": "将来の日数"
 }

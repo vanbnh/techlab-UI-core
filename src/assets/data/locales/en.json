@@ -175,5 +175,13 @@
   "Errors": "Errors",
   "Edit Quick Note": "Edit Quick Note",
   "Title": "Title",
-  "Content": "Content"
+  "Content": "Content",
+  "Today": "Today",
+  "Yesterday": "Yesterday",
+  "This Week": "This Week",
+  "Last Week": "Last Week",
+  "This Month": "This Month",
+  "Last Month": "Last Month",
+  "days up to today": "days up to today",
+  "days starting today": "days starting today"
 }
