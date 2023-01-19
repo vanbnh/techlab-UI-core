@@ -6,12 +6,14 @@ import {yupResolver} from '@hookform/resolvers/yup'
 import ModalComponent from '../../../@core/components/modal'
 import {InputField} from '@src/@core/components/form-field'
 import {EditorField} from '../../../@core/components/form-field'
+import {useTranslation} from 'react-i18next'
 
 const FormSchema = yup.object().shape({
   title: yup.string().required('Tiêu đề không được để trống'),
 })
 
 const ModalEditQuickNote = ({openModal, toggleModal, item, onSaveItem}) => {
+  const {t} = useTranslation()
   // *** Hook Form
   const {
     reset,
@@ -48,7 +50,7 @@ const ModalEditQuickNote = ({openModal, toggleModal, item, onSaveItem}) => {
     <ModalComponent
       open={openModal}
       toggle={toggleModal}
-      title="Edit Quick Note"
+      title={t('Edit Quick Note')}
       scrollable
       Body={
         <>
@@ -62,8 +64,7 @@ const ModalEditQuickNote = ({openModal, toggleModal, item, onSaveItem}) => {
                   render={({field}) => (
                     <InputField
                       name="title"
-                      placeholder="Title..."
-                      label="Title"
+                      label={t('Title')}
                       required
                       invalid={errors['title'] && true}
                       feedback={errors['title'] && errors['title'].message}
@@ -80,7 +81,7 @@ const ModalEditQuickNote = ({openModal, toggleModal, item, onSaveItem}) => {
                   render={({field}) => (
                     <EditorField
                       name="content"
-                      label="Content"
+                      label={t('Content')}
                       required
                       {...field}
                     />
@@ -99,10 +100,10 @@ const ModalEditQuickNote = ({openModal, toggleModal, item, onSaveItem}) => {
             className="me-50"
             onClick={() => toggleModal()}
           >
-            Close
+            {t('Cancel')}
           </Button>
           <Button color="relief-primary" onClick={onSubmit}>
-            Save
+            {t('Save')}
           </Button>
         </div>
       }
