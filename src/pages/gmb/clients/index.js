@@ -4,7 +4,7 @@ import columns from './columns/main'
 import {formatRowData, configs} from './configs'
 
 const ClientPage = () => {
-  const {entries, settings, keys, urls} = configs
+  const {entries, settings, keys, urls, fixedColumns} = configs
   const QUERY = {
     url: urls.list,
     key: keys.list,
@@ -17,6 +17,7 @@ const ClientPage = () => {
       formatData={formatRowData}
       entries={entries}
       settings={settings}
+      fixedCols={fixedColumns}
     />
   )
 }

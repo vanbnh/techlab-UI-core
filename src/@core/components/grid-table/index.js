@@ -49,20 +49,22 @@ import {
   LOCAL_FILTERS,
   LOCAL_FILTER_SETTINGS,
   LOCAL_FIXED_COLUMNS,
+  LOCAL_HIDDEN_COLUMNS,
   LOCAL_PARAM_PAGE_SIZES,
   LOCAL_PARAM_PER_PAGE,
+  LOCAL_PERMISSIONS,
   LOCAL_REORDER_COLUMNS,
   LOCAL_RESIZE_COLUMNS,
 } from './config'
 import {Link, useLocation} from 'react-router-dom'
-import {useQuery, useQueryClient} from 'react-query'
-import axios from 'axios'
 import {formatDate} from '../../../utility/Utils'
 import LoadingGridTable from './components/loading/Loading'
 import ModalSettingGridTable from './components/modal/Setting'
 import ToolbarFilterProvider from './components/filters'
 import ReactPaginate from 'react-paginate'
 import {useTranslation} from 'react-i18next'
+import useGridTable from './hook/useGridTable'
+import {useFetchData, usePrefetchData} from './hook/useQuery'
 
 const GridTableComponent = ({
   providerComponents = [],
@@ -84,96 +86,64 @@ const GridTableComponent = ({
   },
   loading = false,
 }) => {
-  const groupCols = columns.filter(col => col.isGroup)
-  const isGrouping = groupCols.length > 0
+  const isGrouping = columns.filter(col => col.isGroup).length > 0
 
   // *** HOOKS ***
   const {pathname} = useLocation()
   const {t} = useTranslation()
 
-  // *** STATE CORE ***
-  const [dataRows, setDataRows] = useState([])
-  const [columnStates, setColumnStates] = useState([])
-  const [totalPage, setTotalPage] = useState(1)
+  // *** REDUCER ***
+  const {
+    dataRows,
+    columnStates,
+    totalPage,
+    currentPage,
+    perPage,
+    pageSizes,
+    rowSelects,
+    columnOrders,
+    columnWidths,
+    filters,
+    filterColumns,
+    columnResizingMode,
+    fixedColumns,
+    permissions,
+    hiddenColumnNames,
+    columnCustomizer,
 
-  // *** CONTROLS ***
-  const [currentPage, setCurrentPage] = useState(0)
-  const [perPage, setPerPage] = useState(10)
-  const [pageSizes, setPageSizes] = useState([10, 20, 50, 100])
-
-  const [rowSelects, setRowSelects] = useState([])
-  const [columnOrders, setColumnOrders] = useState([])
-  const [columnWidths, setColumnWidths] = useState([])
-  const [filters, setFilters] = useState([])
-  const [filterColumns, setFilterColumns] = useState([])
-  const [columnResizingMode, setColumnResizingMode] = useState('widget')
-  const [fixedColumns, setFixedColumns] = useState(fixedCols)
-  const [permissionState, setPermissionState] = useState(settings)
-  const [hiddenColumnNames, setHiddenColumnNames] = useState([])
-  const [columnCustomizer, setColumnCustomizer] = useState([
-    'reordering',
-    'visibility',
-  ])
-  const exporterRef = useRef(null)
-  const startExport = useCallback(
-    options => {
-      exporterRef.current.exportGrid(options)
-    },
-    [exporterRef],
-  )
+    setDataRows,
+    setColumnStates,
+    setTotalPage,
+    setCurrentPage,
+    setPerPage,
+    setPageSizes,
+    setRowSelects,
+    setColumnOrders,
+    setColumnWidths,
+    setFilters,
+    setFilterColumns,
+    setColumnResizingMode,
+    setFixedColumns,
+    setPermissions,
+    setHiddenColumnNames,
+    setColumnCustomizer,
+  } = useGridTable()
 
   // *** REACT QUERY ***
-  const queryClient = useQueryClient()
-  const handleCallApi = async page => {
-    const params = {
-      ...query.params,
-      page: page + 1,
-      limit: perPage,
-    }
-    const data = filters.map(f => ({
-      key: f.key,
-      value: f.value,
-      expr: f.condition,
-    }))
-
-    return await axios.post(query.url, data, {params}).then(res => res.data)
-  }
-
-  const {data: dataQuery, isLoading} = useQuery(
-    [
-      query.key,
-      {
-        page: currentPage,
-        limit: perPage,
-        f: filters.map(f => ({[f.key]: f.value})),
-      },
-      query.params,
-    ],
-    () => handleCallApi(currentPage),
-  )
+  const {data: dataQuery, isLoading} = useFetchData({
+    query,
+    perPage,
+    page: currentPage,
+    filters,
+  })
   // *** Prefetch
-  useEffect(() => {
-    if (dataQuery && dataQuery.metadata && dataQuery.metadata.has_next) {
-      const maxPostPage = Number(
-        Math.ceil(dataQuery?.metadata?.total / perPage),
-      )
-      if (currentPage < maxPostPage) {
-        const nextPage = currentPage + 1
-        queryClient.prefetchQuery(
-          [
-            query.key,
-            {
-              page: nextPage,
-              limit: perPage,
-              f: filters.map(f => ({[f.key]: f.value})),
-            },
-            query.params,
-          ],
-          () => handleCallApi(nextPage),
-        )
-      }
-    }
-  }, [dataQuery])
+  usePrefetchData({
+    dataQuery,
+    query,
+    perPage,
+    page: currentPage,
+    filters,
+  })
 
   // *** SET DATA ROWS ***
   useEffect(() => {
@@ -224,13 +194,10 @@ const GridTableComponent = ({
 
   // *** FIXED COLUMN *** //
   useEffect(() => {
-    const init = getDataLocalStorage(
-      LOCAL_FIXED_COLUMNS,
-      pathname,
-      fixedColumns,
-    )
+    const init = getDataLocalStorage(LOCAL_FIXED_COLUMNS, pathname, fixedCols)
     setFixedColumns(init)
   }, [pathname])
+
   useEffect(() => {
     saveDataLocalStorage(LOCAL_FIXED_COLUMNS, pathname, fixedColumns)
   }, [fixedColumns, pathname])
@@ -326,15 +293,33 @@ const GridTableComponent = ({
   useEffect(() => {
     saveDataLocalStorage(LOCAL_FILTER_SETTINGS, pathname, filterColumns)
   }, [filterColumns, pathname])
+
+  // *** HIDDEN COLUMNS ***
+  useEffect(() => {
+    const init = getDataLocalStorage(LOCAL_HIDDEN_COLUMNS, pathname, [])
+    setHiddenColumnNames(init)
+  }, [pathname])
+  useEffect(() => {
+    saveDataLocalStorage(LOCAL_HIDDEN_COLUMNS, pathname, hiddenColumnNames)
+  }, [hiddenColumnNames, pathname])
+
+  // *** PERMISSION ***
+  useEffect(() => {
+    const init = getDataLocalStorage(LOCAL_PERMISSIONS, pathname, settings)
+    setPermissions(init)
+  }, [pathname, settings])
+  useEffect(() => {
+    saveDataLocalStorage(LOCAL_PERMISSIONS, pathname, permissions)
+  }, [permissions, pathname])
   // *** ================================ END LOCAL STORAGE ==================================== ***
 
   // *** PERMISSION ***
-  const canSummary = permissionState.includes('summary')
-  const canPagination = permissionState.includes('pagination')
-  const canSelect = permissionState.includes('selecting')
-  const canReOrdering = permissionState.includes('reordering')
-  const canExport = permissionState.includes('exporting')
-  const canUpload = permissionState.includes('upload')
+  const canSummary = permissions.includes('summary')
+  const canPagination = permissions.includes('pagination')
+  const canSelect = permissions.includes('selecting')
+  const canReOrdering = permissions.includes('reordering')
+  const canExport = permissions.includes('exporting')
+  const canUpload = permissions.includes('upload')
 
   // *** COMPONENTS ***
   const ExportButtonComponent = ({onToggle, buttonRef, ...restProps}) => (
@@ -415,6 +400,13 @@ const GridTableComponent = ({
       containerClassName="pagination react-paginate separated-pagination pagination-sm justify-content-end pe-1 mt-1"
     />
   )
+  const exporterRef = useRef(null)
+  const startExport = useCallback(
+    options => {
+      exporterRef.current.exportGrid(options)
+    },
+    [exporterRef],
+  )
 
   const onSaveConfig = useCallback(d => {
     const {
@@ -427,7 +419,7 @@ const GridTableComponent = ({
       hiddenColumnNames,
       filterColumns,
     } = d
-    setPermissionState(permissions)
+    setPermissions(permissions)
     setColumnCustomizer(columnCustomizer)
     setColumnResizingMode(columnResizingMode)
     setColumnStates(columns)
@@ -613,7 +605,7 @@ const GridTableComponent = ({
           hiddenColumnNames,
           filterColumns,
           columnOrders,
-          permissions: permissionState,
+          permissions,
           columnCustomizer,
           columnResizingMode,
           pageSizes,

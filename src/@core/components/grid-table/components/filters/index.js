@@ -8,7 +8,7 @@ import {
 } from '@devexpress/dx-react-core'
 import {DateRangePicker} from 'react-date-range'
 import {enUS, ja} from 'react-date-range/dist/locale'
-import {addDays} from 'date-fns'
+import {addDays, format, isWeekend} from 'date-fns'
 import {uid} from 'uid'
 import moment from 'moment'
 
@@ -96,6 +96,15 @@ const LOCATES = {
   en: enUS,
   jp: ja,
 }
+const customDayContent = day => {
+  return (
+    <div>
+      <span className={isWeekend(day) ? 'text-danger' : ''}>
+        {format(day, 'd')}
+      </span>
+    </div>
+  )
+}
 
 const DatePickerForm = ({onSave, onCancel, onClose, setting}) => {
   const {t, i18n} = useTranslation()
@@ -174,6 +183,7 @@ const DatePickerForm = ({onSave, onCancel, onClose, setting}) => {
           direction={isMedium ? 'vertical' : 'horizontal'}
           staticRanges={getStaticRanges(t)}
           inputRanges={getInputRanges(t)}
+          dayContentRenderer={customDayContent}
         />
       </div>
 
