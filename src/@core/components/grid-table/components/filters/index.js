@@ -35,6 +35,7 @@ import {
 import {Plus, Search, XCircle} from 'react-feather'
 import 'react-date-range/dist/styles.css'
 import 'react-date-range/dist/theme/default.css'
+import {useTranslation} from 'react-i18next'
 
 const invisible = {
   opacity: 0,
@@ -44,7 +45,7 @@ const invisible = {
 
 const textConditionOptions = [
   {
-    label: 'Contains',
+    label: 'Contain',
     value: 'contains',
   },
   {
@@ -52,7 +53,7 @@ const textConditionOptions = [
     value: 'not_contains',
   },
   {
-    label: 'Equals',
+    label: 'Equal',
     value: 'exact',
   },
   {
@@ -89,6 +90,7 @@ const numberConditionOptions = [
 ]
 
 const DatePickerForm = ({onSave, onCancel, onClose, setting}) => {
+  const {t} = useTranslation()
   const [type, setType] = useState(setting ? setting.condition : 'between')
   const [dateRange, setDateRange] = useState([
     {
@@ -167,14 +169,14 @@ const DatePickerForm = ({onSave, onCancel, onClose, setting}) => {
             }
           }}
         >
-          Cancel{' '}
+          {t('Cancel')}
         </Button>
         <Button
           size="sm"
           color={onClose ? 'primary' : 'info'}
           onClick={handleSave}
         >
-          {onClose ? 'Save' : 'Add'}
+          {t(onClose ? 'Save' : 'Add')}
         </Button>
       </div>
     </div>
@@ -191,20 +193,23 @@ const FilterItemForm = ({
   isEdit,
 }) => {
   const ref = useRef(null)
+  const {t} = useTranslation()
   const [opt, setOpt] = useState(selectCondition)
   const [val, setVal] = useState(selectValue)
 
   useClickOutside(ref, () => onClose && onClose())
 
-  const options =
+  let options =
     type === 'number' ? numberConditionOptions : textConditionOptions
+
+  options = options.map(op => ({...op, label: t(op.label)}))
 
   const handleSave = () => onSave({condition: opt, value: val})
 
   return (
     <div ref={ref}>
       <InputGroup>
-        <InputGroupText>Condition</InputGroupText>
+        <InputGroupText>{t('Condition')}</InputGroupText>
         <Input
           type="select"
           name="condition"
@@ -221,7 +226,7 @@ const FilterItemForm = ({
       </InputGroup>
 
       <InputGroup className="mt-1">
-        <InputGroupText>Value</InputGroupText>
+        <InputGroupText>{t('Value')}</InputGroupText>
         <Input type={type} value={val} onChange={e => setVal(e.target.value)} />
       </InputGroup>
       <div className="mt-1 d-flex justify-content-end">
@@ -238,7 +243,7 @@ const FilterItemForm = ({
             }
           }}
         >
-          Cancel{' '}
+          {t('Cancel')}
         </Button>
         <Button
           color={isEdit ? 'primary' : 'info'}
@@ -246,7 +251,7 @@ const FilterItemForm = ({
           onClick={handleSave}
           size="sm"
         >
-          {isEdit ? 'Save' : 'Add'}
+          {t(isEdit ? 'Save' : 'Add')}
         </Button>
       </div>
     </div>
@@ -279,11 +284,12 @@ const ToolbarFilterProvider = ({
   filterColumns = [],
   entries = '',
 }) => {
+  const {t} = useTranslation()
+
   const pluginDependencies = [{name: 'Toolbar'}]
   const refFillterAll = useRef(null)
 
   const [filterTemps, setFilterTemps] = useState([])
-
   const [showFilters, setShowFilters] = useState(false)
   const [searchValue, setSearchValue] = useState('')
   const [selectField, setSelectField] = useState('')
@@ -611,7 +617,7 @@ const ToolbarFilterProvider = ({
                             }
                       }
                     >
-                      Add filter
+                      {t('Add filter')}
                     </Button>
                   </span>
                 </div>
@@ -622,7 +628,7 @@ const ToolbarFilterProvider = ({
                 className="modal-dialog-centered modal-lg"
               >
                 <ModalHeader toggle={() => setShowFilters(false)}>
-                  Filter {entries}
+                  {t('Settings')}
                 </ModalHeader>
                 <ModalBody>
                   <div>
@@ -631,7 +637,7 @@ const ToolbarFilterProvider = ({
                         <Search size={14} />
                       </InputGroupText>
                       <Input
-                        placeholder="Search..."
+                        placeholder={t('Search...')}
                         onChange={e => setSearchValue(e.target.value)}
                         value={searchValue}
                       />
@@ -673,7 +679,9 @@ const ToolbarFilterProvider = ({
                       </>
                     ) : (
                       <div className="mt-1">
-                        <td>No result found for query: {searchValue}</td>
+                        <td>
+                          {t('No result found for query')}: {searchValue}
+                        </td>
                       </div>
                     )}
                   </div>
@@ -689,7 +697,7 @@ const ToolbarFilterProvider = ({
                         setShowFilters(false)
                       }}
                     >
-                      Cancel{' '}
+                      {t('Cancel')}
                     </Button>
                     <Button
                       color="primary"
@@ -699,7 +707,7 @@ const ToolbarFilterProvider = ({
                         setFilterTemps([])
                       }}
                     >
-                      Apply{' '}
+                      {t('Apply')}
                     </Button>
                   </div>
                 </ModalFooter>

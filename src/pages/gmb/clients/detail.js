@@ -30,7 +30,7 @@ const ClientDetailPage = () => {
           data={{
             parentName: entries,
             parentTo,
-            activeName: notFound ? id : detail?.Name,
+            activeName: notFound ? id : detail['CLIENT NAME'],
           }}
         />
       </div>

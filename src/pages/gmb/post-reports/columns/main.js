@@ -4,12 +4,12 @@ import {formatDate} from '../../../../utility/Utils'
 
 const COLUMN_MAIN = [
   {
-    title: 'Actions',
+    title: 'ACTIONS',
     name: 'actions',
     isDetailHidden: true,
   },
   {
-    title: 'post id',
+    title: 'POST ID',
     name: 'post_id',
     isLink: true,
     filterKey: 'post__post_id',
@@ -22,7 +22,7 @@ const COLUMN_MAIN = [
     width: 180,
   },
   {
-    title: 'client',
+    title: 'CLIENT NAME',
     name: 'client_name',
     isLink: true,
     align: 'center',
@@ -39,38 +39,38 @@ const COLUMN_MAIN = [
     ),
   },
   {
-    title: 'local post views search',
+    title: 'LOCAL POST VIEWS SEARCH',
     name: 'local_post_views_search',
     align: 'right',
     summaries: ['min', 'max', 'avg', 'sum'],
     width: 150,
   },
   {
-    title: 'local post actions call to action',
+    title: 'LOCAL POST ACTIONS CTA',
     name: 'local_post_actions_call_to_action',
     align: 'right',
     summaries: ['min', 'max', 'avg', 'sum'],
     width: 150,
   },
   {
-    title: 'report date',
+    title: 'REPORT DATE',
     name: 'report_date',
     isDate: true,
   },
   {
-    title: 'update date',
+    title: 'UPDATED DATE',
     name: 'updated_at',
     isDate: true,
     cell: row => formatDate(row.updated_at),
   },
   {
-    title: 'created date',
+    title: 'CREATED DATE',
     name: 'created_at',
     isDate: true,
     cell: row => formatDate(row.created_at),
   },
   {
-    title: 'download',
+    title: 'DOWNLOAD',
     name: 'download_csv',
     width: 100,
     isDetailHidden: true,

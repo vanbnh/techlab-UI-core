@@ -10,6 +10,7 @@ import {
   UncontrolledButtonDropdown,
 } from 'reactstrap'
 import {Copy, Edit, Settings, Trash2} from 'react-feather'
+import {useTranslation} from 'react-i18next'
 
 const QuickNote = ({
   item,
@@ -19,6 +20,7 @@ const QuickNote = ({
   onRemoveItem,
 }) => {
   const {title, content} = item
+  const {t} = useTranslation()
 
   const renderCardActions = useCallback(
     () => (
@@ -29,8 +31,8 @@ const QuickNote = ({
           </DropdownToggle>
           <DropdownMenu>
             <DropdownItem className="w-100" onClick={() => setItemDetail(item)}>
-              <Edit size={14} className="me-50" />
-              Edit
+              <Edit size={14} className="me-50 ms-1" />
+              {t('Edit')}
             </DropdownItem>
             <DropdownItem
               className="w-100"
@@ -41,16 +43,16 @@ const QuickNote = ({
                 })
               }}
             >
-              <Copy size={14} className="me-50" />
-              Duplicate
+              <Copy size={14} className="me-50 ms-1" />
+              {t('Duplicate')}
             </DropdownItem>
             <DropdownItem divider />
             <DropdownItem
               className="w-100"
               onClick={() => onRemoveItem(item.id)}
             >
-              <Trash2 size={14} className="me-50 text-danger" />
-              Delete
+              <Trash2 size={14} className="me-50 ms-1 text-danger" />
+              {t('Delete')}
             </DropdownItem>
           </DropdownMenu>
         </UncontrolledButtonDropdown>

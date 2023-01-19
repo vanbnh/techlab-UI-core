@@ -3,14 +3,16 @@ import {toast} from 'react-hot-toast'
 import {useCopyToClipboard} from 'react-use'
 import {Card, CardBody, CardHeader, CardSubtitle, CardTitle} from 'reactstrap'
 import Prism from 'prismjs'
+import {useTranslation} from 'react-i18next'
 
-const CoppyText = ({copied, setCopied, value, title}) => {
+const CoppyText = ({copied, setCopied, value}) => {
   const [_, copyToClipboard] = useCopyToClipboard()
+  const {t} = useTranslation()
 
   const onCopy = () => {
     copyToClipboard(value)
     setCopied()
-    toast.success(`Copied ${title} to clipboard`)
+    toast.success(`Copied to clipboard`)
   }
 
   return (
@@ -22,7 +24,7 @@ const CoppyText = ({copied, setCopied, value, title}) => {
           copied ? 'success' : 'info'
         }`}
       >
-        {copied ? 'Copied' : 'Copy'}
+        {t(copied ? 'Copied' : 'Copy')}
       </button>
     </CardSubtitle>
   )
@@ -30,6 +32,7 @@ const CoppyText = ({copied, setCopied, value, title}) => {
 
 const TableRowDetailMonitoringTaskLog = ({row}) => {
   const [copied, setCopied] = useState('')
+  const {t} = useTranslation()
 
   const inputs = Object.keys(row.task_input) || []
   const results = Object.keys(row.task_result) || []
@@ -44,7 +47,7 @@ const TableRowDetailMonitoringTaskLog = ({row}) => {
       {inputs.length > 0 && (
         <Card className="card-snippet">
           <CardHeader>
-            <CardTitle tag="h4">Inputs</CardTitle>
+            <CardTitle tag="h4">{t('Inputs')}</CardTitle>
             <CoppyText
               value={JSON.stringify(row.task_input, null, 2)}
               title="Inputs"
@@ -64,7 +67,7 @@ const TableRowDetailMonitoringTaskLog = ({row}) => {
       {results.length > 0 && (
         <Card className="card-snippet">
           <CardHeader>
-            <CardTitle tag="h4">Results</CardTitle>
+            <CardTitle tag="h4">{t('Results')}</CardTitle>
             <CoppyText
               value={JSON.stringify(row.task_result, null, 2)}
               title="Results"
@@ -84,7 +87,7 @@ const TableRowDetailMonitoringTaskLog = ({row}) => {
       {errors.length > 0 && (
         <Card className="card-snippet">
           <CardHeader>
-            <CardTitle tag="h4">Error</CardTitle>
+            <CardTitle tag="h4">{t('Errors')}</CardTitle>
             <CoppyText
               value={JSON.stringify(row.task_errors, null, 2)}
               title="Errors"

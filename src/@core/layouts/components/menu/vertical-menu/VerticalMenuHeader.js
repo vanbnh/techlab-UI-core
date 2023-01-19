@@ -10,6 +10,7 @@ import themeConfig from '@configs/themeConfig'
 
 // ** Utils
 import {getUserData, getHomeRouteForLoggedInUser} from '@utils'
+import {useTranslation} from 'react-i18next'
 
 const VerticalMenuHeader = props => {
   // ** Props
@@ -20,6 +21,9 @@ const VerticalMenuHeader = props => {
     setGroupOpen,
     menuHover,
   } = props
+
+  // *** Hooks
+  const {t} = useTranslation()
 
   // ** Vars
   const user = getUserData()
@@ -63,7 +67,7 @@ const VerticalMenuHeader = props => {
             <div className="brand-logo">
               <img src={themeConfig.app.appLogoImage} alt="logo" />
             </div>
-            <h4 className="brand-text mb-0">{themeConfig.app.appName}</h4>
+            <h4 className="brand-text mb-0">{t(themeConfig.app.appName)}</h4>
           </NavLink>
         </li>
         <li className="nav-item nav-toggle">

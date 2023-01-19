@@ -30,7 +30,7 @@ const AccountDetailPage = () => {
           data={{
             parentName: entries,
             parentTo,
-            activeName: notFound ? id : detail?.NAME,
+            activeName: notFound ? id : detail['ACCOUNT NAME'],
           }}
         />
       </div>

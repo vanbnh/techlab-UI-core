@@ -2,6 +2,8 @@
 import {Suspense, lazy} from 'react'
 import {createRoot} from 'react-dom/client'
 import {BrowserRouter} from 'react-router-dom'
+import {ErrorBoundary} from 'react-error-boundary'
+import ErrorFallback from './pages/misc/maintenance'
 
 // ** Redux Imports
 import {store} from './redux/store'
@@ -75,7 +77,10 @@ root.render(
         <QueryClientProvider client={queryClient}>
           <AbilityContext.Provider value={ability}>
             <ThemeContext>
-              <LazyApp />
+              <ErrorBoundary FallbackComponent={ErrorFallback}>
+                <LazyApp />
+              </ErrorBoundary>
+
               <Toaster
                 position={themeConfig.layout.toastPosition}
                 toastOptions={{className: 'react-hot-toast'}}

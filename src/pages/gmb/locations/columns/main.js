@@ -4,14 +4,14 @@ import {formatDate} from '../../../../utility/Utils'
 
 const COLUMN_MAIN = [
   {
-    title: 'id',
+    title: 'ID',
     name: 'location_id',
     isLink: true,
     to: row => `${menuConfigs.location.path}/${row.location_id}`,
     width: 210,
   },
   {
-    title: 'location name',
+    title: 'LOCATION NAME',
     name: 'location_name',
     isLink: true,
     to: row => `${menuConfigs.location.path}/${row.location_id}`,
@@ -23,7 +23,7 @@ const COLUMN_MAIN = [
     ),
   },
   {
-    title: 'gmb account',
+    title: 'GMB ACCOUNT',
     name: 'gmb_account_name',
     isLink: true,
     filterKey: 'gmb_account__account_name',
@@ -37,7 +37,7 @@ const COLUMN_MAIN = [
       ),
   },
   {
-    title: 'client',
+    title: 'CLIENT NAME',
     name: 'client_name',
     isLink: true,
     filterKey: 'gmb_account__client__client_name',
@@ -53,58 +53,58 @@ const COLUMN_MAIN = [
       ),
   },
   {
-    title: 'address admin area',
+    title: 'ADDRESS ADMIN AREA',
     name: 'address_admin_area',
   },
   {
-    title: 'Language',
+    title: 'LANGUAGE CODE',
     name: 'address_language_code',
   },
   {
-    title: 'address lines',
+    title: 'ADDRESS LINE',
     name: 'address_lines',
     cell: row => row.address_lines?.join(', '),
   },
   {
-    title: 'address locality',
+    title: 'ADDRESS LOCALITY',
     name: 'address_locality',
   },
   {
-    title: 'address organization',
+    title: 'ADDRESS ORGANIZATION',
     name: 'address_organization',
   },
   {
-    title: 'address recipients',
+    title: 'ADDRESS RECIPIENTS',
     name: 'address_recipients',
     cell: row => row.address_recipients?.join(', '),
   },
   {
-    title: 'address postal code',
+    title: 'ADDRESS POSTAL CODE',
     name: 'address_postal_code',
   },
   {
-    title: 'address region',
+    title: 'ADDRESS REGION',
     name: 'address_region',
   },
   {
-    title: 'address sublocality',
+    title: 'ADDRESS SUBLOCALITY',
     name: 'address_sublocality',
   },
   {
-    title: 'labels',
+    title: 'LABELS',
     name: 'labels',
     cell: row => row.labels?.join(', '),
   },
   {
-    title: 'store code',
+    title: 'STORE CODE',
     name: 'store_code',
   },
   {
-    title: 'location path',
+    title: 'LOCATION PATH',
     name: 'location_path',
   },
   {
-    title: 'Update date',
+    title: 'UPDATED DATE',
     name: 'updated_at',
     isDate: true,
     cell: row => row.updated_at && formatDate(row.updated_at),

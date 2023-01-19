@@ -1,11 +1,15 @@
 // ** Third Party Components
-import { MoreHorizontal } from 'react-feather'
+import {MoreHorizontal} from 'react-feather'
+import {useTranslation} from 'react-i18next'
 
-const VerticalNavMenuSectionHeader = ({ item }) => {
+const VerticalNavMenuSectionHeader = ({item}) => {
+  // ** Hooks
+  const {t} = useTranslation()
+
   return (
-    <li className='navigation-header'>
-      <span>{item.header}</span>
-      <MoreHorizontal className='feather-more-horizontal' />
+    <li className="navigation-header">
+      <span>{t(item.header)}</span>
+      <MoreHorizontal className="feather-more-horizontal" />
     </li>
   )
 }

@@ -17,10 +17,12 @@ import illustrationsDark from '@src/assets/images/pages/not-authorized-dark.svg'
 // ** Styles
 import '@styles/base/pages/page-misc.scss'
 import {getBrandLogo} from '../../../utility/Utils'
+import {useTranslation} from 'react-i18next'
 
 const NotAuthorized = () => {
   // ** Hooks
   const {skin} = useSkin()
+  const {t} = useTranslation()
 
   // ** Vars
   const user = getUserData()
@@ -34,11 +36,7 @@ const NotAuthorized = () => {
       </Link>
       <div className="misc-inner p-2 p-sm-3">
         <div className="w-100 text-center">
-          <h2 className="mb-1">You are not authorized! 🔐</h2>
-          <p className="mb-2">
-            The Webtrends Marketing Lab website in IIS uses the default IUSR
-            account credentials to access the web pages it serves.
-          </p>
+          <h2 className="mb-1">{t('You are not authorized')}! 🔐</h2>
           <Button
             tag={Link}
             color="primary"

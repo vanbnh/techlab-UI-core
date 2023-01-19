@@ -1,10 +1,12 @@
 import axios from 'axios'
 import {useEffect, useState} from 'react'
+import {useTranslation} from 'react-i18next'
 import {useQuery} from 'react-query'
 import useDetailPage, {serializerFunc} from './useDetailPage'
 
 export default function useVersionDetailPage({keys, urls, columns}) {
   // *** OTHER HOOKS ***
+  const {t} = useTranslation()
   const {detail, setDetail, data, isLoading, notFound, versions} =
     useDetailPage({
       columns,
@@ -27,6 +29,7 @@ export default function useVersionDetailPage({keys, urls, columns}) {
       enabled: !!versionSelect,
     },
   )
+  const versionIdText = t('Version ID')
 
   useEffect(() => {
     if (versions.length > 0 && versionSelect) {
@@ -42,7 +45,7 @@ export default function useVersionDetailPage({keys, urls, columns}) {
           acc[cur] = d[cur]
           return acc
         },
-        {'version id': versionSelect},
+        {[versionIdText]: versionSelect},
       )
       setDetail(d)
     }
@@ -58,7 +61,7 @@ export default function useVersionDetailPage({keys, urls, columns}) {
           acc[cur] = dataVersionNew[cur]
           return {...acc}
         },
-        {'version id': versionSelect},
+        {[versionIdText]: versionSelect},
       )
       setDataVersionCompare(dataVersionNew)
 
@@ -68,7 +71,7 @@ export default function useVersionDetailPage({keys, urls, columns}) {
           acc[cur] = dataVersionOld[cur]
           return acc
         },
-        {'version id': String(versions[0])},
+        {[versionIdText]: String(versions[0])},
       )
       setDataVersionCurrent(dataVersionOld)
     }

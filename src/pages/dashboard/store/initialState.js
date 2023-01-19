@@ -4,7 +4,7 @@ const WIDGET_TYPES = [
     id: 1,
     type: 1,
     code: 'QUICK_NOTE',
-    name: 'Quick note',
+    name: 'Quick notes',
     icon: 'Edit3',
     title: 'Title',
     content: 'Edit',
@@ -16,7 +16,7 @@ const WIDGET_TYPES = [
     id: 2,
     type: 2,
     code: 'STATISTIC',
-    name: 'Satistics',
+    name: 'Statistics',
     icon: 'TrendingUp',
     col: {
       lg: 4,

@@ -2,11 +2,11 @@ import columns from '../columns/main'
 export const configs = {
   entries: 'Location Reports',
   settings: [
-    'export',
-    'select',
+    'exporting',
+    'selecting',
     'reordering',
-    'filter',
-    'search',
+    'filtering',
+    'searching',
     'pagination',
     'summary',
   ],

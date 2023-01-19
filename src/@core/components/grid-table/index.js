@@ -29,7 +29,6 @@ import {
   TableGroupRow,
   TableSummaryRow,
   TableRowDetail,
-  PagingPanel,
   TableColumnVisibility,
 } from '@devexpress/dx-react-grid-bootstrap4'
 import '@devexpress/dx-react-grid-bootstrap4/dist/dx-react-grid-bootstrap4.css'
@@ -38,7 +37,6 @@ import LinkNavigateProvider from './format/LinkNavigate'
 import NumberProvider from './format/Number'
 import {
   getDataLocalStorage,
-  // getTotalSummaryValues,
   renderTotalItems,
   saveDataLocalStorage,
 } from './func'
@@ -64,6 +62,7 @@ import LoadingGridTable from './components/loading/Loading'
 import ModalSettingGridTable from './components/modal/Setting'
 import ToolbarFilterProvider from './components/filters'
 import ReactPaginate from 'react-paginate'
+import {useTranslation} from 'react-i18next'
 
 const GridTableComponent = ({
   providerComponents = [],
@@ -90,6 +89,7 @@ const GridTableComponent = ({
 
   // *** HOOKS ***
   const {pathname} = useLocation()
+  const {t} = useTranslation()
 
   // *** STATE CORE ***
   const [dataRows, setDataRows] = useState([])
@@ -200,7 +200,6 @@ const GridTableComponent = ({
       pathname,
       columns.map(column => ({
         ...column,
-        title: column.title.toUpperCase(),
         width:
           column.width || column.title.length * DEFAULT_WIDTH_MULTIPLICATION,
       })),
@@ -209,7 +208,6 @@ const GridTableComponent = ({
     const mergeColumns = columns.map(col => {
       const find = init.find(i => i.name === col.name)
       const d = {...col, ...find}
-      d.title = d.title.toUpperCase()
       d.width = d.width || d.title.length * DEFAULT_WIDTH_MULTIPLICATION
       return d
     })
@@ -362,7 +360,7 @@ const GridTableComponent = ({
           {...restProps}
         >
           <ArrowDownCircle size={16} />
-          <span className="align-middle ms-25">Export</span>
+          <span className="align-middle ms-25">{t('Export')}</span>
         </button>
       </div>
       {canUpload && (
@@ -376,7 +374,7 @@ const GridTableComponent = ({
             size="sm"
           >
             <ArrowUpCircle size={16} />
-            <span className="align-middle ms-25">Upload</span>
+            <span className="align-middle ms-25">{t('Upload')}</span>
           </Button>
         </div>
       )}
@@ -453,17 +451,22 @@ const GridTableComponent = ({
     />
   )
 
+  const COLUMN_TRANSLATE = columnStates.map(col => ({
+    ...col,
+    title: t(col.title),
+  }))
+
   return (
     <>
       <div className="d-flex justify-content-between">
         <div>
-          <Breadcrumb>
+          <Breadcrumb className="breadcrumb-dashes">
             <BreadcrumbItem>
-              <Link to="/"> Home </Link>
+              <Link to="/">{t('Home')}</Link>
             </BreadcrumbItem>
 
             <BreadcrumbItem active>
-              <span> {entries} </span>
+              <span> {t(entries)} </span>
             </BreadcrumbItem>
           </Breadcrumb>
         </div>
@@ -479,13 +482,17 @@ const GridTableComponent = ({
       </div>
 
       <Card className="grid-table">
-        <Grid rows={dataRows} columns={columnStates}>
+        <Grid rows={dataRows} columns={COLUMN_TRANSLATE}>
           <DragDropProvider />
           <LinkNavigateProvider
-            for={columnStates.filter(col => col.isLink).map(col => col.name)}
+            for={COLUMN_TRANSLATE.filter(col => col.isLink).map(
+              col => col.name,
+            )}
           />
           <NumberProvider
-            for={columnStates.filter(col => col.isNumber).map(col => col.name)}
+            for={COLUMN_TRANSLATE.filter(col => col.isNumber).map(
+              col => col.name,
+            )}
           />
           {providerComponents.length > 0 &&
             providerComponents.map((Provider, idx) => <Provider key={idx} />)}
@@ -501,7 +508,7 @@ const GridTableComponent = ({
             }}
           /> */}
           {canSummary && (
-            <SummaryState totalItems={renderTotalItems(columnStates)} />
+            <SummaryState totalItems={renderTotalItems(COLUMN_TRANSLATE)} />
           )}
 
           {/* {canPagination && <CustomPaging totalCount={total} />} */}
@@ -511,9 +518,9 @@ const GridTableComponent = ({
           {canSelect && <IntegratedSelection />}
           <VirtualTable
             height={isLoading ? '40vh' : 'auto'}
-            columnExtensions={columnStates
-              .filter(col => col.align)
-              .map(col => ({columnName: col.name, align: col.align}))}
+            columnExtensions={COLUMN_TRANSLATE.filter(col => col.align).map(
+              col => ({columnName: col.name, align: col.align}),
+            )}
           />
 
           {canReOrdering && (
@@ -551,7 +558,7 @@ const GridTableComponent = ({
           <Toolbar />
 
           <ToolbarFilterProvider
-            columns={columnStates}
+            columns={COLUMN_TRANSLATE}
             filters={filters}
             setFilters={f => setFilters(f)}
             filterColumns={filterColumns}
@@ -575,7 +582,9 @@ const GridTableComponent = ({
           <GridExporter
             ref={exporterRef}
             rows={dataRows}
-            columns={columnExports.length > 0 ? columnExports : columnStates}
+            columns={
+              columnExports.length > 0 ? columnExports : COLUMN_TRANSLATE
+            }
             selection={rowSelects}
             onSave={onExportExcel}
           />

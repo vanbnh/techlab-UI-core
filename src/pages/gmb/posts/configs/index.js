@@ -4,11 +4,11 @@ import columns from '../columns/main'
 export const configs = {
   entries: 'Posts',
   settings: [
-    'export',
-    'select',
+    'exporting',
+    'selecting',
     'reordering',
-    'filter',
-    'search',
+    'filtering',
+    'searching',
     'pagination',
   ],
   keys: {
