@@ -1,19 +1,14 @@
 import axios from 'axios'
 import React, {useCallback, useEffect, useRef, useState} from 'react'
 import {
-  CustomPaging,
   IntegratedSelection,
-  PagingState,
   RowDetailState,
-  // SearchState,
   SelectionState,
 } from '@devexpress/dx-react-grid'
 import {
   Grid,
   VirtualTable,
   TableHeaderRow,
-  PagingPanel,
-  // SearchPanel,
   Toolbar,
   TableSelection,
   DragDropProvider,
@@ -26,7 +21,7 @@ import {
 } from '@devexpress/dx-react-grid-bootstrap4'
 import '@devexpress/dx-react-grid-bootstrap4/dist/dx-react-grid-bootstrap4.css'
 import {GridExporter} from '@devexpress/dx-react-grid-export'
-import {Card, CardBody, Input} from 'reactstrap'
+import {Card, CardBody, CardFooter, Input} from 'reactstrap'
 import saveAs from 'file-saver'
 import CommonCardHeader from '../../CommonCardHeader'
 import CardActionTableWidgetItem from './Action'
@@ -41,6 +36,7 @@ import {useQuery} from 'react-query'
 import {formatDate} from '../../../../../../utility/Utils'
 import ModalSettingColumn from '../../modal/ModalSettingColumn'
 import {useTranslation} from 'react-i18next'
+import ReactPaginate from 'react-paginate'
 
 const CommonTableWidgetItem = ({
   configs,
@@ -71,7 +67,7 @@ const CommonTableWidgetItem = ({
   const [openModal, setOpenModal] = useState(false)
   const toggleModal = () => setOpenModal(!openModal)
 
-  const [total, setTotal] = useState(0)
+  const [totalPage, setTotalPage] = useState(1)
   const [currentPage, setCurrentPage] = useState(() => {
     if (item && item.params) {
       return item.params.page
@@ -201,9 +197,9 @@ const CommonTableWidgetItem = ({
       if (formatData) {
         rows = formatData(rows)
       }
-      const total = dataQuery?.metadata?.total || 0
+      const totalPage = dataQuery?.metadata?.total_page || 0
       setRows(rows)
-      setTotal(total)
+      setTotalPage(totalPage)
     }
   }, [dataQuery])
 
@@ -237,6 +233,29 @@ const CommonTableWidgetItem = ({
         </button>
       </div>
     </div>
+  )
+
+  const CustomPagination = () => (
+    <ReactPaginate
+      nextLabel=""
+      breakLabel="..."
+      previousLabel=""
+      pageRangeDisplayed={2}
+      forcePage={currentPage - 1}
+      marginPagesDisplayed={2}
+      activeClassName="active"
+      pageClassName="page-item"
+      breakClassName="page-item"
+      nextLinkClassName="page-link"
+      pageLinkClassName="page-link"
+      breakLinkClassName="page-link"
+      previousLinkClassName="page-link"
+      nextClassName="page-item next-item"
+      previousClassName="page-item prev-item"
+      pageCount={totalPage}
+      onPageChange={p => setCurrentPage(p.selected)}
+      containerClassName="pagination react-paginate separated-pagination pagination-sm justify-content-end pe-1 mt-1"
+    />
   )
 
   return (
@@ -296,17 +315,6 @@ const CommonTableWidgetItem = ({
             />
 
             {TableRowDetailComponent && <RowDetailState />}
-            <PagingState
-              currentPage={currentPage - 1}
-              onCurrentPageChange={val => {
-                setRowSelected([])
-                setCurrentPage(val + 1)
-              }}
-              pageSize={perPage}
-              onPageSizeChange={val => setPerPage(val)}
-            />
-            <CustomPaging totalCount={total} />
-
             {/* INTEGRATED */}
             <IntegratedSelection />
 
@@ -345,8 +353,6 @@ const CommonTableWidgetItem = ({
               setFilters={f => setFilters(f)}
               filterColumns={columnStates.map(col => col.name)}
             />
-
-            <PagingPanel />
             {/* <SearchPanel /> */}
             <ExportPanel
               startExport={startExport}
@@ -367,6 +373,29 @@ const CommonTableWidgetItem = ({
           />
           {isLoading && <Loading />}
         </CardBody>
+        {
+          <CardFooter>
+            <div className="d-flex justify-content-between align-item-center ">
+              <div className="mt-50">
+                <Input
+                  className="mx-50"
+                  type="select"
+                  id="rows-per-page"
+                  value={perPage}
+                  onChange={e => setPerPage(+e.target.value)}
+                  style={{width: '5rem'}}
+                >
+                  {pageSizes.map(num => (
+                    <option key={num} value={num}>
+                      {num}
+                    </option>
+                  ))}
+                </Input>
+              </div>
+              <div>{CustomPagination()}</div>
+            </div>
+          </CardFooter>
+        }
       </Card>
       <ModalSettingColumn
         isOpen={openModal}

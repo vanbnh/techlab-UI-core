@@ -136,7 +136,7 @@ const Statistic = ({item, isEdit, onDuplicateItem, onRemoveItem}) => {
   )
 
   const renderData = () => {
-    const cols = {sm: '6', xs: '12'}
+    const cols = {xs: '6'}
     return statisticCards.map((item, index) => {
       return (
         <Col

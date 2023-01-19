@@ -331,9 +331,9 @@ const GridTableComponent = ({
   // *** PERMISSION ***
   const canSummary = permissionState.includes('summary')
   const canPagination = permissionState.includes('pagination')
-  const canSelect = permissionState.includes('select')
+  const canSelect = permissionState.includes('selecting')
   const canReOrdering = permissionState.includes('reordering')
-  const canExport = permissionState.includes('export')
+  const canExport = permissionState.includes('exporting')
   const canUpload = permissionState.includes('upload')
 
   // *** COMPONENTS ***
@@ -393,6 +393,28 @@ const GridTableComponent = ({
     },
     [entries],
   )
+  const CustomPagination = () => (
+    <ReactPaginate
+      nextLabel=""
+      breakLabel="..."
+      previousLabel=""
+      pageRangeDisplayed={2}
+      forcePage={currentPage}
+      marginPagesDisplayed={2}
+      activeClassName="active"
+      pageClassName="page-item"
+      breakClassName="page-item"
+      nextLinkClassName="page-link"
+      pageLinkClassName="page-link"
+      breakLinkClassName="page-link"
+      previousLinkClassName="page-link"
+      nextClassName="page-item next-item"
+      previousClassName="page-item prev-item"
+      pageCount={totalPage}
+      onPageChange={p => setCurrentPage(p.selected)}
+      containerClassName="pagination react-paginate separated-pagination pagination-sm justify-content-end pe-1 mt-1"
+    />
+  )
 
   const onSaveConfig = useCallback(d => {
     const {
@@ -423,33 +445,6 @@ const GridTableComponent = ({
 
   const toggleModalSetting = () =>
     setModalOpen({...modalOpen, setting: !modalOpen.setting})
-
-  const handlePagination = page => {
-    setCurrentPage(page.selected)
-  }
-
-  const CustomPagination = () => (
-    <ReactPaginate
-      nextLabel=""
-      breakLabel="..."
-      previousLabel=""
-      pageRangeDisplayed={2}
-      forcePage={currentPage}
-      marginPagesDisplayed={2}
-      activeClassName="active"
-      pageClassName="page-item"
-      breakClassName="page-item"
-      nextLinkClassName="page-link"
-      pageLinkClassName="page-link"
-      breakLinkClassName="page-link"
-      previousLinkClassName="page-link"
-      nextClassName="page-item next-item"
-      previousClassName="page-item prev-item"
-      pageCount={totalPage}
-      onPageChange={handlePagination}
-      containerClassName="pagination react-paginate separated-pagination pagination-sm justify-content-end pe-1 mt-1"
-    />
-  )
 
   const COLUMN_TRANSLATE = columnStates.map(col => ({
     ...col,
@@ -501,17 +496,9 @@ const GridTableComponent = ({
             onSelectionChange={r => setRowSelects(r)}
           />
           {TableRowDetailComponent && <RowDetailState />}
-          {/* <PagingState
-            currentPage={currentPage - 1}
-            onCurrentPageChange={val => {
-              setCurrentPage(val + 1)
-            }}
-          /> */}
           {canSummary && (
             <SummaryState totalItems={renderTotalItems(COLUMN_TRANSLATE)} />
           )}
-
-          {/* {canPagination && <CustomPaging totalCount={total} />} */}
 
           {/* INTEGRATED */}
           {canSummary && <IntegratedSummary />}

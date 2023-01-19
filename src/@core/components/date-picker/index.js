@@ -3,11 +3,13 @@ import moment from 'moment'
 import React, {useRef, useState} from 'react'
 import {DateRangePicker} from 'react-date-range'
 import {Clock} from 'react-feather'
+import {useMedia} from 'react-use'
 import {Button, Popover, PopoverBody} from 'reactstrap'
 import useClickOutside from '../../../utility/hooks/useClickOutside'
 
 const DatePickerComponent = ({datePicker, setDatePicker}) => {
   const pickerRef = useRef()
+  const isSmall = useMedia('(max-width: 480px)')
   const [dateRange, setDateRange] = useState([
     {
       startDate: new Date(datePicker.start_date),
@@ -48,11 +50,12 @@ const DatePickerComponent = ({datePicker, setDatePicker}) => {
               months={2}
               ranges={dateRange}
               showSelectionPreview
+              editableDateInputs
               moveRangeOnFirstSelection={false}
               retainEndDateOnFirstSelection={false}
-              // scroll={{enabled: true}}
+              scroll={{enabled: isSmall}}
               rangeColors={['#2c652f']}
-              direction="horizontal"
+              direction={isSmall ? 'vertical' : 'horizontal'}
             />
             <div className="d-flex justify-content-end mt-1">
               <Button

@@ -14,7 +14,7 @@ const CardTableDetail = ({
   // *** STATE ***
   const {t} = useTranslation()
   const [checkDataChange, setCheckDataChange] = useState({})
-  const isWide = useMedia('(max-width: 480px)')
+  const isSmall = useMedia('(max-width: 480px)')
 
   useEffect(() => {
     if (dataVersionCompare) {
@@ -28,9 +28,9 @@ const CardTableDetail = ({
     }
   }, [dataVersionCurrent, dataVersionCompare])
 
-  const renderCell = value => (isWide ? <small>{value}</small> : value)
+  const renderCell = value => (isSmall ? <small>{value}</small> : value)
   const renderTitleCell = value =>
-    isWide ? <small>{t(value)}</small> : t(value)
+    isSmall ? <small>{t(value)}</small> : t(value)
 
   const renderBody = () =>
     dataVersionCompare ? (

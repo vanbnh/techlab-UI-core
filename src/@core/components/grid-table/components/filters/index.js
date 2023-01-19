@@ -7,6 +7,7 @@ import {
   TemplateConnector,
 } from '@devexpress/dx-react-core'
 import {DateRangePicker} from 'react-date-range'
+import {enUS, ja} from 'react-date-range/dist/locale'
 import {addDays} from 'date-fns'
 import {uid} from 'uid'
 import moment from 'moment'
@@ -36,6 +37,8 @@ import {Plus, Search, XCircle} from 'react-feather'
 import 'react-date-range/dist/styles.css'
 import 'react-date-range/dist/theme/default.css'
 import {useTranslation} from 'react-i18next'
+import {useMedia} from 'react-use'
+import {getInputRanges, getStaticRanges} from './func'
 
 const invisible = {
   opacity: 0,
@@ -89,9 +92,15 @@ const numberConditionOptions = [
   },
 ]
 
+const LOCATES = {
+  en: enUS,
+  jp: ja,
+}
+
 const DatePickerForm = ({onSave, onCancel, onClose, setting}) => {
-  const {t} = useTranslation()
-  const [type, setType] = useState(setting ? setting.condition : 'between')
+  const {t, i18n} = useTranslation()
+  const isMedium = useMedia('(max-width: 768px)')
+  const [type] = useState(setting ? setting.condition : 'between')
   const [dateRange, setDateRange] = useState([
     {
       startDate: new Date(),
@@ -136,6 +145,15 @@ const DatePickerForm = ({onSave, onCancel, onClose, setting}) => {
 
   useClickOutside(ref, () => onClose && onClose())
 
+  useEffect(() => {
+    if (isMedium) {
+      const defineRange = document.querySelector('.rdrDefinedRangesWrapper')
+      if (defineRange) {
+        defineRange.style.display = 'none'
+      }
+    }
+  }, [isMedium])
+
   return (
     <div
       className="d-flex flex-column align-item-center justify-content-center"
@@ -143,15 +161,19 @@ const DatePickerForm = ({onSave, onCancel, onClose, setting}) => {
     >
       <div className="d-flex justify-content-center mt-1">
         <DateRangePicker
+          locale={LOCATES[i18n.language]}
           onChange={item => setDateRange([item.selection])}
           months={2}
           ranges={dateRange}
           showSelectionPreview
+          editableDateInputs
           moveRangeOnFirstSelection={false}
           retainEndDateOnFirstSelection={false}
-          // scroll={{enabled: true}}
+          scroll={{enabled: isMedium}}
           rangeColors={['#2c652f']}
-          direction="horizontal"
+          direction={isMedium ? 'vertical' : 'horizontal'}
+          staticRanges={getStaticRanges(t)}
+          inputRanges={getInputRanges(t)}
         />
       </div>
 
@@ -282,7 +304,6 @@ const ToolbarFilterProvider = ({
   filters,
   setFilters,
   filterColumns = [],
-  entries = '',
 }) => {
   const {t} = useTranslation()
 
