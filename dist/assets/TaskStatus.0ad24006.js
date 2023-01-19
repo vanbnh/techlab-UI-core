@@ -1,0 +1,1 @@
+import{j as t,as as a}from"./index.7e0b0f28.js";import{D as o}from"./react-paginate.4b40d3fc.js";const r={success:"success",error:"danger",failed:"secondary",done:"info"},e=({row:s})=>t(a,{color:`light-${r[s.task_status]}`,children:s.task_status}),d=s=>t(o,{for:["task_status"],formatterComponent:e,...s});export{d as T};
