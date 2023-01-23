@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -69,6 +69,7 @@ const GridTableComponent = ({
     left: [],
     right: [],
   },
+  initialFilters = [],
   loading = false,
 }) => {
   const isGrouping = columns.filter(col => col.isGroup).length > 0
@@ -96,22 +97,24 @@ const GridTableComponent = ({
     columnCustomizer,
 
     setDataRows,
-    setColumnStates,
     setTotalPage,
     setCurrentPage,
     setPerPage,
-    setPageSizes,
     setRowSelects,
     setColumnOrders,
     setColumnWidths,
     setFilters,
-    setFilterColumns,
-    setColumnResizingMode,
-    setFixedColumns,
-    setPermissions,
     setHiddenColumnNames,
-    setColumnCustomizer,
+    setConfig,
   } = useGridTable()
+
+  // *** ================================ START LOCAL STORAGE ==================================== ***
+  useLocalStorageGridTable(columns, {
+    fixedCols,
+    settings,
+    initialFilters,
+  })
+  // *** ================================ END LOCAL STORAGE ==================================== ***
 
   // *** REACT QUERY ***
   const {data: dataQuery, isLoading} = useFetchData({
@@ -119,6 +122,8 @@ const GridTableComponent = ({
     perPage,
     page: currentPage,
     filters,
+    initialFilters,
+    columns,
   })
   // *** Prefetch
   usePrefetchData({
@@ -127,6 +132,7 @@ const GridTableComponent = ({
     perPage,
     page: currentPage,
     filters,
+    columns,
   })
 
   // *** SET DATA ROWS ***
@@ -145,13 +151,6 @@ const GridTableComponent = ({
       setTotalPage(totalPage)
     }
   }, [dataQuery])
-
-  // *** ================================ START LOCAL STORAGE ==================================== ***
-  useLocalStorageGridTable(columns, {
-    fixedCols,
-    settings,
-  })
-  // *** ================================ END LOCAL STORAGE ==================================== ***
 
   // *** ================================ EXPORTING ==================================== ***
   const {
@@ -201,28 +200,6 @@ const GridTableComponent = ({
     />
   )
 
-  // *** CALLBACKS ***
-  const onSaveConfig = useCallback(d => {
-    const {
-      permissions,
-      columnCustomizer,
-      columnResizingMode,
-      columns,
-      fixedColumns,
-      pageSizes,
-      hiddenColumnNames,
-      filterColumns,
-    } = d
-    setPermissions(permissions)
-    setColumnCustomizer(columnCustomizer)
-    setColumnResizingMode(columnResizingMode)
-    setColumnStates(columns)
-    setFixedColumns(fixedColumns)
-    setPageSizes(pageSizes)
-    setHiddenColumnNames(hiddenColumnNames)
-    setFilterColumns(filterColumns)
-  }, [])
-
   // *** MODALS ***
   const [modalOpen, setModalOpen] = useState({
     filter: false,
@@ -263,7 +240,7 @@ const GridTableComponent = ({
       </div>
 
       <Card className="grid-table">
-        <Grid rows={dataRows} columns={COLUMN_TRANSLATE}>
+        <Grid rows={isLoading ? [] : dataRows} columns={COLUMN_TRANSLATE}>
           <DragDropProvider />
           <LinkNavigateProvider
             for={COLUMN_TRANSLATE.filter(col => col.isLink).map(
@@ -405,7 +382,7 @@ const GridTableComponent = ({
           columnResizingMode,
           pageSizes,
         }}
-        saveConfig={onSaveConfig}
+        saveConfig={setConfig}
       />
     </>
   )

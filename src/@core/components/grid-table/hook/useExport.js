@@ -29,7 +29,7 @@ export default function useExportGridTable({
   )
 
   const ExportButtonComponent = ({onToggle, buttonRef, ...restProps}) => (
-    <div className="ms-2">
+    <div className="w-100 d-flex justify-content-end ms-1">
       <button
         ref={buttonRef}
         className="btn btn-warning btn-sm"

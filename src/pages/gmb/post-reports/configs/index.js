@@ -1,3 +1,6 @@
+import {endOfMonth, startOfMonth} from 'date-fns'
+import moment from 'moment'
+import {uid} from 'uid'
 import columns from '../columns/main'
 export const configs = {
   entries: 'Post Reports',
@@ -34,6 +37,20 @@ export const configs = {
     {
       key: 'post_views_search',
       name: 'Views Search',
+    },
+  ],
+  filters: [
+    {
+      id: uid(),
+      key: 'report_date',
+      condition: 'between',
+      conditionName: 'between',
+      value: [
+        moment(startOfMonth(new Date())).format('YYYY-MM-DD'),
+        moment(endOfMonth(new Date())).format('YYYY-MM-DD'),
+      ],
+      title: 'REPORT DATE',
+      type: 'date',
     },
   ],
 }

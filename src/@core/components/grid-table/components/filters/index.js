@@ -1,11 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react'
 
-import {
-  Template,
-  // TemplatePlaceholder,
-  Plugin,
-  TemplateConnector,
-} from '@devexpress/dx-react-core'
+import {Template, Plugin, TemplateConnector} from '@devexpress/dx-react-core'
 import {DateRangePicker} from 'react-date-range'
 import {enUS, ja} from 'react-date-range/dist/locale'
 import {addDays, format, isWeekend} from 'date-fns'
@@ -33,12 +28,13 @@ import {
   Popover,
   PopoverBody,
 } from 'reactstrap'
-import {Plus, Search, XCircle} from 'react-feather'
+import {Filter, Plus, Search, XCircle} from 'react-feather'
 import 'react-date-range/dist/styles.css'
 import 'react-date-range/dist/theme/default.css'
 import {useTranslation} from 'react-i18next'
 import {useMedia} from 'react-use'
 import {getInputRanges, getStaticRanges} from './func'
+import {SelectField} from '../../../form-field'
 
 const invisible = {
   opacity: 0,
@@ -92,21 +88,32 @@ const numberConditionOptions = [
   },
 ]
 
+const FilterChipContent = ({item, onClick}) => {
+  const {t} = useTranslation()
+  const renderValue = () => {
+    let content = item.value
+    if (Array.isArray(item.value)) {
+      content = `${item.value[0]} to ${item.value[1]}`
+    }
+    return content
+  }
+  return (
+    <span onClick={() => onClick && onClick()}>
+      {t(item.title)}:{' '}
+      <span className="mx-25 text-muted fst-italic">
+        {item.conditionName}:{' '}
+      </span>
+      {renderValue()}
+    </span>
+  )
+}
+
 const LOCATES = {
   en: enUS,
   jp: ja,
 }
-const customDayContent = day => {
-  return (
-    <div>
-      <span className={isWeekend(day) ? 'text-danger' : ''}>
-        {format(day, 'd')}
-      </span>
-    </div>
-  )
-}
 
-const DatePickerForm = ({onSave, onCancel, onClose, setting}) => {
+const DatePickerFieldForm = ({onSave, onCancel, onClose, setting}) => {
   const {t, i18n} = useTranslation()
   const isMedium = useMedia('(max-width: 768px)')
   const [type] = useState(setting ? setting.condition : 'between')
@@ -183,7 +190,15 @@ const DatePickerForm = ({onSave, onCancel, onClose, setting}) => {
           direction={isMedium ? 'vertical' : 'horizontal'}
           staticRanges={getStaticRanges(t)}
           inputRanges={getInputRanges(t)}
-          dayContentRenderer={customDayContent}
+          dayContentRenderer={day => {
+            return (
+              <div>
+                <span className={isWeekend(day) ? 'text-danger' : ''}>
+                  {format(day, 'd')}
+                </span>
+              </div>
+            )
+          }}
         />
       </div>
 
@@ -215,7 +230,7 @@ const DatePickerForm = ({onSave, onCancel, onClose, setting}) => {
   )
 }
 
-const FilterItemForm = ({
+const StringFieldForm = ({
   type = 'text',
   selectCondition,
   selectValue,
@@ -290,31 +305,79 @@ const FilterItemForm = ({
   )
 }
 
-const FilterChipContent = ({item}) => {
-  const renderValue = () => {
-    let content = item.value
-    if (Array.isArray(item.value)) {
-      content = `${item.value[0]} to ${item.value[1]}`
-    }
-    return content
+const OptionFieldForm = ({
+  id,
+  options,
+  value,
+  isEdit,
+  onReset,
+  onClose,
+  onSave,
+}) => {
+  const {t} = useTranslation()
+  const [clientSelects, setClientSelects] = useState([])
+  const handleSave = () => {
+    onSave(clientSelects, isEdit)
+    setClientSelects([])
   }
+
+  useEffect(() => {
+    if (value && options.length > 0) {
+      const selected = options.filter(op => op.label === value)
+      setClientSelects(selected)
+    }
+  }, [value, options])
+
   return (
     <>
-      {item.title}:{' '}
-      <span className="mx-25 text-muted fst-italic">
-        {item.conditionName}:{' '}
-      </span>
-      {renderValue()}
+      <div style={isEdit ? {minWidth: '300px'} : {}}>
+        <SelectField
+          name={id}
+          options={options}
+          value={clientSelects}
+          onChange={setClientSelects}
+          isClearable
+          isMulti={!isEdit}
+          placeholder={`${t('Clients')}...`}
+          required
+        />
+      </div>
+      <div className="mt-1 d-flex justify-content-end">
+        <Button
+          color="secondary"
+          className="me-50"
+          outline
+          size="sm"
+          onClick={() => {
+            if (onClose) {
+              onClose()
+            } else {
+              onReset()
+            }
+          }}
+        >
+          {t('Cancel')}
+        </Button>
+        <Button
+          color={isEdit ? 'primary' : 'info'}
+          onClick={handleSave}
+          size="sm"
+        >
+          {t(isEdit ? 'Save' : 'Add')}
+        </Button>
+      </div>
     </>
   )
 }
 
+//  *** Main Component ***
 const ToolbarFilterProvider = ({
   columns,
   filters,
   setFilters,
   filterColumns = [],
 }) => {
+  // *** HOOKS ***
   const {t} = useTranslation()
 
   const pluginDependencies = [{name: 'Toolbar'}]
@@ -324,12 +387,14 @@ const ToolbarFilterProvider = ({
   const [showFilters, setShowFilters] = useState(false)
   const [searchValue, setSearchValue] = useState('')
   const [selectField, setSelectField] = useState('')
+  const [selectFieldOptionId, setSelectFieldOptionId] = useState('')
   const [selectCondition, setSelectCondition] = useState('')
   const [selectValue, setSelectValue] = useState('')
   const [popoverTargetId, setPopoverTargetId] = useState(null)
   const [popoverTargetAll, setPopoverTargetAll] = useState(false)
   useClickOutside(refFillterAll, () => setPopoverTargetAll(false))
   const [showPickerForm, setShowPickerForm] = useState(false)
+  const [showOptionForm, setShowOptionForm] = useState(false)
   const [filterResult, setFilterResults] = useState([])
 
   useEffect(() => {
@@ -444,9 +509,42 @@ const ToolbarFilterProvider = ({
     }
   }
 
+  const onSaveOptions = (options, isEdit) => {
+    if (isEdit) {
+      const filter = options[0]
+      setFilters(
+        filters.map(f => {
+          const newFilter = {...f}
+          if (newFilter.id === selectFieldOptionId) {
+            newFilter.value = filter.label
+          }
+          return newFilter
+        }),
+      )
+      setShowOptionForm(false)
+    } else {
+      const d = options.map(o => {
+        const col = columns.find(c => c.name === selectField)
+        const key = col?.filterKey ? col?.filterKey : selectField
+        return {
+          id: uid(),
+          key,
+          condition: 'exact',
+          conditionName: 'Equal',
+          value: o.label,
+          title: col.title,
+          type: 'option',
+          name: col.name,
+        }
+      })
+      setFilterTemps(fts => [...fts, ...d])
+      setSelectField('')
+    }
+  }
+
   const onDelete = id => setFilters(filters.filter(f => f.id !== id))
 
-  const renderFilterField = () => (
+  const renderStringField = () => (
     <Accordion
       open={selectField}
       toggle={id => {
@@ -456,15 +554,17 @@ const ToolbarFilterProvider = ({
           setSelectField(id)
         }
       }}
-      className="accordion-border"
+      className="accordion-border mt-1"
     >
       {filterResult
-        .filter(f => !f.isDate)
+        .filter(f => !f.isDate && !f.isOption)
         .map(item => (
           <AccordionItem key={item.name}>
-            <AccordionHeader targetId={item.name}>{item.title}</AccordionHeader>
+            <AccordionHeader targetId={item.name}>
+              {t(item.title)}
+            </AccordionHeader>
             <AccordionBody accordionId={item.name}>
-              <FilterItemForm
+              <StringFieldForm
                 type={item.isNumber ? 'number' : 'text'}
                 selectValue={selectValue}
                 selectCondition={selectCondition}
@@ -477,7 +577,7 @@ const ToolbarFilterProvider = ({
     </Accordion>
   )
 
-  const renderFilterDateField = () => (
+  const renderDatePickerField = () => (
     <Accordion
       open={selectField}
       toggle={id => {
@@ -495,272 +595,358 @@ const ToolbarFilterProvider = ({
         .filter(f => f.isDate)
         .map(item => (
           <AccordionItem key={item.name}>
-            <AccordionHeader targetId={item.name}>{item.title}</AccordionHeader>
+            <AccordionHeader targetId={item.name}>
+              {t(item.title)}
+            </AccordionHeader>
           </AccordionItem>
         ))}
     </Accordion>
   )
 
-  return (
-    <Plugin name="ToolbarFilterProvider" dependencies={pluginDependencies}>
-      <Template name="toolbarContent">
-        <TemplateConnector>
-          {() => (
-            <>
-              <div
-                className="d-flex align-items-center justify-content-center"
-                style={{
-                  overflow: 'clip',
-                  textOverflow: 'ellipsis',
-                }}
-              >
-                {filters.length > 0 && (
-                  <div className="col-auto position-relative">
-                    <div>
-                      <Button.Ripple
-                        className="btn-icon"
-                        color="flat-primary"
-                        size="sm"
-                        onClick={() => setPopoverTargetAll(true)}
-                        id="popoverTargetAll"
-                      >
-                        <span className="align-middle ms-25">
-                          {filters.length}
-                        </span>
-                        <Plus size={16} />
-                      </Button.Ripple>
-                    </div>
+  const renderOptionField = () => {
+    return (
+      <Accordion
+        open={selectField}
+        toggle={id => {
+          if (selectField === id) {
+            setSelectField('')
+          } else {
+            setSelectField(id)
+          }
+        }}
+        className="accordion-border"
+      >
+        {filterResult
+          .filter(f => f.isOption)
+          .map(item => (
+            <AccordionItem key={item.name}>
+              <AccordionHeader targetId={item.name}>
+                {t(item.title)}
+              </AccordionHeader>
+              <AccordionBody accordionId={item.name}>
+                <OptionFieldForm
+                  id={item.name}
+                  options={item.options}
+                  onReset={onReset}
+                  onSave={onSaveOptions}
+                />
+              </AccordionBody>
+            </AccordionItem>
+          ))}
+      </Accordion>
+    )
+  }
 
-                    <Popover
-                      placement="bottom"
-                      isOpen={popoverTargetAll}
-                      target="popoverTargetAll"
-                      toggle={() => setPopoverTargetAll(!popoverTargetAll)}
-                    >
-                      <PopoverBody>
-                        <div
-                          className="d-flex flex-column overflow-auto"
-                          ref={refFillterAll}
+  const getOptions = k => {
+    let options = []
+    const col = columns.find(c => c.name === k)
+
+    if (col) {
+      options = col.options
+    }
+
+    return options
+  }
+
+  return (
+    <>
+      <Plugin name="ToolbarFilterProvider" dependencies={pluginDependencies}>
+        <Template name="toolbarContent">
+          <TemplateConnector>
+            {() => (
+              <>
+                <div
+                  className="d-flex align-items-center justify-content-center"
+                  style={{
+                    overflow: 'clip',
+                    textOverflow: 'ellipsis',
+                  }}
+                >
+                  {filters.length > 0 && (
+                    <div className="col-auto position-relative">
+                      <div>
+                        <Button.Ripple
+                          className="btn-icon"
+                          color="flat-primary"
+                          size="sm"
+                          onClick={() => setPopoverTargetAll(true)}
+                          id="popoverTargetAll"
                         >
-                          <ListGroup tag="div">
-                            {filters.map(f => (
-                              <ListGroupItem
-                                key={f.id}
-                                tag="a"
-                                href="#"
-                                onClick={e => {
-                                  e.preventDefault()
-                                  setPopoverTargetAll(false)
-                                  setSelectField(f.key)
+                          <span className="align-middle ms-25">
+                            {filters.length}
+                          </span>
+                          <Plus size={16} />
+                        </Button.Ripple>
+                      </div>
+
+                      <Popover
+                        placement="bottom"
+                        isOpen={popoverTargetAll}
+                        target="popoverTargetAll"
+                        toggle={() => setPopoverTargetAll(!popoverTargetAll)}
+                      >
+                        <PopoverBody>
+                          <div
+                            className="d-flex flex-column overflow-auto"
+                            ref={refFillterAll}
+                          >
+                            <ListGroup tag="div">
+                              {filters.map(f => (
+                                <ListGroupItem
+                                  key={f.id}
+                                  tag="a"
+                                  href="#"
+                                  onClick={e => {
+                                    e.preventDefault()
+                                    setPopoverTargetAll(false)
+                                    setSelectField(f.key)
+                                    setPopoverTargetId(f.id)
+                                    setSelectCondition(f.condition)
+                                    setSelectValue(f.value)
+                                  }}
+                                >
+                                  <FilterChipContent item={f} />
+                                </ListGroupItem>
+                              ))}
+                            </ListGroup>
+                          </div>
+                        </PopoverBody>
+                      </Popover>
+                    </div>
+                  )}
+                  <div className="w-100 mt-25 d-lex align-items-center justify-content-center flex-nowrap mx-auto">
+                    {filters.length > 0 &&
+                      filters.map(f => (
+                        <span
+                          className="mx-25 position-relative cursor-pointer"
+                          key={f.id}
+                        >
+                          <Badge
+                            className="p-50 mb-50"
+                            outline
+                            size="sm"
+                            color="light-primary"
+                            id={`f_${f.id}`}
+                          >
+                            <FilterChipContent
+                              item={f}
+                              onClick={() => {
+                                if (f.type === 'option') {
+                                  setSelectFieldOptionId(f.id)
+                                  setSelectField(f.name)
+                                  setSelectValue(f.value)
+                                  setShowOptionForm(!showOptionForm)
+                                } else {
                                   setPopoverTargetId(f.id)
+                                  setSelectField(f.key)
                                   setSelectCondition(f.condition)
                                   setSelectValue(f.value)
-                                }}
-                              >
-                                <FilterChipContent item={f} />
-                              </ListGroupItem>
-                            ))}
-                          </ListGroup>
-                        </div>
-                      </PopoverBody>
-                    </Popover>
-                  </div>
-                )}
-                <div className="w-100 mt-25 d-lex align-items-center justify-content-center flex-nowrap mx-auto">
-                  {filters.length > 0 &&
-                    filters.map(f => (
-                      <span
-                        className="mx-25 position-relative cursor-pointer"
-                        key={f.id}
-                      >
-                        <Badge
-                          className="p-50 mb-50"
-                          outline
-                          size="sm"
-                          color="light-primary"
-                          id={`f_${f.id}`}
-                          onClick={() => {
-                            setPopoverTargetId(f.id)
-                            setSelectField(f.key)
-                            setSelectCondition(f.condition)
-                            setSelectValue(f.value)
-                          }}
-                        >
-                          <FilterChipContent item={f} />
-                          <XCircle
-                            className="cursor-pointer ms-1"
-                            size={14}
-                            onClick={() => onDelete(f.id)}
-                          />
-                        </Badge>
-                        <Popover
-                          placement="bottom"
-                          isOpen={popoverTargetId === f.id}
-                          target={`f_${f.id}`}
-                          toggle={() => setPopoverTargetId('')}
-                        >
-                          <PopoverBody>
-                            <div
-                              className="d-flex flex-column overflow-auto"
-                              ref={refFillterAll}
-                            >
-                              {f.type === 'date' ? (
-                                <DatePickerForm
-                                  onSave={onSaveDatePicker}
-                                  onCancel={() => setShowPickerForm(false)}
-                                  onClose={() => {
-                                    setPopoverTargetId(null)
-                                  }}
-                                  setting={f}
-                                />
-                              ) : (
-                                <FilterItemForm
-                                  type={f.type}
-                                  selectValue={selectValue}
-                                  selectCondition={selectCondition}
-                                  onClose={() => setPopoverTargetId(null)}
-                                  isEdit
-                                  onReset={onReset}
-                                  onSave={onSave}
-                                />
-                              )}
-                            </div>
-                          </PopoverBody>
-                        </Popover>
-                      </span>
-                    ))}
-                  <span className="position-relative ms-50">
-                    <Button
-                      color="flat-primary"
-                      // className="ms-1"
-                      onClick={() => {
-                        onReset()
-                        setShowFilters(true)
-                      }}
-                      style={
-                        showFilters
-                          ? invisible
-                          : {
-                              outline: 'none',
-                              border: 'none',
-                              backgroundColor: 'transparent',
-                              padding: 0,
-                            }
-                      }
-                    >
-                      {t('Add filter')}
-                    </Button>
-                  </span>
-                </div>
-              </div>
-              <Modal
-                isOpen={showFilters}
-                scrollable
-                className="modal-dialog-centered modal-lg"
-              >
-                <ModalHeader toggle={() => setShowFilters(false)}>
-                  {t('Settings')}
-                </ModalHeader>
-                <ModalBody>
-                  <div>
-                    <InputGroup className="mb-2">
-                      <InputGroupText>
-                        <Search size={14} />
-                      </InputGroupText>
-                      <Input
-                        placeholder={t('Search...')}
-                        onChange={e => setSearchValue(e.target.value)}
-                        value={searchValue}
-                      />
-                    </InputGroup>
-                  </div>
-                  <div
-                    className="position-sticky overflow-auto"
-                    style={{top: -13}}
-                  >
-                    {filterTemps.length > 0 && (
-                      <div className="d-flex mb-50">
-                        {filterTemps.map(f => (
-                          <Badge
-                            className="mx-25 cursor-pointer"
-                            key={f.id}
-                            color="light-primary"
-                            pill
-                          >
-                            <FilterChipContent item={f} />
+                                }
+                              }}
+                            />
+
                             <XCircle
-                              className="cursor-pointer ms-1"
+                              className="cursor-pointer ms-50"
                               size={14}
-                              onClick={() =>
-                                setFilterTemps(fts =>
-                                  fts.filter(ft => ft.id !== f.id),
-                                )
-                              }
+                              onClick={() => onDelete(f.id)}
                             />
                           </Badge>
-                        ))}
-                      </div>
-                    )}
+                          <Popover
+                            placement="bottom"
+                            isOpen={popoverTargetId === f.id}
+                            target={`f_${f.id}`}
+                            toggle={() => setPopoverTargetId('')}
+                          >
+                            <PopoverBody>
+                              <div
+                                className="d-flex flex-column overflow-auto"
+                                ref={refFillterAll}
+                              >
+                                {f.type === 'date' ? (
+                                  <DatePickerFieldForm
+                                    onSave={onSaveDatePicker}
+                                    onCancel={() => setShowPickerForm(false)}
+                                    onClose={() => {
+                                      setPopoverTargetId(null)
+                                    }}
+                                    setting={f}
+                                  />
+                                ) : (
+                                  <StringFieldForm
+                                    type={f.type}
+                                    selectValue={selectValue}
+                                    selectCondition={selectCondition}
+                                    onClose={() => setPopoverTargetId(null)}
+                                    isEdit
+                                    onReset={onReset}
+                                    onSave={onSave}
+                                  />
+                                )}
+                              </div>
+                            </PopoverBody>
+                          </Popover>
+                        </span>
+                      ))}
+                    <span className="position-relative ms-50">
+                      <Button
+                        color="flat-primary"
+                        className="ms-50 text-decoration-underline"
+                        onClick={() => {
+                          onReset()
+                          setShowFilters(true)
+                        }}
+                        style={
+                          showFilters
+                            ? invisible
+                            : {
+                                outline: 'none',
+                                border: 'none',
+                                backgroundColor: 'transparent',
+                                padding: 0,
+                              }
+                        }
+                      >
+                        <Filter size={14} />
+                        <span className="align-middle ms-25">
+                          {t('Add filter')}
+                        </span>
+                      </Button>
+                    </span>
                   </div>
-                  <div className="d-flex flex-column mb-0">
-                    {filterResult.length > 0 ? (
-                      <>
-                        {renderFilterField()}
-                        {renderFilterDateField()}
-                      </>
-                    ) : (
-                      <div className="mt-1">
-                        <td>
-                          {t('No result found for query')}: {searchValue}
-                        </td>
-                      </div>
-                    )}
-                  </div>
-                </ModalBody>
-                <ModalFooter>
-                  <div className="mt-1 d-flex justify-content-end">
-                    <Button
-                      color="secondary"
-                      className="me-50"
-                      outline
-                      onClick={() => {
-                        setFilterTemps([])
-                        setShowFilters(false)
-                      }}
+                </div>
+                <Modal
+                  isOpen={showFilters}
+                  scrollable
+                  className="modal-dialog-centered modal-lg"
+                >
+                  <ModalHeader toggle={() => setShowFilters(false)}>
+                    {t('Settings')}
+                  </ModalHeader>
+                  <ModalBody>
+                    <div>
+                      <InputGroup className="mb-2">
+                        <InputGroupText>
+                          <Search size={14} />
+                        </InputGroupText>
+                        <Input
+                          placeholder={t('Search...')}
+                          onChange={e => setSearchValue(e.target.value)}
+                          value={searchValue}
+                        />
+                      </InputGroup>
+                    </div>
+                    <div
+                      className="position-sticky overflow-auto"
+                      style={{top: -13}}
                     >
-                      {t('Cancel')}
-                    </Button>
-                    <Button
-                      color="primary"
-                      onClick={() => {
-                        setFilters([...filters, ...filterTemps])
-                        setShowFilters(false)
-                        setFilterTemps([])
-                      }}
-                    >
-                      {t('Apply')}
-                    </Button>
-                  </div>
-                </ModalFooter>
-              </Modal>
+                      {filterTemps.length > 0 && (
+                        <div className="d-flex mb-50">
+                          {filterTemps.map(f => (
+                            <Badge
+                              className="mx-25 cursor-pointer"
+                              key={f.id}
+                              color="light-primary"
+                              pill
+                            >
+                              <FilterChipContent item={f} />
+                              <XCircle
+                                className="cursor-pointer ms-1"
+                                size={14}
+                                onClick={() =>
+                                  setFilterTemps(fts =>
+                                    fts.filter(ft => ft.id !== f.id),
+                                  )
+                                }
+                              />
+                            </Badge>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                    <div className="d-flex flex-column mb-0">
+                      {filterResult.length > 0 ? (
+                        <>
+                          {renderOptionField()}
+                          {renderStringField()}
+                          {renderDatePickerField()}
+                        </>
+                      ) : (
+                        <div className="mt-1">
+                          <td>
+                            {t('No result found for query')}: {searchValue}
+                          </td>
+                        </div>
+                      )}
+                    </div>
+                  </ModalBody>
+                  <ModalFooter>
+                    <div className="mt-1 d-flex justify-content-end">
+                      <Button
+                        color="secondary"
+                        className="me-50"
+                        outline
+                        onClick={() => {
+                          setFilterTemps([])
+                          setShowFilters(false)
+                        }}
+                      >
+                        {t('Cancel')}
+                      </Button>
+                      <Button
+                        color="primary"
+                        onClick={() => {
+                          setFilters([...filters, ...filterTemps])
+                          setShowFilters(false)
+                          setFilterTemps([])
+                        }}
+                      >
+                        {t('Apply')}
+                      </Button>
+                    </div>
+                  </ModalFooter>
+                </Modal>
+                <Modal
+                  isOpen={showPickerForm}
+                  className="modal-dialog-centered modal-fullscreen"
+                  scrollable
+                >
+                  <ModalHeader toggle={() => setShowPickerForm(false)}>
+                    {t(
+                      columns.find(col => col.name === selectField)?.title ||
+                        'Date Picker',
+                    )}
+                  </ModalHeader>
+                  <ModalBody>
+                    <DatePickerFieldForm
+                      onSave={onSaveDatePicker}
+                      onCancel={() => setShowPickerForm(false)}
+                    />
+                  </ModalBody>
+                </Modal>
 
-              <Modal
-                isOpen={showPickerForm}
-                className="modal-dialog-centered modal-xl"
-                scrollable
-              >
-                <ModalBody>
-                  <DatePickerForm
-                    onSave={onSaveDatePicker}
-                    onCancel={() => setShowPickerForm(false)}
-                  />
-                </ModalBody>
-              </Modal>
-            </>
-          )}
-        </TemplateConnector>
-      </Template>
-    </Plugin>
+                <Modal
+                  isOpen={showOptionForm}
+                  className="modal-dialog-centered"
+                >
+                  <ModalHeader toggle={() => setShowOptionForm(false)}>
+                    {t('Select a client')}
+                  </ModalHeader>
+                  <ModalBody>
+                    <OptionFieldForm
+                      isEdit
+                      value={selectValue}
+                      options={getOptions(selectField)}
+                      onSave={onSaveOptions}
+                      onClose={() => setShowOptionForm(false)}
+                    />
+                  </ModalBody>
+                </Modal>
+              </>
+            )}
+          </TemplateConnector>
+        </Template>
+      </Plugin>
+    </>
   )
 }
 

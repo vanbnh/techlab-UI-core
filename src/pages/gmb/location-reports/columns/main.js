@@ -29,6 +29,7 @@ const COLUMN_MAIN = [
     align: 'left',
     width: 110,
     filterKey: 'location__gmb_account__client__client_name',
+    isOption: true,
     to: row => `${menuConfigs.client.path}/${row.client_id}`,
     value_compare: row => row.location?.gmb_account.client?.client_id,
     cell: row => (
