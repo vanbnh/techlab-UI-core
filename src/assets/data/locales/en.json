@@ -186,5 +186,7 @@
   "days starting today": "days starting today",
   "You must select at least one row to export": "You must select at least one row to export",
   "Export All": "Export All",
-  "Export selected rows": "Export selected rows"
+  "Export selected rows": "Export selected rows",
+  "Date Picker": "Date Picker",
+  "Select a client": "Select a client"
 }

@@ -40,8 +40,7 @@ export default function useLocalStorageGridTable(columns, configs) {
     setPermissions,
     setHiddenColumnNames,
   } = useGridTable()
-
-  const {fixedCols, settings} = configs
+  const {fixedCols, settings, initialFilters} = configs
 
   // *** CORE COLUMN *** //
   useEffect(() => {
@@ -152,9 +151,10 @@ export default function useLocalStorageGridTable(columns, configs) {
 
   // *** FILTERS ***
   useEffect(() => {
-    const init = getDataLocalStorage(LOCAL_FILTERS, pathname, [])
+    const init = getDataLocalStorage(LOCAL_FILTERS, pathname, initialFilters)
     setFilters(init)
   }, [pathname])
+
   useEffect(() => {
     saveDataLocalStorage(LOCAL_FILTERS, pathname, filters)
   }, [filters, pathname])

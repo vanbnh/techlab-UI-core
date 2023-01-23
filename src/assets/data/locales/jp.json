@@ -186,5 +186,7 @@
   "days starting today": "将来の日数",
   "You must select at least one row to export": "エクスポートする行を1つ以上選択してください",
   "Export All": "すべてエクスポート",
-  "Export selected rows": "選択した行をエクスポート"
+  "Export selected rows": "選択した行をエクスポート",
+  "Date Picker": "日付ピッカー",
+  "Select a client": "クライアントを選択"
 }

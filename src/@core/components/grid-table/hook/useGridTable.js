@@ -41,6 +41,7 @@ const useGridTable = () => {
     setPermissionsAction,
     setHiddenColumnNamesAction,
     setColumnCustomizerAction,
+    setConfigAction,
   } = dataTableActions
 
   // *** DISPATCH ***
@@ -60,6 +61,7 @@ const useGridTable = () => {
   const setPermissions = d => dispatch(setPermissionsAction(d))
   const setHiddenColumnNames = d => dispatch(setHiddenColumnNamesAction(d))
   const setColumnCustomizer = d => dispatch(setColumnCustomizerAction(d))
+  const setConfig = d => dispatch(setConfigAction(d))
 
   return {
     dataRows,
@@ -95,6 +97,7 @@ const useGridTable = () => {
     setPermissions,
     setHiddenColumnNames,
     setColumnCustomizer,
+    setConfig,
   }
 }
 export default useGridTable

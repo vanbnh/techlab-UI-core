@@ -1,4 +1,3 @@
-/* eslint-disable multiline-ternary */
 // ** React Imports
 import {useContext, useEffect, useState} from 'react'
 import {Link, useNavigate} from 'react-router-dom'
@@ -8,10 +7,8 @@ import {useSkin} from '@hooks/useSkin'
 import useJwt from '@src/auth/jwt/useJwt'
 
 // ** Third Party Components
-// import toast from 'react-hot-toast'
 import {useDispatch} from 'react-redux'
 import {useForm, Controller} from 'react-hook-form'
-// import {Coffee, X} from 'react-feather'
 
 // ** Actions
 import {handleLogin} from '@store/authentication'
@@ -20,7 +17,6 @@ import {handleLogin} from '@store/authentication'
 import {AbilityContext} from '@src/utility/context/Can'
 
 // ** Custom Components
-// import Avatar from '@components/avatar'
 import InputPasswordToggle from '@components/input-password-toggle'
 
 // ** Utils
@@ -33,12 +29,10 @@ import {
   Form,
   Input,
   Label,
-  Alert,
   Button,
   CardText,
   CardTitle,
   FormFeedback,
-  // UncontrolledTooltip,
   Spinner,
 } from 'reactstrap'
 
@@ -48,35 +42,8 @@ import illustrationsDark from '@src/assets/images/pages/login-v2-dark.svg'
 
 // ** Styles
 import '@styles/react/pages/page-authentication.scss'
-import {getAppTitle, getAvatarBlank, getBrandLogo} from '../../../utility/Utils'
+import {getAvatarBlank, getBrandLogo} from '../../../utility/Utils'
 import {useTranslation} from 'react-i18next'
-
-const brandName = getAppTitle()
-
-// const ToastContent = ({t, name, role}) => {
-//   return (
-//     <div className="d-flex">
-//       <div className="me-1">
-//         <Avatar size="sm" color="success" icon={<Coffee size={12} />} />
-//       </div>
-//       <div className="d-flex flex-column">
-//         <div className="d-flex justify-content-between">
-//           <h6>{name}</h6>
-//           <X
-//             size={12}
-//             className="cursor-pointer"
-//             onClick={() => toast.dismiss(t.id)}
-//           />
-//         </div>
-//         <span>
-//           You have successfully logged in as an {role} user to {brandName}. Now
-//           you can start to explore. Enjoy!
-//         </span>
-//       </div>
-//     </div>
-//   )
-// }
-
 const defaultValues = {
   username: '',
   password: '',
@@ -135,14 +102,6 @@ const LoginPage = () => {
           ability.update(userData.ability)
           setIsLoading(false)
           setUserLogin(userData)
-
-          // toast(t => (
-          //   <ToastContent
-          //     t={t}
-          //     role={data.role || 'admin'}
-          //     name={data.fullName || data.username || 'Admin'}
-          //   />
-          // ))
         })
         .catch(err => {
           console.log(err)
@@ -186,31 +145,6 @@ const LoginPage = () => {
             <CardText className="mb-2">
               {t('Please sign-in to your account and start the adventure')}
             </CardText>
-            <Alert color="primary">
-              {/* <div className="alert-body font-small-2">
-                <p>
-                  <small className="me-50">
-                    <span className="fw-bold">Admin:</span> vanbnh |
-                    Strangerthing1
-                  </small>
-                </p>
-                <p>
-                  <small className="me-50">
-                    <span className="fw-bold">Client:</span> opetech_1 |
-                    6BMEf8HnbrDA8v7
-                  </small>
-                </p>
-              </div> */}
-              {/* <HelpCircle
-                id="login-tip"
-                className="position-absolute"
-                size={18}
-                style={{top: '0px', right: '5px'}}
-              />
-              <UncontrolledTooltip target="login-tip" placement="left">
-                This is just for ACL demo purpose.
-              </UncontrolledTooltip> */}
-            </Alert>
             <Form
               className="auth-login-form mt-2"
               onSubmit={handleSubmit(onSubmit)}

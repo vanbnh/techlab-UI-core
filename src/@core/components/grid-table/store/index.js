@@ -74,6 +74,26 @@ function createReducer() {
     setColumnCustomizerAction(state, action) {
       state.columnCustomizer = action.payload
     },
+    setConfigAction(state, action) {
+      const {
+        permissions,
+        columnCustomizer,
+        columnResizingMode,
+        columns,
+        fixedColumns,
+        pageSizes,
+        hiddenColumnNames,
+        filterColumns,
+      } = action.payload
+      state.permissions = permissions
+      state.columnCustomizer = columnCustomizer
+      state.columnResizingMode = columnResizingMode
+      state.columnStates = columns
+      state.fixedColumns = fixedColumns
+      state.pageSizes = pageSizes
+      state.hiddenColumnNames = hiddenColumnNames
+      state.filterColumns = filterColumns
+    },
   }
 }
 
