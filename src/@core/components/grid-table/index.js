@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react'
+import React, {useCallback, useEffect, useState} from 'react'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -35,28 +35,10 @@ import '@devexpress/dx-react-grid-bootstrap4/dist/dx-react-grid-bootstrap4.css'
 import {GridExporter} from '@devexpress/dx-react-grid-export'
 import LinkNavigateProvider from './format/LinkNavigate'
 import NumberProvider from './format/Number'
-import {
-  getDataLocalStorage,
-  renderTotalItems,
-  saveDataLocalStorage,
-} from './func'
+import {renderTotalItems} from './func'
 import {toast} from 'react-hot-toast'
-import saveAs from 'file-saver'
-import {ArrowDownCircle, ArrowUpCircle, Settings} from 'react-feather'
-import {
-  DEFAULT_WIDTH_MULTIPLICATION,
-  LOCAL_COLUMN_TABLES,
-  LOCAL_FILTERS,
-  LOCAL_FILTER_SETTINGS,
-  LOCAL_FIXED_COLUMNS,
-  LOCAL_HIDDEN_COLUMNS,
-  LOCAL_PARAM_PAGE_SIZES,
-  LOCAL_PARAM_PER_PAGE,
-  LOCAL_PERMISSIONS,
-  LOCAL_REORDER_COLUMNS,
-  LOCAL_RESIZE_COLUMNS,
-} from './config'
-import {Link, useLocation} from 'react-router-dom'
+import {Settings} from 'react-feather'
+import {Link} from 'react-router-dom'
 import {formatDate} from '../../../utility/Utils'
 import LoadingGridTable from './components/loading/Loading'
 import ModalSettingGridTable from './components/modal/Setting'
@@ -65,6 +47,9 @@ import ReactPaginate from 'react-paginate'
 import {useTranslation} from 'react-i18next'
 import useGridTable from './hook/useGridTable'
 import {useFetchData, usePrefetchData} from './hook/useQuery'
+import useLocalStorageGridTable from './hook/useLocalStorage'
+import useExportGridTable from './hook/useExport'
+import usePermissionGridTable from './hook/usePermission'
 
 const GridTableComponent = ({
   providerComponents = [],
@@ -89,7 +74,6 @@ const GridTableComponent = ({
   const isGrouping = columns.filter(col => col.isGroup).length > 0
 
   // *** HOOKS ***
-  const {pathname} = useLocation()
   const {t} = useTranslation()
 
   // *** REDUCER ***
@@ -163,221 +147,37 @@ const GridTableComponent = ({
   }, [dataQuery])
 
   // *** ================================ START LOCAL STORAGE ==================================== ***
-  // *** CORE COLUMN *** //
-  useEffect(() => {
-    const init = getDataLocalStorage(
-      LOCAL_COLUMN_TABLES,
-      pathname,
-      columns.map(column => ({
-        ...column,
-        width:
-          column.width || column.title.length * DEFAULT_WIDTH_MULTIPLICATION,
-      })),
-    )
-
-    const mergeColumns = columns.map(col => {
-      const find = init.find(i => i.name === col.name)
-      const d = {...col, ...find}
-      d.width = d.width || d.title.length * DEFAULT_WIDTH_MULTIPLICATION
-      return d
-    })
-    setColumnStates(mergeColumns)
-  }, [columns, pathname])
-  useEffect(() => {
-    const dataSaveLocalStorage = columns.map(col => ({
-      title: col.title,
-      width: col.width,
-      name: col.name,
-    }))
-    saveDataLocalStorage(LOCAL_COLUMN_TABLES, pathname, dataSaveLocalStorage)
-  }, [columns, pathname])
-
-  // *** FIXED COLUMN *** //
-  useEffect(() => {
-    const init = getDataLocalStorage(LOCAL_FIXED_COLUMNS, pathname, fixedCols)
-    setFixedColumns(init)
-  }, [pathname])
-
-  useEffect(() => {
-    saveDataLocalStorage(LOCAL_FIXED_COLUMNS, pathname, fixedColumns)
-  }, [fixedColumns, pathname])
-
-  // *** COLUMN WIDTHS ***
-  useEffect(() => {
-    const init = getDataLocalStorage(
-      LOCAL_RESIZE_COLUMNS,
-      pathname,
-      columns.map(col => ({
-        columnName: col.name,
-        width: col.width || col.title.length * DEFAULT_WIDTH_MULTIPLICATION,
-      })),
-    )
-    setColumnWidths(init)
-  }, [columns, pathname])
-
-  useEffect(() => {
-    saveDataLocalStorage(LOCAL_RESIZE_COLUMNS, pathname, columnWidths)
-  }, [columnWidths, pathname])
-
-  // *** COLUMN REORDER ***
-  useEffect(() => {
-    const init = getDataLocalStorage(
-      LOCAL_REORDER_COLUMNS,
-      pathname,
-      columns.map(col => col.name),
-    )
-    setColumnOrders(init)
-  }, [columns, pathname])
-  useEffect(() => {
-    saveDataLocalStorage(LOCAL_REORDER_COLUMNS, pathname, columnOrders)
-  }, [columnOrders, pathname])
-
-  // *** PER PAGE ***
-  useEffect(() => {
-    const init = getDataLocalStorage(LOCAL_PARAM_PER_PAGE, pathname, 10)
-    if (init !== perPage) {
-      setPerPage(init)
-    }
-  }, [pathname])
-  useEffect(() => {
-    saveDataLocalStorage(LOCAL_PARAM_PER_PAGE, pathname, perPage)
-  }, [perPage, pathname])
-
-  // *** PAGE SIZES ***
-  useEffect(() => {
-    if (!pageSizes.includes(perPage)) {
-      const oldPageSizes = getDataLocalStorage(
-        LOCAL_PARAM_PAGE_SIZES,
-        pathname,
-        [],
-      )
-      const newPerPageIdx = oldPageSizes.findIndex(item => item === perPage)
-
-      if (newPerPageIdx !== -1) {
-        setPerPage(pageSizes[newPerPageIdx])
-      } else {
-        setPerPage(pageSizes[0])
-      }
-    }
-  }, [pageSizes])
-  useEffect(() => {
-    const init = getDataLocalStorage(
-      LOCAL_PARAM_PAGE_SIZES,
-      pathname,
-      pageSizes,
-    )
-    setPageSizes(init)
-  }, [pathname])
-  useEffect(() => {
-    saveDataLocalStorage(LOCAL_PARAM_PAGE_SIZES, pathname, pageSizes)
-  }, [pageSizes, pathname])
-
-  // *** FILTERS ***
-  useEffect(() => {
-    const init = getDataLocalStorage(LOCAL_FILTERS, pathname, [])
-    setFilters(init)
-  }, [pathname])
-  useEffect(() => {
-    saveDataLocalStorage(LOCAL_FILTERS, pathname, filters)
-  }, [filters, pathname])
-
-  // *** FILTER COLUMNS ***
-  useEffect(() => {
-    const init = getDataLocalStorage(
-      LOCAL_FILTER_SETTINGS,
-      pathname,
-      columns.map(col => col.name),
-    )
-    setFilterColumns(init)
-  }, [pathname, columns])
-  useEffect(() => {
-    saveDataLocalStorage(LOCAL_FILTER_SETTINGS, pathname, filterColumns)
-  }, [filterColumns, pathname])
-
-  // *** HIDDEN COLUMNS ***
-  useEffect(() => {
-    const init = getDataLocalStorage(LOCAL_HIDDEN_COLUMNS, pathname, [])
-    setHiddenColumnNames(init)
-  }, [pathname])
-  useEffect(() => {
-    saveDataLocalStorage(LOCAL_HIDDEN_COLUMNS, pathname, hiddenColumnNames)
-  }, [hiddenColumnNames, pathname])
-
-  // *** PERMISSION ***
-  useEffect(() => {
-    const init = getDataLocalStorage(LOCAL_PERMISSIONS, pathname, settings)
-    setPermissions(init)
-  }, [pathname, settings])
-  useEffect(() => {
-    saveDataLocalStorage(LOCAL_PERMISSIONS, pathname, permissions)
-  }, [permissions, pathname])
+  useLocalStorageGridTable(columns, {
+    fixedCols,
+    settings,
+  })
   // *** ================================ END LOCAL STORAGE ==================================== ***
 
+  // *** ================================ EXPORTING ==================================== ***
+  const {
+    exporterRef,
+    onSave,
+    startExport,
+    ExportButtonComponent,
+    exportMessages = {},
+  } = useExportGridTable({
+    isCustomExport: onExport,
+    onExport: () => {
+      if (rowSelects.length > 0) {
+        const dataExport = dataRows.filter((r, idx) => rowSelects.includes(idx))
+        onExport(dataExport)
+      } else {
+        toast.error(t('You must select at least one row to export'))
+      }
+    },
+    entries,
+  })
+
   // *** PERMISSION ***
-  const canSummary = permissions.includes('summary')
-  const canPagination = permissions.includes('pagination')
-  const canSelect = permissions.includes('selecting')
-  const canReOrdering = permissions.includes('reordering')
-  const canExport = permissions.includes('exporting')
-  const canUpload = permissions.includes('upload')
+  const {canSummary, canPagination, canSelect, canReOrdering, canExport} =
+    usePermissionGridTable(permissions)
 
   // *** COMPONENTS ***
-  const ExportButtonComponent = ({onToggle, buttonRef, ...restProps}) => (
-    <div className="d-flex">
-      <div className="ms-2">
-        <button
-          ref={buttonRef}
-          className="btn btn-warning btn-sm"
-          onClick={() => {
-            if (onExport) {
-              if (rowSelects.length > 0) {
-                const dataExport = dataRows.filter((r, idx) =>
-                  rowSelects.includes(idx),
-                )
-                onExport(dataExport)
-              } else {
-                toast.error('You must select at least one row to export')
-              }
-            } else {
-              onToggle()
-            }
-          }}
-          {...restProps}
-        >
-          <ArrowDownCircle size={16} />
-          <span className="align-middle ms-25">{t('Export')}</span>
-        </button>
-      </div>
-      {canUpload && (
-        <div className="ms-50">
-          <Button
-            color="info"
-            onClick={() => {
-              alert('upload')
-            }}
-            target="_blank"
-            size="sm"
-          >
-            <ArrowUpCircle size={16} />
-            <span className="align-middle ms-25">{t('Upload')}</span>
-          </Button>
-        </div>
-      )}
-    </div>
-  )
-
-  // *** CALLBACKS ***
-  const onExportExcel = useCallback(
-    workbook => {
-      workbook.xlsx.writeBuffer().then(buffer => {
-        saveAs(
-          new Blob([buffer], {type: 'application/octet-stream'}),
-          `${entries}.xlsx`,
-        )
-      })
-    },
-    [entries],
-  )
   const CustomPagination = () => (
     <ReactPaginate
       nextLabel=""
@@ -400,14 +200,8 @@ const GridTableComponent = ({
       containerClassName="pagination react-paginate separated-pagination pagination-sm justify-content-end pe-1 mt-1"
     />
   )
-  const exporterRef = useRef(null)
-  const startExport = useCallback(
-    options => {
-      exporterRef.current.exportGrid(options)
-    },
-    [exporterRef],
-  )
 
+  // *** CALLBACKS ***
   const onSaveConfig = useCallback(d => {
     const {
       permissions,
@@ -548,6 +342,7 @@ const GridTableComponent = ({
             <ExportPanel
               startExport={startExport}
               toggleButtonComponent={ExportButtonComponent}
+              messages={exportMessages}
             />
           )}
           {isGrouping && <GroupingPanel showGroupingControls />}
@@ -565,7 +360,7 @@ const GridTableComponent = ({
               columnExports.length > 0 ? columnExports : COLUMN_TRANSLATE
             }
             selection={rowSelects}
-            onSave={onExportExcel}
+            onSave={onSave}
           />
         )}
         {(isLoading || loading) && <LoadingGridTable />}
