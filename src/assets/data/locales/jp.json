@@ -183,5 +183,8 @@
   "This Month": "今月",
   "Last Month": "先月",
   "days up to today": "過去の日数",
-  "days starting today": "将来の日数"
+  "days starting today": "将来の日数",
+  "You must select at least one row to export": "エクスポートする行を1つ以上選択してください",
+  "Export All": "すべてエクスポート",
+  "Export selected rows": "選択した行をエクスポート"
 }

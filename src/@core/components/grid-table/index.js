@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react'
+import React, {useCallback, useEffect, useState} from 'react'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -35,34 +35,21 @@ import '@devexpress/dx-react-grid-bootstrap4/dist/dx-react-grid-bootstrap4.css'
 import {GridExporter} from '@devexpress/dx-react-grid-export'
 import LinkNavigateProvider from './format/LinkNavigate'
 import NumberProvider from './format/Number'
-import {
-  getDataLocalStorage,
-  renderTotalItems,
-  saveDataLocalStorage,
-} from './func'
+import {renderTotalItems} from './func'
 import {toast} from 'react-hot-toast'
-import saveAs from 'file-saver'
-import {ArrowDownCircle, ArrowUpCircle, Settings} from 'react-feather'
-import {
-  DEFAULT_WIDTH_MULTIPLICATION,
-  LOCAL_COLUMN_TABLES,
-  LOCAL_FILTERS,
-  LOCAL_FILTER_SETTINGS,
-  LOCAL_FIXED_COLUMNS,
-  LOCAL_PARAM_PAGE_SIZES,
-  LOCAL_PARAM_PER_PAGE,
-  LOCAL_REORDER_COLUMNS,
-  LOCAL_RESIZE_COLUMNS,
-} from './config'
-import {Link, useLocation} from 'react-router-dom'
-import {useQuery, useQueryClient} from 'react-query'
-import axios from 'axios'
+import {Settings} from 'react-feather'
+import {Link} from 'react-router-dom'
 import {formatDate} from '../../../utility/Utils'
 import LoadingGridTable from './components/loading/Loading'
 import ModalSettingGridTable from './components/modal/Setting'
 import ToolbarFilterProvider from './components/filters'
 import ReactPaginate from 'react-paginate'
 import {useTranslation} from 'react-i18next'
+import useGridTable from './hook/useGridTable'
+import {useFetchData, usePrefetchData} from './hook/useQuery'
+import useLocalStorageGridTable from './hook/useLocalStorage'
+import useExportGridTable from './hook/useExport'
+import usePermissionGridTable from './hook/usePermission'
 
 const GridTableComponent = ({
   providerComponents = [],
@@ -84,96 +71,63 @@ const GridTableComponent = ({
   },
   loading = false,
 }) => {
-  const groupCols = columns.filter(col => col.isGroup)
-  const isGrouping = groupCols.length > 0
+  const isGrouping = columns.filter(col => col.isGroup).length > 0
 
   // *** HOOKS ***
-  const {pathname} = useLocation()
   const {t} = useTranslation()
 
-  // *** STATE CORE ***
-  const [dataRows, setDataRows] = useState([])
-  const [columnStates, setColumnStates] = useState([])
-  const [totalPage, setTotalPage] = useState(1)
+  // *** REDUCER ***
+  const {
+    dataRows,
+    columnStates,
+    totalPage,
+    currentPage,
+    perPage,
+    pageSizes,
+    rowSelects,
+    columnOrders,
+    columnWidths,
+    filters,
+    filterColumns,
+    columnResizingMode,
+    fixedColumns,
+    permissions,
+    hiddenColumnNames,
+    columnCustomizer,
 
-  // *** CONTROLS ***
-  const [currentPage, setCurrentPage] = useState(0)
-  const [perPage, setPerPage] = useState(10)
-  const [pageSizes, setPageSizes] = useState([10, 20, 50, 100])
-
-  const [rowSelects, setRowSelects] = useState([])
-  const [columnOrders, setColumnOrders] = useState([])
-  const [columnWidths, setColumnWidths] = useState([])
-  const [filters, setFilters] = useState([])
-  const [filterColumns, setFilterColumns] = useState([])
-  const [columnResizingMode, setColumnResizingMode] = useState('widget')
-  const [fixedColumns, setFixedColumns] = useState(fixedCols)
-  const [permissionState, setPermissionState] = useState(settings)
-  const [hiddenColumnNames, setHiddenColumnNames] = useState([])
-  const [columnCustomizer, setColumnCustomizer] = useState([
-    'reordering',
-    'visibility',
-  ])
-  const exporterRef = useRef(null)
-  const startExport = useCallback(
-    options => {
-      exporterRef.current.exportGrid(options)
-    },
-    [exporterRef],
-  )
+    setDataRows,
+    setColumnStates,
+    setTotalPage,
+    setCurrentPage,
+    setPerPage,
+    setPageSizes,
+    setRowSelects,
+    setColumnOrders,
+    setColumnWidths,
+    setFilters,
+    setFilterColumns,
+    setColumnResizingMode,
+    setFixedColumns,
+    setPermissions,
+    setHiddenColumnNames,
+    setColumnCustomizer,
+  } = useGridTable()
 
   // *** REACT QUERY ***
-  const queryClient = useQueryClient()
-  const handleCallApi = async page => {
-    const params = {
-      ...query.params,
-      page: page + 1,
-      limit: perPage,
-    }
-    const data = filters.map(f => ({
-      key: f.key,
-      value: f.value,
-      expr: f.condition,
-    }))
-
-    return await axios.post(query.url, data, {params}).then(res => res.data)
-  }
-
-  const {data: dataQuery, isLoading} = useQuery(
-    [
-      query.key,
-      {
-        page: currentPage,
-        limit: perPage,
-        f: filters.map(f => ({[f.key]: f.value})),
-      },
-      query.params,
-    ],
-    () => handleCallApi(currentPage),
-  )
+  const {data: dataQuery, isLoading} = useFetchData({
+    query,
+    perPage,
+    page: currentPage,
+    filters,
+  })
   // *** Prefetch
-  useEffect(() => {
-    if (dataQuery && dataQuery.metadata && dataQuery.metadata.has_next) {
-      const maxPostPage = Number(
-        Math.ceil(dataQuery?.metadata?.total / perPage),
-      )
-      if (currentPage < maxPostPage) {
-        const nextPage = currentPage + 1
-        queryClient.prefetchQuery(
-          [
-            query.key,
-            {
-              page: nextPage,
-              limit: perPage,
-              f: filters.map(f => ({[f.key]: f.value})),
-            },
-            query.params,
-          ],
-          () => handleCallApi(nextPage),
-        )
-      }
-    }
-  }, [dataQuery])
+  usePrefetchData({
+    dataQuery,
+    query,
+    perPage,
+    page: currentPage,
+    filters,
+  })
 
   // *** SET DATA ROWS ***
   useEffect(() => {
@@ -193,206 +147,37 @@ const GridTableComponent = ({
   }, [dataQuery])
 
   // *** ================================ START LOCAL STORAGE ==================================== ***
-  // *** CORE COLUMN *** //
-  useEffect(() => {
-    const init = getDataLocalStorage(
-      LOCAL_COLUMN_TABLES,
-      pathname,
-      columns.map(column => ({
-        ...column,
-        width:
-          column.width || column.title.length * DEFAULT_WIDTH_MULTIPLICATION,
-      })),
-    )
-
-    const mergeColumns = columns.map(col => {
-      const find = init.find(i => i.name === col.name)
-      const d = {...col, ...find}
-      d.width = d.width || d.title.length * DEFAULT_WIDTH_MULTIPLICATION
-      return d
-    })
-    setColumnStates(mergeColumns)
-  }, [columns, pathname])
-  useEffect(() => {
-    const dataSaveLocalStorage = columns.map(col => ({
-      title: col.title,
-      width: col.width,
-      name: col.name,
-    }))
-    saveDataLocalStorage(LOCAL_COLUMN_TABLES, pathname, dataSaveLocalStorage)
-  }, [columns, pathname])
-
-  // *** FIXED COLUMN *** //
-  useEffect(() => {
-    const init = getDataLocalStorage(
-      LOCAL_FIXED_COLUMNS,
-      pathname,
-      fixedColumns,
-    )
-    setFixedColumns(init)
-  }, [pathname])
-  useEffect(() => {
-    saveDataLocalStorage(LOCAL_FIXED_COLUMNS, pathname, fixedColumns)
-  }, [fixedColumns, pathname])
-
-  // *** COLUMN WIDTHS ***
-  useEffect(() => {
-    const init = getDataLocalStorage(
-      LOCAL_RESIZE_COLUMNS,
-      pathname,
-      columns.map(col => ({
-        columnName: col.name,
-        width: col.width || col.title.length * DEFAULT_WIDTH_MULTIPLICATION,
-      })),
-    )
-    setColumnWidths(init)
-  }, [columns, pathname])
-
-  useEffect(() => {
-    saveDataLocalStorage(LOCAL_RESIZE_COLUMNS, pathname, columnWidths)
-  }, [columnWidths, pathname])
-
-  // *** COLUMN REORDER ***
-  useEffect(() => {
-    const init = getDataLocalStorage(
-      LOCAL_REORDER_COLUMNS,
-      pathname,
-      columns.map(col => col.name),
-    )
-    setColumnOrders(init)
-  }, [columns, pathname])
-  useEffect(() => {
-    saveDataLocalStorage(LOCAL_REORDER_COLUMNS, pathname, columnOrders)
-  }, [columnOrders, pathname])
-
-  // *** PER PAGE ***
-  useEffect(() => {
-    const init = getDataLocalStorage(LOCAL_PARAM_PER_PAGE, pathname, 10)
-    if (init !== perPage) {
-      setPerPage(init)
-    }
-  }, [pathname])
-  useEffect(() => {
-    saveDataLocalStorage(LOCAL_PARAM_PER_PAGE, pathname, perPage)
-  }, [perPage, pathname])
-
-  // *** PAGE SIZES ***
-  useEffect(() => {
-    if (!pageSizes.includes(perPage)) {
-      const oldPageSizes = getDataLocalStorage(
-        LOCAL_PARAM_PAGE_SIZES,
-        pathname,
-        [],
-      )
-      const newPerPageIdx = oldPageSizes.findIndex(item => item === perPage)
-
-      if (newPerPageIdx !== -1) {
-        setPerPage(pageSizes[newPerPageIdx])
-      } else {
-        setPerPage(pageSizes[0])
-      }
-    }
-  }, [pageSizes])
-  useEffect(() => {
-    const init = getDataLocalStorage(
-      LOCAL_PARAM_PAGE_SIZES,
-      pathname,
-      pageSizes,
-    )
-    setPageSizes(init)
-  }, [pathname])
-  useEffect(() => {
-    saveDataLocalStorage(LOCAL_PARAM_PAGE_SIZES, pathname, pageSizes)
-  }, [pageSizes, pathname])
-
-  // *** FILTERS ***
-  useEffect(() => {
-    const init = getDataLocalStorage(LOCAL_FILTERS, pathname, [])
-    setFilters(init)
-  }, [pathname])
-  useEffect(() => {
-    saveDataLocalStorage(LOCAL_FILTERS, pathname, filters)
-  }, [filters, pathname])
-
-  // *** FILTER COLUMNS ***
-  useEffect(() => {
-    const init = getDataLocalStorage(
-      LOCAL_FILTER_SETTINGS,
-      pathname,
-      columns.map(col => col.name),
-    )
-    setFilterColumns(init)
-  }, [pathname, columns])
-  useEffect(() => {
-    saveDataLocalStorage(LOCAL_FILTER_SETTINGS, pathname, filterColumns)
-  }, [filterColumns, pathname])
+  useLocalStorageGridTable(columns, {
+    fixedCols,
+    settings,
+  })
   // *** ================================ END LOCAL STORAGE ==================================== ***
 
+  // *** ================================ EXPORTING ==================================== ***
+  const {
+    exporterRef,
+    onSave,
+    startExport,
+    ExportButtonComponent,
+    exportMessages = {},
+  } = useExportGridTable({
+    isCustomExport: onExport,
+    onExport: () => {
+      if (rowSelects.length > 0) {
+        const dataExport = dataRows.filter((r, idx) => rowSelects.includes(idx))
+        onExport(dataExport)
+      } else {
+        toast.error(t('You must select at least one row to export'))
+      }
+    },
+    entries,
+  })
+
   // *** PERMISSION ***
-  const canSummary = permissionState.includes('summary')
-  const canPagination = permissionState.includes('pagination')
-  const canSelect = permissionState.includes('selecting')
-  const canReOrdering = permissionState.includes('reordering')
-  const canExport = permissionState.includes('exporting')
-  const canUpload = permissionState.includes('upload')
+  const {canSummary, canPagination, canSelect, canReOrdering, canExport} =
+    usePermissionGridTable(permissions)
 
   // *** COMPONENTS ***
-  const ExportButtonComponent = ({onToggle, buttonRef, ...restProps}) => (
-    <div className="d-flex">
-      <div className="ms-2">
-        <button
-          ref={buttonRef}
-          className="btn btn-warning btn-sm"
-          onClick={() => {
-            if (onExport) {
-              if (rowSelects.length > 0) {
-                const dataExport = dataRows.filter((r, idx) =>
-                  rowSelects.includes(idx),
-                )
-                onExport(dataExport)
-              } else {
-                toast.error('You must select at least one row to export')
-              }
-            } else {
-              onToggle()
-            }
-          }}
-          {...restProps}
-        >
-          <ArrowDownCircle size={16} />
-          <span className="align-middle ms-25">{t('Export')}</span>
-        </button>
-      </div>
-      {canUpload && (
-        <div className="ms-50">
-          <Button
-            color="info"
-            onClick={() => {
-              alert('upload')
-            }}
-            target="_blank"
-            size="sm"
-          >
-            <ArrowUpCircle size={16} />
-            <span className="align-middle ms-25">{t('Upload')}</span>
-          </Button>
-        </div>
-      )}
-    </div>
-  )
-
-  // *** CALLBACKS ***
-  const onExportExcel = useCallback(
-    workbook => {
-      workbook.xlsx.writeBuffer().then(buffer => {
-        saveAs(
-          new Blob([buffer], {type: 'application/octet-stream'}),
-          `${entries}.xlsx`,
-        )
-      })
-    },
-    [entries],
-  )
   const CustomPagination = () => (
     <ReactPaginate
       nextLabel=""
@@ -416,6 +201,7 @@ const GridTableComponent = ({
     />
   )
 
+  // *** CALLBACKS ***
   const onSaveConfig = useCallback(d => {
     const {
       permissions,
@@ -427,7 +213,7 @@ const GridTableComponent = ({
       hiddenColumnNames,
       filterColumns,
     } = d
-    setPermissionState(permissions)
+    setPermissions(permissions)
     setColumnCustomizer(columnCustomizer)
     setColumnResizingMode(columnResizingMode)
     setColumnStates(columns)
@@ -556,6 +342,7 @@ const GridTableComponent = ({
             <ExportPanel
               startExport={startExport}
               toggleButtonComponent={ExportButtonComponent}
+              messages={exportMessages}
             />
           )}
           {isGrouping && <GroupingPanel showGroupingControls />}
@@ -573,7 +360,7 @@ const GridTableComponent = ({
               columnExports.length > 0 ? columnExports : COLUMN_TRANSLATE
             }
             selection={rowSelects}
-            onSave={onExportExcel}
+            onSave={onSave}
           />
         )}
         {(isLoading || loading) && <LoadingGridTable />}
@@ -613,7 +400,7 @@ const GridTableComponent = ({
           hiddenColumnNames,
           filterColumns,
           columnOrders,
-          permissions: permissionState,
+          permissions,
           columnCustomizer,
           columnResizingMode,
           pageSizes,

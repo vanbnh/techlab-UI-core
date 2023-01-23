@@ -140,7 +140,7 @@ const PagingForm = ({pageSizeValues, setPageSizeValues}) => {
             <Button
               key={v}
               outline={pageIdx !== i}
-              className="me-1"
+              className="me-50"
               color="primary"
               onClick={() => onSetValue(i)}
               size="sm"
@@ -363,7 +363,7 @@ const ColumnForm = ({
                     <input
                       name={column.name}
                       type="text"
-                      value={column.title}
+                      value={t(column.title)}
                       onChange={e => onChangeTitle(e, column.name)}
                       disabled
                     />
@@ -530,13 +530,7 @@ const FormBody = ({setDataSave, config}) => {
   )
 }
 
-const ModalSettingGridTable = ({
-  isOpen,
-  close,
-  entries,
-  config,
-  saveConfig,
-}) => {
+const ModalSettingGridTable = ({isOpen, close, config, saveConfig}) => {
   const {t} = useTranslation()
   const [dataSave, setDataSave] = useState({})
 

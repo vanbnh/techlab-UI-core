@@ -9,7 +9,7 @@ export const saveDataLocalStorage = (key, pathname, data) => {
   localStorage.setItem(key, JSON.stringify(dataSave))
 }
 
-export const getDataLocalStorage = (key, pathname, initial = []) => {
+export const getDataLocalStorage = (key, pathname, initial) => {
   const cols = localStorage.getItem(key)
   if (cols) {
     const data = JSON.parse(cols)

@@ -183,5 +183,8 @@
   "This Month": "This Month",
   "Last Month": "Last Month",
   "days up to today": "days up to today",
-  "days starting today": "days starting today"
+  "days starting today": "days starting today",
+  "You must select at least one row to export": "You must select at least one row to export",
+  "Export All": "Export All",
+  "Export selected rows": "Export selected rows"
 }
