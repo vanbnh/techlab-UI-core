@@ -1,4 +1,4 @@
-name: Core UI CI
+name: Production UI core
 
 on:
     workflow_dispatch:
