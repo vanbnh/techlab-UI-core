@@ -11,7 +11,7 @@ jobs:
 
             - name: Deploy
               env:
-                  PRIVATE_KEY: ${{ secrets.AWS_SSH_PRIVATE_KEY_DEV }}
+                  PRIVATE_KEY: ${{ secrets.AWS_SSH_PRIVATE_KEY_PROD }}
                   USER_NAME: ubuntu
                   HOST_NAME: 35.79.166.148
               run: |
