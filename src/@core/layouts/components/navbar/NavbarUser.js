@@ -13,7 +13,7 @@ import {NavItem, NavLink} from 'reactstrap'
 
 const NavbarUser = props => {
   // ** Props
-  const {skin, setSkin} = props
+  const {skin, setSkin, setModalChangePassword} = props
 
   // ** Function to toggle Theme (Light/Dark)
   const ThemeToggler = () => {
@@ -35,7 +35,7 @@ const NavbarUser = props => {
       {/* <NavbarSearch /> */}
       {/* <CartDropdown /> */}
       {/* <NotificationDropdown /> */}
-      <UserDropdown />
+      <UserDropdown setModalChangePassword={setModalChangePassword} />
     </ul>
   )
 }

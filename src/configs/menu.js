@@ -27,5 +27,11 @@ const menuConfigs = {
       path: '/gmb/monitoring/task-logs',
     },
   },
+  exportReport: {
+    path: '/gmb/export-reports',
+  },
+  uploadReport: {
+    path: '/gmb/upload-reports',
+  },
 }
 export default menuConfigs

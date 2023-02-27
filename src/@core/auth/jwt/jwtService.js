@@ -44,19 +44,19 @@ export default class JwtService {
         // ** const { config, response: { status } } = error
         const {config, response} = error
         const originalRequest = config
-        // ** if (status === 401) {
+
         if (
           response &&
           response.status === 401 &&
           !response.request.responseURL.includes('/login/') &&
-          this.countRefresh < 2
+          this.countRefresh < 1 &&
+          response.data?.status !== 'denied'
         ) {
           if (!this.isAlreadyFetchingAccessToken) {
             this.isAlreadyFetchingAccessToken = true
             this.refreshToken().then(r => {
               this.countRefresh += 1
               this.isAlreadyFetchingAccessToken = false
-
               // ** Update accessToken in localStorage
               this.setToken(JSON.stringify(r.data.access))
               this.setRefreshToken(JSON.stringify(r.data.refresh))

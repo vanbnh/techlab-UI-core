@@ -28,9 +28,6 @@ export const useFetchData = ({
   const filterQuery = filters.filter(f => {
     return columns.find(c => f.key === (c.filterKey ? c.filterKey : c.name))
   })
-
-  console.log('filterQuery', filterQuery)
-
   return useQuery(
     [
       query.key,

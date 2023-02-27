@@ -188,5 +188,18 @@
   "Export All": "すべてエクスポート",
   "Export selected rows": "選択した行をエクスポート",
   "Date Picker": "日付ピッカー",
-  "Select a client": "クライアントを選択"
+  "Select a client": "クライアントを選択",
+  "Login failed": "ログインに失敗しました",
+  "Submit": "送信",
+  "Month": "月",
+  "Keyword limit": "キーワード制限",
+  "Are you sure?": "よろしいですか？",
+  "Yes, export it!": "はい、エクスポートします！",
+  "Downloads": "ダウンロード",
+  "Uploads": "アップロード",
+  "Location Upload": "ロケーションアップロード",
+  "Local Post Upload": "ローカルポストアップロード",
+  "Invalid file name, please use the format YYYY-MM-DD-HH_": "無効なファイル名です。フォーマットをYYYY-MM-DD-HH_にしてください",
+  "Change Password": "パスワードを変更",
+  "Select...": "選択..."
 }

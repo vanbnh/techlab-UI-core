@@ -26,6 +26,17 @@ const COLUMN_MAIN = [
     title: 'GMB ACCOUNT',
     name: 'gmb_account_name',
     isLink: true,
+
+    // *** OPTION ***
+    isOption: true,
+    fetchOption: '/gmb-account/',
+    optionField: 'account_name',
+    mapOptions: options =>
+      options.map(option => ({
+        value: option.account_name,
+        label: option.account_name,
+      })),
+
     filterKey: 'gmb_account__account_name',
     to: row => `${menuConfigs.account.path}/${row.gmb_account_id}`,
     value_compare: row => row.gmb_account?.account_name,
@@ -39,6 +50,17 @@ const COLUMN_MAIN = [
   {
     title: 'CLIENT NAME',
     name: 'client_name',
+
+    // *** OPTION ***
+    isOption: true,
+    fetchOption: '/client/',
+    optionField: 'client_name',
+    mapOptions: options =>
+      options.map(option => ({
+        value: option.client_name,
+        label: option.client_name,
+      })),
+
     isLink: true,
     filterKey: 'gmb_account__client__client_name',
     to: row => `${menuConfigs.client.path}/${row.client_id}`,

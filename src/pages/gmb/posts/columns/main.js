@@ -13,6 +13,17 @@ const COLUMN_MAIN = [
   {
     title: 'LOCATION NAME',
     name: 'location_name',
+
+    // *** OPTION ***
+    isOption: true,
+    fetchOption: '/location/',
+    optionField: 'location_name',
+    mapOptions: options =>
+      options.map(option => ({
+        value: option.location_name,
+        label: option.location_name,
+      })),
+
     align: 'left',
     isLink: true,
     filterKey: 'location__location_name',
@@ -28,6 +39,17 @@ const COLUMN_MAIN = [
   {
     title: 'CLIENT NAME',
     name: 'client_name',
+
+    // *** OPTION ***
+    isOption: true,
+    fetchOption: '/client/',
+    optionField: 'client_name',
+    mapOptions: options =>
+      options.map(option => ({
+        value: option.client_name,
+        label: option.client_name,
+      })),
+
     isLink: true,
     align: 'left',
     width: 110,

@@ -188,5 +188,18 @@
   "Export All": "Export All",
   "Export selected rows": "Export selected rows",
   "Date Picker": "Date Picker",
-  "Select a client": "Select a client"
+  "Select a client": "Select a client",
+  "Login failed": "Login failed",
+  "Submit": "Submit",
+  "Month": "Month",
+  "Keyword limit": "Keyword limit",
+  "Are you sure?": "Are you sure?",
+  "Yes, export it!": "Yes, export it!",
+  "Downloads": "Downloads",
+  "Uploads": "Uploads",
+  "Location Upload": "Location Upload",
+  "Local Post Upload": "Local Post Upload",
+  "Invalid file name, please use the format YYYY-MM-DD-HH_": "Invalid file name, please use the format YYYY-MM-DD-HH_",
+  "Change Password": "Change Password",
+  "Select...": "Select..."
 }
