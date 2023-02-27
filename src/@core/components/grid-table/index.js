@@ -71,6 +71,7 @@ const GridTableComponent = ({
   },
   initialFilters = [],
   loading = false,
+  isPage = true,
 }) => {
   const isGrouping = columns.filter(col => col.isGroup).length > 0
 
@@ -216,30 +217,32 @@ const GridTableComponent = ({
 
   return (
     <>
-      <div className="d-flex justify-content-between">
-        <div>
-          <Breadcrumb className="breadcrumb-dashes">
-            <BreadcrumbItem>
-              <Link to="/">{t('Home')}</Link>
-            </BreadcrumbItem>
+      {isPage && (
+        <div className="d-flex justify-content-between">
+          <div>
+            <Breadcrumb className="breadcrumb-dashes">
+              <BreadcrumbItem>
+                <Link to="/">{t('Home')}</Link>
+              </BreadcrumbItem>
 
-            <BreadcrumbItem active>
-              <span> {t(entries)} </span>
-            </BreadcrumbItem>
-          </Breadcrumb>
+              <BreadcrumbItem active>
+                <span> {t(entries)} </span>
+              </BreadcrumbItem>
+            </Breadcrumb>
+          </div>
+          <div className="d-flex align-items-center justify-content-end me-1 mb-1">
+            <Button.Ripple
+              className="btn-icon"
+              color="primary"
+              onClick={toggleModalSetting}
+            >
+              <Settings size={16} />
+            </Button.Ripple>
+          </div>
         </div>
-        <div className="d-flex align-items-center justify-content-end me-1 mb-1">
-          <Button.Ripple
-            className="btn-icon"
-            color="primary"
-            onClick={toggleModalSetting}
-          >
-            <Settings size={16} />
-          </Button.Ripple>
-        </div>
-      </div>
+      )}
 
-      <Card className="grid-table">
+      <Card className="grid-table shadow-0">
         <Grid rows={isLoading ? [] : dataRows} columns={COLUMN_TRANSLATE}>
           <DragDropProvider />
           <LinkNavigateProvider

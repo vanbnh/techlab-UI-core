@@ -2,7 +2,6 @@
 import {Fragment} from 'react'
 
 // ** Routes Imports
-import AuthenticationRoutes from './Authentication'
 import GMBRoutes from './GMB'
 
 // ** Layouts
@@ -31,7 +30,7 @@ const TemplateTitle = import.meta.env.VITE_APP_TITLE
 const DefaultRoute = '/dashboard'
 
 // ** Merge Routes
-const Routes = [...AuthenticationRoutes, ...GMBRoutes]
+const Routes = [...GMBRoutes]
 
 const getRouteMeta = route => {
   if (isObjEmpty(route.element.props)) {

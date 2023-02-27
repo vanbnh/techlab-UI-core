@@ -35,6 +35,7 @@ import {useTranslation} from 'react-i18next'
 import {useMedia} from 'react-use'
 import {getInputRanges, getStaticRanges} from './func'
 import {SelectField} from '../../../form-field'
+import axios from 'axios'
 
 const invisible = {
   opacity: 0,
@@ -307,39 +308,78 @@ const StringFieldForm = ({
 
 const OptionFieldForm = ({
   id,
-  options,
   value,
   isEdit,
   onReset,
   onClose,
   onSave,
+  fetchOption,
+  filterKey,
+  mapOptions,
 }) => {
+  // *** HOOKS ***
   const {t} = useTranslation()
+
+  // *** STATE ***
+  // const [options, setOptions] = useState([])
   const [clientSelects, setClientSelects] = useState([])
+
+  const fetchOptions = async v => {
+    let data = []
+    const options = await axios
+      .post(
+        fetchOption,
+        v
+          ? [
+              {
+                expr: 'contains',
+                key: filterKey,
+                value: v,
+              },
+            ]
+          : [],
+        {
+          params: {
+            page: 1,
+            limit: 8,
+          },
+        },
+      )
+      .then(res => res.data)
+    if (options.data.length > 0) {
+      data = (mapOptions && mapOptions(options.data)) || []
+    }
+
+    return data
+  }
+
+  // *** FUNCTIONS ***
   const handleSave = () => {
     onSave(clientSelects, isEdit)
     setClientSelects([])
   }
 
   useEffect(() => {
-    if (value && options.length > 0) {
-      const selected = options.filter(op => op.label === value)
-      setClientSelects(selected)
+    if (value) {
+      setClientSelects([{value, label: value}])
     }
-  }, [value, options])
+  }, [value])
 
   return (
     <>
       <div style={isEdit ? {minWidth: '300px'} : {}}>
         <SelectField
           name={id}
-          options={options}
           value={clientSelects}
           onChange={setClientSelects}
           isClearable
           isMulti={!isEdit}
-          placeholder={`${t('Clients')}...`}
           required
+          placeholder={t('Select...')}
+          type="async"
+          loadOptions={fetchOptions}
+          cacheOptions
+          defaultOptions
         />
       </div>
       <div className="mt-1 d-flex justify-content-end">
@@ -379,7 +419,6 @@ const ToolbarFilterProvider = ({
 }) => {
   // *** HOOKS ***
   const {t} = useTranslation()
-
   const pluginDependencies = [{name: 'Toolbar'}]
   const refFillterAll = useRef(null)
 
@@ -396,6 +435,9 @@ const ToolbarFilterProvider = ({
   const [showPickerForm, setShowPickerForm] = useState(false)
   const [showOptionForm, setShowOptionForm] = useState(false)
   const [filterResult, setFilterResults] = useState([])
+
+  // *** CONSTANTS ***
+  const columnSelect = columns.find(col => col.name === selectField)
 
   useEffect(() => {
     setFilterResults(
@@ -554,12 +596,12 @@ const ToolbarFilterProvider = ({
           setSelectField(id)
         }
       }}
-      className="accordion-border mt-1"
+      className="accordion-margin mt-3"
     >
       {filterResult
         .filter(f => !f.isDate && !f.isOption)
         .map(item => (
-          <AccordionItem key={item.name}>
+          <AccordionItem key={item.name} className="bg-light-primary">
             <AccordionHeader targetId={item.name}>
               {t(item.title)}
             </AccordionHeader>
@@ -589,7 +631,7 @@ const ToolbarFilterProvider = ({
           setShowPickerForm(true)
         }
       }}
-      className="accordion-border mt-1"
+      className="accordion-margin mt-3"
     >
       {filterResult
         .filter(f => f.isDate)
@@ -614,38 +656,29 @@ const ToolbarFilterProvider = ({
             setSelectField(id)
           }
         }}
-        className="accordion-border"
+        className="accordion-margin"
       >
         {filterResult
           .filter(f => f.isOption)
           .map(item => (
-            <AccordionItem key={item.name}>
+            <AccordionItem key={item.name} className="bg-light-primary">
               <AccordionHeader targetId={item.name}>
                 {t(item.title)}
               </AccordionHeader>
               <AccordionBody accordionId={item.name}>
                 <OptionFieldForm
                   id={item.name}
-                  options={item.options}
                   onReset={onReset}
                   onSave={onSaveOptions}
+                  fetchOption={item.fetchOption}
+                  filterKey={item.optionField}
+                  mapOptions={item.mapOptions}
                 />
               </AccordionBody>
             </AccordionItem>
           ))}
       </Accordion>
     )
-  }
-
-  const getOptions = k => {
-    let options = []
-    const col = columns.find(c => c.name === k)
-
-    if (col) {
-      options = col.options
-    }
-
-    return options
   }
 
   return (
@@ -907,14 +940,11 @@ const ToolbarFilterProvider = ({
                 </Modal>
                 <Modal
                   isOpen={showPickerForm}
-                  className="modal-dialog-centered modal-fullscreen"
+                  className="modal-dialog-centered modal-xl"
                   scrollable
                 >
                   <ModalHeader toggle={() => setShowPickerForm(false)}>
-                    {t(
-                      columns.find(col => col.name === selectField)?.title ||
-                        'Date Picker',
-                    )}
+                    {t(columnSelect?.title || 'Date Picker')}
                   </ModalHeader>
                   <ModalBody>
                     <DatePickerFieldForm
@@ -935,9 +965,11 @@ const ToolbarFilterProvider = ({
                     <OptionFieldForm
                       isEdit
                       value={selectValue}
-                      options={getOptions(selectField)}
                       onSave={onSaveOptions}
                       onClose={() => setShowOptionForm(false)}
+                      fetchOption={columnSelect?.fetchOption}
+                      filterKey={columnSelect?.optionField}
+                      mapOptions={columnSelect?.mapOptions}
                     />
                   </ModalBody>
                 </Modal>

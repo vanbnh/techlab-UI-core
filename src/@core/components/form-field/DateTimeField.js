@@ -14,11 +14,6 @@ const DateTimeField = ({
   className = '',
   invalid = false,
   feedback,
-  options = {
-    altInput: true,
-    altFormat: 'd/m/Y',
-    dateFormat: 'd/m/Y',
-  },
   ...rest
 }) => {
   return (
@@ -47,7 +42,6 @@ const DateTimeField = ({
           'is-invalid': invalid,
         })}
         id={name || id}
-        options={options}
         {...rest}
       />
       {feedback && <FormFeedback>{feedback}</FormFeedback>}

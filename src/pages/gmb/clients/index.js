@@ -3,7 +3,7 @@ import GridTableComponent from '../../../@core/components/grid-table'
 import columns from './columns/main'
 import {formatRowData, configs} from './configs'
 
-const ClientPage = () => {
+const ClientPage = ({...rest}) => {
   const {entries, settings, keys, urls, fixedColumns} = configs
   const QUERY = {
     url: urls.list,
@@ -18,6 +18,7 @@ const ClientPage = () => {
       entries={entries}
       settings={settings}
       fixedCols={fixedColumns}
+      {...rest}
     />
   )
 }

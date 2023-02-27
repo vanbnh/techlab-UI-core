@@ -4,6 +4,10 @@ import menuConfigs from '../../configs/menu'
 // *** DASHBOARD ***
 const DashboardPage = lazy(() => import('../../pages/dashboard'))
 
+// *** REPORTS ***
+const ExportReportPage = lazy(() => import('../../pages/gmb/export-reports'))
+const UploadReportPage = lazy(() => import('../../pages/gmb/upload-reports'))
+
 // *** ACCOUNT ***
 const AccountPage = lazy(() => import('../../pages/gmb/accounts'))
 const AccountDetailPage = lazy(() => import('../../pages/gmb/accounts/detail'))
@@ -23,15 +27,15 @@ const PostPage = lazy(() => import('../../pages/gmb/posts'))
 const PostDetailPage = lazy(() => import('../../pages/gmb/posts/detail'))
 
 // *** LOCATION REPORT ***
-const LocationReportPage = lazy(() =>
-  import('../../pages/gmb/location-reports'),
-)
-const LocationReportDetailPage = lazy(() =>
-  import('../../pages/gmb/location-reports/detail'),
-)
-const LocationReportStatisticlPage = lazy(() =>
-  import('../../pages/gmb/location-reports/statistic'),
-)
+// const LocationReportPage = lazy(() =>
+//   import('../../pages/gmb/location-reports'),
+// )
+// const LocationReportDetailPage = lazy(() =>
+//   import('../../pages/gmb/location-reports/detail'),
+// )
+// const LocationReportStatisticlPage = lazy(() =>
+//   import('../../pages/gmb/location-reports/statistic'),
+// )
 
 // *** POST REPORT ***
 const PostReportPage = lazy(() => import('../../pages/gmb/post-reports'))
@@ -52,6 +56,15 @@ const GMBRoutes = [
   {
     element: <DashboardPage />,
     path: '/dashboard',
+  },
+  // *** REPORTS ***
+  {
+    element: <ExportReportPage />,
+    path: menuConfigs.exportReport.path,
+  },
+  {
+    element: <UploadReportPage />,
+    path: menuConfigs.uploadReport.path,
   },
   // *** ACCOUNT ***
   {
@@ -94,18 +107,18 @@ const GMBRoutes = [
   },
 
   // *** LOCATION REPORT ***
-  {
-    element: <LocationReportPage />,
-    path: menuConfigs.report.location.path,
-  },
-  {
-    element: <LocationReportDetailPage />,
-    path: `${menuConfigs.report.location.path}/details`,
-  },
-  {
-    element: <LocationReportStatisticlPage />,
-    path: `${menuConfigs.report.location.path}/statistic`,
-  },
+  // {
+  //   element: <LocationReportPage />,
+  //   path: menuConfigs.report.location.path,
+  // },
+  // {
+  //   element: <LocationReportDetailPage />,
+  //   path: `${menuConfigs.report.location.path}/details`,
+  // },
+  // {
+  //   element: <LocationReportStatisticlPage />,
+  //   path: `${menuConfigs.report.location.path}/statistic`,
+  // },
 
   // *** POST REPORT ***
   {

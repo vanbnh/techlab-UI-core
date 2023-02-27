@@ -12,7 +12,7 @@ const App = () => {
   // ** Check token invalid or expired
   const refreshToken = localStorage.getItem('refreshToken')
   useEffect(() => {
-    if (refreshToken) {
+    if (refreshToken && refreshToken !== 'undefined') {
       const decodedToken = jwtDecode(refreshToken)
       if (decodedToken.exp * 1000 < new Date().getTime()) {
         dispatch(handleLogout())

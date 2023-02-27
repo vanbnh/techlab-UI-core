@@ -44,6 +44,7 @@ import illustrationsDark from '@src/assets/images/pages/login-v2-dark.svg'
 import '@styles/react/pages/page-authentication.scss'
 import {getAvatarBlank, getBrandLogo} from '../../../utility/Utils'
 import {useTranslation} from 'react-i18next'
+import {toast} from 'react-hot-toast'
 const defaultValues = {
   username: '',
   password: '',
@@ -104,12 +105,8 @@ const LoginPage = () => {
           setUserLogin(userData)
         })
         .catch(err => {
-          console.log(err)
           setIsLoading(false)
-          setError('username', {
-            type: 'manual',
-            message: err.response?.data?.error,
-          })
+          toast.error(t('Login failed'))
         })
     } else {
       for (const key in data) {
