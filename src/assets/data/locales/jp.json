@@ -201,5 +201,6 @@
   "Local Post Upload": "ローカルポストアップロード",
   "Invalid file name, please use the format YYYY-MM-DD-HH_": "無効なファイル名です。フォーマットをYYYY-MM-DD-HH_にしてください",
   "Change Password": "パスワードを変更",
-  "Select...": "選択..."
+  "Select...": "選択...",
+  "Yes, do": "はい、実行します"
 }

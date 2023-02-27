@@ -82,9 +82,11 @@ const CardReport = ({data}) => {
 
   const onSubmit = () => {
     handleConfirmAlert({
-      title: 'Are you sure?',
-      text: `You are about to export ${data?.name} ${clientSelected.length} clients: ${clientStrings}`,
-      confirmButtonText: 'Yes, export it!',
+      title: t('Are you sure?'),
+      text: `${data[`name_${language}`]} ${clientSelected.length} ${t(
+        'Clients',
+      )}: ${clientStrings}`,
+      confirmButtonText: t('Yes, do'),
       cb: async () => {
         const clientIds = clientSelected.map(client => client.client_id)
         const params = {}
