@@ -1,3 +1,4 @@
+import {FileText, MapPin} from 'react-feather'
 import {useTranslation} from 'react-i18next'
 import {Col, Row} from 'reactstrap'
 import TabComponent from '../../../@core/components/tabs'
@@ -11,6 +12,7 @@ const ExportReports = () => {
     {
       id: 1,
       name: t('Location Upload'),
+      icon: <MapPin size={18} />,
       component: (
         <div>
           <Row>
@@ -26,6 +28,7 @@ const ExportReports = () => {
     {
       id: 2,
       name: t('Local Post Upload'),
+      icon: <FileText size={18} />,
       component: (
         <div>
           <Row>
