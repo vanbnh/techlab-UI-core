@@ -23,7 +23,7 @@ export default [
     navLink: '/dashboard',
   },
   {
-    header: 'Reports',
+    header: 'Actions',
   },
   {
     id: 'gmb-download-report',

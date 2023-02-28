@@ -38,7 +38,7 @@ export const uploadPostData = [
       'Upload your post to the map immediately after you register it.',
     description_jp: '投稿バルクをアップするとすぐにGoogleマップに反映します。',
     icon: Rss,
-    color: 'info',
+    color: 'primary',
     modelType: 'post',
     uploadType: 'update',
   },
@@ -50,7 +50,7 @@ export const uploadPostData = [
     description_jp:
       'バルク名に基づいて投稿を指定した時間にGoogleマップに反映します。',
     icon: Clock,
-    color: 'info',
+    color: 'primary',
     modelType: 'post',
     uploadType: 'schedule',
   },

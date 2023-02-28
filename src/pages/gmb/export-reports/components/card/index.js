@@ -142,8 +142,6 @@ const CardReport = ({data}) => {
           }
         })
 
-        console.log(mgs)
-
         if (mgs.length > 0) {
           mgs.forEach(msg => {
             const status = msg.status && msg.status.toLowerCase()
@@ -158,7 +156,7 @@ const CardReport = ({data}) => {
 
         setTimeLeft(30)
         setIsWaiting(true)
-        setShow(false)
+        toggle()
         setLoading(false)
       },
     })
@@ -272,7 +270,7 @@ const CardReport = ({data}) => {
               color="relief-primary"
               onClick={onSubmit}
               disabled={rowSelects.length === 0}
-              text={t('Submit')}
+              text={t('Output')}
               loading={loading}
             />
           </div>
