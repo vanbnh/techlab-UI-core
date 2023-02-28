@@ -197,10 +197,15 @@
   "Yes, export it!": "はい、エクスポートします！",
   "Downloads": "ダウンロード",
   "Uploads": "アップロード",
-  "Location Upload": "ロケーションアップロード",
-  "Local Post Upload": "ローカルポストアップロード",
+  "Location Upload": "店舗更新",
+  "Local Post Upload": "投稿更新",
   "Invalid file name, please use the format YYYY-MM-DD-HH_": "無効なファイル名です。フォーマットをYYYY-MM-DD-HH_にしてください",
   "Change Password": "パスワードを変更",
   "Select...": "選択...",
-  "Yes, do": "はい、実行します"
+  "Yes, do": "はい、実行します",
+  "Actions": "オペレーション",
+  "Upload Successfull": "アップロード成功",
+  "Upload Failed": "アップロード失敗",
+  "Output": "出力",
+  "Choose File": "ファイルを選択"
 }

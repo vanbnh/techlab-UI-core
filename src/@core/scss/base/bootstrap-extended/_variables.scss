@@ -54,7 +54,7 @@ $grid-breakpoints: (
   md: 768px,
   lg: 992px,
   xl: 1200px,
-  xxl: 1440px // Custom xxl size,,
+  xxl: 1440px // Custom xxl size,,,
 ) !default;
 
 $container-max-widths: (
@@ -63,7 +63,7 @@ $container-max-widths: (
   md: 768px,
   lg: 992px,
   xl: 1200px,
-  xxl: 1440px // Custom xxl size,,
+  xxl: 1440px // Custom xxl size,,,
 ) !default;
 // scss-docs-end container-max-widths
 
@@ -145,8 +145,8 @@ $component-active-bg: $primary !default;
 // Font, line-height, and color for body text, headings, and more.
 
 // stylelint-disable value-keyword-case
-$font-family-sans-serif: 'Montserrat', Helvetica, Arial, serif !default;
-$font-family-monospace: 'Montserrat', Helvetica, Arial, serif !default;
+$font-family-sans-serif: 'Kosugi Maru', Helvetica, Arial, serif !default;
+$font-family-monospace: 'Kosugi Maru', Helvetica, Arial, serif !default;
 
 // stylelint-enable value-keyword-case
 $font-size-base: 1rem !default;

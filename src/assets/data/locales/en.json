@@ -202,5 +202,10 @@
   "Invalid file name, please use the format YYYY-MM-DD-HH_": "Invalid file name, please use the format YYYY-MM-DD-HH_",
   "Change Password": "Change Password",
   "Select...": "Select...",
-  "Yes, do": "Yes, do"
+  "Yes, do": "Yes, do",
+  "Actions": "Actions",
+  "Upload Successfull": "Upload Successfull",
+  "Upload Failed": "Upload Failed",
+  "Output": "Output",
+  "Choose File": "Choose File"
 }
