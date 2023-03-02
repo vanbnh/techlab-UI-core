@@ -44,9 +44,13 @@ export const authSlice = createSlice({
       localStorage.removeItem(config.storageRefreshTokenKeyName)
       // localStorage.clear()
     },
+    handleGetUserData: (state, action) => {
+      state.userData = action.payload
+      localStorage.setItem('userData', JSON.stringify(action.payload))
+    },
   },
 })
 
-export const {handleLogin, handleLogout} = authSlice.actions
+export const {handleLogin, handleLogout, handleGetUserData} = authSlice.actions
 
 export default authSlice.reducer

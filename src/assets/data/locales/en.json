@@ -207,5 +207,21 @@
   "Upload Successfull": "Upload Successfull",
   "Upload Failed": "Upload Failed",
   "Output": "Output",
-  "Choose File": "Choose File"
+  "Choose File": "Choose File",
+  "My profile": "My profile",
+  "Email is invalid": "Email is invalid",
+  "Fullname": "Fullname",
+  "Email": "Email",
+  "Phone Number": "Phone Number",
+  "Chatwork ID": "Chatwork ID",
+  "Employee ID": "Employee ID",
+  "S3 Access Key": "S3 Access Key",
+  "Old Password": "Old Password",
+  "New Password": "New Password",
+  "Password requirements": "Password requirements",
+  "Minimum 8 characters long - the more, the better": "Minimum 8 characters long - the more, the better",
+  "At least one lowercase character": "At least one lowercase character",
+  "At least one number, symbol, or whitespace character": "At least one number, symbol, or whitespace character",
+  "User has been updated": "User has been updated",
+  "Update user failed": "Update user failed"
 }
