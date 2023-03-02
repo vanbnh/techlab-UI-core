@@ -4,7 +4,7 @@ import {Save} from 'react-feather'
 
 const SpinnerButton = ({
   isWizard = false,
-  loading,
+  loading = false,
   text = 'Save',
   hasIcon = true,
   ...btnRest

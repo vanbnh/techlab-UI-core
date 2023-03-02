@@ -207,5 +207,20 @@
   "Upload Successfull": "アップロード成功",
   "Upload Failed": "アップロード失敗",
   "Output": "出力",
-  "Choose File": "ファイルを選択"
+  "Choose File": "ファイルを選択",
+  "My profile": "マイプロフィール",
+  "Email is invalid": "メールアドレスが無効です",
+  "Fullname": "フルネーム",
+  "Email": "メールアドレス",
+  "Phone Number": "電話番号",
+  "Chatwork ID": "Chatwork ID",
+  "Employee ID": "社員番号",
+  "S3 Access Key": "S3 Access Key",
+  "Old Password": "旧パスワード",
+  "New Password": "新しいパスワード",
+  "Password requirements": "パスワード要件",
+  "Minimum 8 characters long - the more, the better": "最低8文字以上 - より多く、より良い",
+  "At least one lowercase character": "少なくとも1つの小文字",
+  "At least one number, symbol, or whitespace character": "少なくとも1つの数字、記号、または空白文字",
+  "User has been updated": "ユーザーが更新されました"
 }

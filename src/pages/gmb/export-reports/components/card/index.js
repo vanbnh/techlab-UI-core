@@ -1,8 +1,6 @@
 import axios from 'axios'
 import moment from 'moment'
-import InputNumber from 'rc-input-number'
 import {useEffect, useState} from 'react'
-import {Minus, Plus, Save} from 'react-feather'
 import {toast} from 'react-hot-toast'
 import {useTranslation} from 'react-i18next'
 import {useDispatch, useSelector} from 'react-redux'
@@ -13,6 +11,7 @@ import {
   CardBody,
   CardText,
   CardTitle,
+  Input,
   Label,
   Progress,
 } from 'reactstrap'
@@ -51,10 +50,6 @@ const CardReport = ({data}) => {
 
   // *** STATE ***
   const [show, setShow] = useState(false)
-  const toggle = () => {
-    setShow(!show)
-    dispatch(setRowSelectsAction([]))
-  }
   const [isWaiting, setIsWaiting] = useState(false)
   const [timeLeft, setTimeLeft] = useState(30)
   const [loading, setLoading] = useState(false)
@@ -64,7 +59,7 @@ const CardReport = ({data}) => {
     start_date: moment().startOf('week').add('-8', 'week').format('YYYY-MM-DD'),
     end_date: moment().endOf('week').format('YYYY-MM-DD'),
   })
-  const [keywordLimit, setKeywordLimit] = useState(1)
+  const [keywordLimit, setKeywordLimit] = useState(100)
   const [monthPicker, setMonthPicker] = useState('')
 
   // *** CONSTANT ***
@@ -79,6 +74,43 @@ const CardReport = ({data}) => {
         {client.client_name}
       </Badge>
     ))
+
+  useEffect(() => {
+    if (isWaiting) {
+      const countdown = setInterval(() => {
+        setTimeLeft(timeLeft - 1)
+      }, 1000)
+
+      if (timeLeft === 0) {
+        clearInterval(countdown)
+        setIsWaiting(false)
+      }
+      return () => clearInterval(countdown)
+    }
+  }, [timeLeft, isWaiting])
+
+  const onReset = () => {
+    dispatch(setRowSelectsAction([]))
+    setDatePicker({
+      start_date: moment()
+        .startOf('week')
+        .add('-8', 'week')
+        .format('YYYY-MM-DD'),
+      end_date: moment().endOf('week').format('YYYY-MM-DD'),
+    })
+    setKeywordLimit(100)
+    setMonthPicker('')
+  }
+
+  const toggle = () => {
+    setShow(!show)
+    onReset()
+  }
+
+  const onChangeKeywordLimit = e => {
+    const value = e.target.value
+    setKeywordLimit(value)
+  }
 
   const onSubmit = () => {
     handleConfirmAlert({
@@ -162,25 +194,13 @@ const CardReport = ({data}) => {
     })
   }
 
-  useEffect(() => {
-    if (isWaiting) {
-      const countdown = setInterval(() => {
-        setTimeLeft(timeLeft - 1)
-      }, 1000)
-
-      if (timeLeft === 0) {
-        clearInterval(countdown)
-        setIsWaiting(false)
-      }
-      return () => clearInterval(countdown)
-    }
-  }, [timeLeft, isWaiting])
-
   return (
     <>
-      <Card style={{minHeight: '240px'}}>
+      <Card className="position-relative" style={{minHeight: '250px'}}>
         <CardBody className="text-center">
-          <data.icon className="font-large-2 mb-1" />
+          {data.icon && <data.icon className="font-large-2 mb-1" />}
+
+          <i className="fa-solid fa-star-sharp-half-stroke font-large-2 mb-1"></i>
           <CardTitle tag="h5">{data[`name_${language}`]}</CardTitle>
           <CardText>{data[`description_${language}`]}</CardText>
           {isWaiting ? (
@@ -192,11 +212,23 @@ const CardReport = ({data}) => {
             </>
           ) : (
             <Button color="relief-primary" onClick={() => setShow(true)}>
-              <Save size={14} />
-              <span className="align-middle ms-25"> {t('Submit')}</span>
+              {t('Output')}
             </Button>
           )}
         </CardBody>
+        {data.bubble && (
+          <div
+            className="position-absolute"
+            style={{
+              top: '10px',
+              right: '10px',
+            }}
+          >
+            <Badge color="danger" className="badge-glow">
+              {data.bubble}
+            </Badge>
+          </div>
+        )}
       </Card>
       <ModalComponent
         open={show}
@@ -216,13 +248,13 @@ const CardReport = ({data}) => {
                       {t('Keyword limit')}
                     </Label>
 
-                    <InputNumber
-                      min={1}
-                      value={keywordLimit}
-                      onChange={num => setKeywordLimit(num)}
-                      upHandler={<Plus />}
-                      downHandler={<Minus />}
+                    <Input
+                      type="number"
                       id="keyword_limit"
+                      value={keywordLimit}
+                      onChange={onChangeKeywordLimit}
+                      min={1}
+                      required
                     />
                   </div>
                 )}
@@ -258,11 +290,7 @@ const CardReport = ({data}) => {
         }
         Footer={
           <div className="d-flex gap-1">
-            <Button.Ripple
-              color="secondary"
-              outline
-              onClick={() => setShow(false)}
-            >
+            <Button.Ripple color="secondary" outline onClick={toggle}>
               {t('Cancel')}
             </Button.Ripple>
 

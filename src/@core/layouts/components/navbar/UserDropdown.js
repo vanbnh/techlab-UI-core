@@ -14,7 +14,7 @@ import {useDispatch} from 'react-redux'
 import {handleLogout} from '@store/authentication'
 
 // ** Third Party Components
-import {Lock, Power} from 'react-feather'
+import {Lock, Power, User} from 'react-feather'
 
 // ** Reactstrap Imports
 import {
@@ -27,7 +27,7 @@ import {
 // ** Default Avatar Image
 import defaultAvatar from '@src/assets/images/portrait/small/avatar-s-11.jpg'
 
-const UserDropdown = ({setModalChangePassword}) => {
+const UserDropdown = ({setModalChangePassword, setModalEditInfo}) => {
   // ** Hooks ***
   const dispatch = useDispatch()
   const {t} = useTranslation()
@@ -64,6 +64,10 @@ const UserDropdown = ({setModalChangePassword}) => {
         <Avatar img={userAvatar} imgHeight="40" imgWidth="40" status="online" />
       </DropdownToggle>
       <DropdownMenu end>
+        <DropdownItem className="w-100" onClick={() => setModalEditInfo(true)}>
+          <User size={14} className="me-75" />
+          <span className="align-middle">{t('My profile')}</span>
+        </DropdownItem>
         <DropdownItem
           className="w-100"
           onClick={() => setModalChangePassword(true)}
