@@ -1,5 +1,5 @@
 // ** React Imports
-import { useEffect, useState } from 'react'
+import {useEffect, useState} from 'react'
 
 // ** Third Party Components
 import axios from 'axios'
@@ -7,11 +7,11 @@ import classnames from 'classnames'
 import * as Icon from 'react-feather'
 
 // ** Reactstrap Imports
-import { NavItem, NavLink } from 'reactstrap'
+import {NavItem, NavLink} from 'reactstrap'
 
 // ** Store & Actions
-import { useDispatch } from 'react-redux'
-import { handleSearchQuery } from '@store/navbar'
+import {useDispatch} from 'react-redux'
+import {handleSearchQuery} from '@store/navbar'
 
 // ** Custom Components
 import Autocomplete from '@components/autocomplete'
@@ -26,7 +26,7 @@ const NavbarSearch = () => {
 
   // ** ComponentDidMount
   useEffect(() => {
-    axios.get('/api/main-search/data').then(({ data }) => {
+    axios.get('/api/main-search/data').then(({data}) => {
       setSuggestions(data.searchArr)
     })
   }, [])
@@ -76,66 +76,95 @@ const NavbarSearch = () => {
   }
 
   return (
-    <NavItem className='nav-search' onClick={() => setNavbarSearch(true)}>
-      <NavLink className='nav-link-search'>
-        <Icon.Search className='ficon' />
+    <NavItem className="nav-search" onClick={() => setNavbarSearch(true)}>
+      <NavLink className="nav-link-search">
+        <Icon.Search className="ficon" />
       </NavLink>
       <div
         className={classnames('search-input', {
-          open: navbarSearch === true
+          open: navbarSearch === true,
         })}
       >
-        <div className='search-input-icon'>
+        <div className="search-input-icon">
           <Icon.Search />
         </div>
         {navbarSearch ? (
           <Autocomplete
-            className='form-control'
+            className="form-control"
             suggestions={suggestions}
-            filterKey='title'
-            filterHeaderKey='groupTitle'
+            filterKey="title"
+            filterHeaderKey="groupTitle"
             grouped={true}
-            placeholder='Explore Vuexy...'
+            placeholder="Explore..."
             autoFocus={true}
             onSuggestionItemClick={handleSuggestionItemClick}
             externalClick={handleExternalClick}
-            clearInput={(userInput, setUserInput) => handleClearInput(setUserInput)}
+            clearInput={(userInput, setUserInput) =>
+              handleClearInput(setUserInput)
+            }
             onKeyDown={onKeyDown}
             onChange={e => dispatch(handleSearchQuery(e.target.value))}
-            customRender={(item, i, filteredData, activeSuggestion, onSuggestionItemClick, onSuggestionItemHover) => {
+            customRender={(
+              item,
+              i,
+              filteredData,
+              activeSuggestion,
+              onSuggestionItemClick,
+              onSuggestionItemHover,
+            ) => {
               const IconTag = Icon[item.icon ? item.icon : 'X']
               return (
                 <li
                   className={classnames('suggestion-item', {
-                    active: filteredData.indexOf(item) === activeSuggestion
+                    active: filteredData.indexOf(item) === activeSuggestion,
                   })}
                   key={i}
-                  onClick={e => handleListItemClick(onSuggestionItemClick, item.link, e)}
-                  onMouseEnter={() => onSuggestionItemHover(filteredData.indexOf(item))}
+                  onClick={e =>
+                    handleListItemClick(onSuggestionItemClick, item.link, e)
+                  }
+                  onMouseEnter={() =>
+                    onSuggestionItemHover(filteredData.indexOf(item))
+                  }
                 >
                   <div
                     className={classnames({
-                      'd-flex justify-content-between align-items-center': item.file || item.img
+                      'd-flex justify-content-between align-items-center':
+                        item.file || item.img,
                     })}
                   >
-                    <div className='item-container d-flex'>
+                    <div className="item-container d-flex">
                       {item.icon ? (
                         <IconTag size={17} />
                       ) : item.file ? (
-                        <img src={item.file} height='36' width='28' alt={item.title} />
+                        <img
+                          src={item.file}
+                          height="36"
+                          width="28"
+                          alt={item.title}
+                        />
                       ) : item.img ? (
-                        <img className='rounded-circle mt-25' src={item.img} height='28' width='28' alt={item.title} />
+                        <img
+                          className="rounded-circle mt-25"
+                          src={item.img}
+                          height="28"
+                          width="28"
+                          alt={item.title}
+                        />
                       ) : null}
-                      <div className='item-info ms-1'>
-                        <p className='align-middle mb-0'>{item.title}</p>
+                      <div className="item-info ms-1">
+                        <p className="align-middle mb-0">{item.title}</p>
                         {item.by || item.email ? (
-                          <small className='text-muted'>{item.by ? item.by : item.email ? item.email : null}</small>
+                          <small className="text-muted">
+                            {item.by ? item.by : item.email ? item.email : null}
+                          </small>
                         ) : null}
                       </div>
                     </div>
                     {item.size || item.date ? (
-                      <div className='meta-container'>
-                        <small className='text-muted'>{item.size ? item.size : item.date ? item.date : null}</small>
+                      <div className="meta-container">
+                        <small className="text-muted">
+                          {item.size ? item.size : item.date ? item.date : null}
+                        </small>
                       </div>
                     ) : null}
                   </div>
@@ -144,9 +173,9 @@ const NavbarSearch = () => {
             }}
           />
         ) : null}
-        <div className='search-input-close'>
+        <div className="search-input-close">
           <Icon.X
-            className='ficon'
+            className="ficon"
             onClick={e => {
               e.stopPropagation()
               setNavbarSearch(false)

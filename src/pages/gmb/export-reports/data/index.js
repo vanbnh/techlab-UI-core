@@ -1,4 +1,4 @@
-import {FileText, MapPin} from 'react-feather'
+import {FileText, MapPin, MessageSquare} from 'react-feather'
 import {
   ChartColumnIcon,
   MagnifyingGlassLocationIcon,
@@ -79,6 +79,6 @@ export const downloadReportData = [
     name_jp: '投稿掲載内容',
     description_en: 'Export local posts contents group by client',
     description_jp: '指定したクライアントの投稿掲載内容を出力します',
-    icon: MessageLinesIcon,
+    icon: MessageSquare,
   },
 ]

@@ -1,17 +1,4 @@
-// =========================================================================================
-//   File Name: avatar.scss
-//   Description: Avatar style.
-//   ----------------------------------------------------------------------------------------
-//   Item Name: Vuexy  - Vuejs, HTML & Laravel Admin Dashboard Template
-//   Author: PIXINVENT
-//   Author URL: http://www.themeforest.net/user/pixinvent
-// ==========================================================================================
-
-// Component: Avatar
-// ========================================================================
-
 // avatar
-
 .avatar {
   white-space: nowrap;
   background-color: $avatar-bg;
@@ -164,7 +151,8 @@
     transition: all 0.25s ease;
     img,
     .avatar-content {
-      box-shadow: 0 0 0 2px $avatar-group-border, inset 0 0 0 1px rgba($black, 0.07);
+      box-shadow: 0 0 0 2px $avatar-group-border,
+        inset 0 0 0 1px rgba($black, 0.07);
     }
     .avatar-content {
       background-color: tint-color($secondary, 20%) !important;

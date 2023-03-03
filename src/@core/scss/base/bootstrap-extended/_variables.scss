@@ -1,16 +1,4 @@
-//  ================================================================================================
-//  File Name: variables.scss
-//  Description: Custom overrides of Bootstrap variables
-//  ----------------------------------------------------------------------------------------------
-//  Item Name: Vuexy  - Vuejs, HTML & Laravel Admin Dashboard Template
-//  Author: PIXINVENT
-//  Author URL: http://www.themeforest.net/user/pixinvent
-//  ================================================================================================
-
-// (c) = are custom variables for vuexy template
-
 // Color system
-
 $white: #fff !default;
 $gray-50: #f6f6f6 !default;
 $gray-100: #babfc7 !default; // $gray-lightest
@@ -54,7 +42,7 @@ $grid-breakpoints: (
   md: 768px,
   lg: 992px,
   xl: 1200px,
-  xxl: 1440px // Custom xxl size,,,
+  xxl: 1440px // Custom xxl size,,,,
 ) !default;
 
 $container-max-widths: (
@@ -63,7 +51,7 @@ $container-max-widths: (
   md: 768px,
   lg: 992px,
   xl: 1200px,
-  xxl: 1440px // Custom xxl size,,,
+  xxl: 1440px // Custom xxl size,,,,
 ) !default;
 // scss-docs-end container-max-widths
 
