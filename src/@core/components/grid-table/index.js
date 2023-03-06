@@ -72,6 +72,7 @@ const GridTableComponent = ({
   initialFilters = [],
   loading = false,
   isPage = true,
+  hideExport = false,
 }) => {
   const isGrouping = columns.filter(col => col.isGroup).length > 0
 
@@ -318,7 +319,7 @@ const GridTableComponent = ({
             entries={entries}
           />
 
-          {canExport && (
+          {canExport && !hideExport && (
             <ExportPanel
               startExport={startExport}
               toggleButtonComponent={ExportButtonComponent}
@@ -332,7 +333,7 @@ const GridTableComponent = ({
             rightColumns={fixedColumns.right || []}
           />
         </Grid>
-        {canExport && (
+        {canExport && !hideExport && (
           <GridExporter
             ref={exporterRef}
             rows={dataRows}

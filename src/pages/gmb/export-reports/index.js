@@ -1,17 +1,26 @@
+import {useTranslation} from 'react-i18next'
 import {Col, Row} from 'reactstrap'
 import DownloadReportCard from './components/card'
-import {downloadReportData} from './data'
+import {downloadReportDataNew} from './data'
 
 const ExportReports = () => {
+  const {i18n} = useTranslation()
+  const language = i18n.language
+
   return (
     <>
-      <Row>
-        {downloadReportData.map(item => (
-          <Col key={item.url} md="4">
-            <DownloadReportCard data={item} />
-          </Col>
-        ))}
-      </Row>
+      {downloadReportDataNew.map(item => (
+        <div className="mb-2 text-center" key={item.jp}>
+          <h1>{item[language]}</h1>
+          <Row className="mt-2">
+            {item.children.map(child => (
+              <Col key={child.url} md="4">
+                <DownloadReportCard data={child} />
+              </Col>
+            ))}
+          </Row>
+        </div>
+      ))}
     </>
   )
 }

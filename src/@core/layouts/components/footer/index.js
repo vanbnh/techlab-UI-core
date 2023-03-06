@@ -1,6 +1,3 @@
-// ** Icons Import
-import {Heart} from 'react-feather'
-
 const Footer = () => {
   return (
     <p className="clearfix mb-0">
@@ -14,10 +11,6 @@ const Footer = () => {
           CA ADVANCE VN
         </a>
         <span className="d-none d-sm-inline-block">, All rights Reserved</span>
-      </span>
-      <span className="float-md-end d-none d-md-block">
-        {/* Hand-crafted & Made with */}
-        <Heart size={14} />
       </span>
     </p>
   )
