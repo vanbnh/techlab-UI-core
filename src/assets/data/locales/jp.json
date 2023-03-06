@@ -1,5 +1,5 @@
 {
-  "GMB Dashboard": "GMBダッシュボード",
+  "GMB Dashboard": "テンポアップ",
   "Dashboards": "ダッシュボード",
   "GMB": "GMB",
   "Accounts": "アカウント",
@@ -15,8 +15,8 @@
   "English": "英語",
   "Japan": "日本",
   "Logout": "ログアウト",
-  "Welcome to GMB Dashboard": "GMBダッシュボードへようこそ",
-  "Please sign-in to your account and start the adventure": "アカウントにサインインして冒険を始めましょう",
+  "Welcome!": "ようこそ!",
+  "Insert your email and password to login!": "ユーザー名とパスワードを記入してサインインしてください",
   "Username": "ユーザー名",
   "Password": "パスワード",
   "Remember Me": "ログイン情報を記憶する",
@@ -90,8 +90,8 @@
   "version": "バージョン",
   "Version ID": "バージョンID",
 
-  "UPDATED DATE": "更新日",
-  "CREATED DATE": "作成日",
+  "UPDATED DATE": "更新日（期間内を検索）",
+  "CREATED DATE": "作成日（期間内を検索）",
   "ID": "ID",
 
   "ACCOUNT NAME": "アカウント名",
@@ -222,5 +222,8 @@
   "Minimum 8 characters long - the more, the better": "最低8文字以上 - より多く、より良い",
   "At least one lowercase character": "少なくとも1つの小文字",
   "At least one number, symbol, or whitespace character": "少なくとも1つの数字、記号、または空白文字",
-  "User has been updated": "ユーザーが更新されました"
+  "User has been updated": "ユーザーが更新されました",
+  "Data fetching duration": "取得データの期間",
+  "Posted Information": "掲載情報",
+  "Data For Reporting": "レポート用データ"
 }

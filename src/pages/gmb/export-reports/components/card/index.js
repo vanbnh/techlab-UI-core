@@ -211,7 +211,11 @@ const CardReport = ({data}) => {
               </Progress>
             </>
           ) : (
-            <Button color="relief-primary" onClick={() => setShow(true)}>
+            <Button
+              color="relief-primary"
+              onClick={() => setShow(true)}
+              disabled={data.isDisabled}
+            >
               {t('Output')}
             </Button>
           )}
@@ -259,10 +263,15 @@ const CardReport = ({data}) => {
                   </div>
                 )}
                 {data?.dateRange && (
-                  <DatePickerComponent
-                    datePicker={datePicker}
-                    setDatePicker={setDatePicker}
-                  />
+                  <div className="d-flex flex-column ">
+                    <Label className="form-label">
+                      {t('Data fetching duration')}
+                    </Label>
+                    <DatePickerComponent
+                      datePicker={datePicker}
+                      setDatePicker={setDatePicker}
+                    />
+                  </div>
                 )}
                 {data?.month && (
                   <div>
@@ -285,7 +294,7 @@ const CardReport = ({data}) => {
             <div className="d-flex flex-wrap mb-1">
               {clientSelected.length > 0 && renderClientSelected()}
             </div>
-            <ClientPage isPage={false} />
+            <ClientPage isPage={false} hideExport />
           </>
         }
         Footer={

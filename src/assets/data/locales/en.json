@@ -15,8 +15,8 @@
   "English": "English",
   "Japan": "Japan",
   "Logout": "Logout",
-  "Welcome to GMB Dashboard": "Welcome to GMB Dashboard",
-  "Please sign-in to your account and start the adventure": "Please sign-in to your account and start the adventure",
+  "Welcome!": "Welcome!",
+  "Insert your email and password to login!": "Insert your email and password to login!",
   "Username": "Username",
   "Password": "Password",
   "Remember Me": "Remember Me",
@@ -223,5 +223,8 @@
   "At least one lowercase character": "At least one lowercase character",
   "At least one number, symbol, or whitespace character": "At least one number, symbol, or whitespace character",
   "User has been updated": "User has been updated",
-  "Update user failed": "Update user failed"
+  "Update user failed": "Update user failed",
+  "Data fetching duration": "Data fetching duration",
+  "Posted information": "Posted information",
+  "Data For Reporting": "Data For Reporting"
 }

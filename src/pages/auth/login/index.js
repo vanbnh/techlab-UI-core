@@ -137,10 +137,10 @@ const LoginPage = () => {
         >
           <Col className="px-xl-2 mx-auto" sm="8" md="6" lg="12">
             <CardTitle tag="h2" className="fw-bold mb-1">
-              {t('Welcome to GMB Dashboard')}! 👋
+              {t('Welcome!')}
             </CardTitle>
             <CardText className="mb-2">
-              {t('Please sign-in to your account and start the adventure')}
+              {t('Insert your email and password to login!')}
             </CardText>
             <Form
               className="auth-login-form mt-2"

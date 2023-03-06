@@ -1,5 +1,5 @@
 // ** React Imports
-import {useEffect, useState} from 'react'
+import {useState} from 'react'
 
 // ** Custom Components
 import NavbarUser from './NavbarUser'
@@ -32,6 +32,7 @@ const ThemeNavbar = props => {
       onSuccess: data => {
         dispatchUpdateUserData({...userData, ...data})
       },
+      enabled: !!userData,
     },
   )
 
