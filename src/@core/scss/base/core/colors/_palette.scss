@@ -199,15 +199,15 @@
           background-color: $color_value !important;
           color: $white !important;
 
-          &:focus,
-          &:active,
-          &.active {
-            color: $white;
-            background-color: color-function(
-              $color_name,
-              'darken-1'
-            ) !important;
-          }
+          // &:focus,
+          // &:active,
+          // &.active {
+          //   color: $white;
+          //   background-color: color-function(
+          //     $color_name,
+          //     'darken-1'
+          //   ) !important;
+          // }
 
           &:hover:not(.disabled):not(:disabled) {
             box-shadow: 0 8px 25px -8px rgba($color-value, 1);
