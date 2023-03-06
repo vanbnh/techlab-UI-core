@@ -122,9 +122,9 @@ const LoginPage = () => {
   return (
     <div className="auth-wrapper auth-cover">
       <Row className="auth-inner m-0">
-        <Link className="brand-logo" to="/" onClick={e => e.preventDefault()}>
+        {/* <Link className="brand-logo" to="/" onClick={e => e.preventDefault()}>
           <img className="img-fluid" width="300" src={getBrandLogo()} />
-        </Link>
+        </Link> */}
         <Col className="d-none d-lg-flex align-items-center p-5" lg="8" sm="12">
           <div className="w-100 d-lg-flex align-items-center justify-content-center px-5">
             <img className="img-fluid" src={source} alt="Login Cover" />
