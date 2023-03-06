@@ -101,7 +101,7 @@ const CardReport = ({data}) => {
             </InputGroup>
             {!file && (
               <Button.Ripple
-                color="relief-primary"
+                color="primary"
                 onClick={() => fileRef?.current?.click()}
               >
                 {t('Choose File')}

@@ -211,13 +211,13 @@ const CardReport = ({data}) => {
               </Progress>
             </>
           ) : (
-            <Button
-              color="relief-primary"
+            <Button.Ripple
+              color="primary"
               onClick={() => setShow(true)}
               disabled={data.isDisabled}
             >
               {t('Output')}
-            </Button>
+            </Button.Ripple>
           )}
         </CardBody>
         {data.bubble && (
