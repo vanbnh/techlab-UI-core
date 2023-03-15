@@ -30,7 +30,7 @@ const FileUploadField = ({
   isShow = true,
   ...rest
 }) => {
-  let listImages = files.length > 0 ? files.map(f => f.url) : []
+  const listImages = files.length > 0 ? files.map(f => f.url) : []
 
   // ** State
   const [isOpenLb, setIsOpenLb] = useState(false)
@@ -44,10 +44,10 @@ const FileUploadField = ({
       if (rejectedFiles.length) {
         toast.error('You can only upload image Files!.')
       } else {
-        let response = await uploadImage(acceptedFiles[0], true)
+        const response = await uploadImage(acceptedFiles[0], true)
 
         if (response.content) {
-          let name = response.content
+          const name = response.content
           if (multiple) {
             setFiles([
               ...files,
