@@ -129,7 +129,7 @@ const CardReport = ({data}) => {
         }
 
         if (data.keywordLimit) {
-          params.keyword_limit = keywordLimit
+          params.keywords_limit = keywordLimit
         }
 
         if (data.month) {
@@ -248,13 +248,13 @@ const CardReport = ({data}) => {
               <div className="d-flex gap-1">
                 {data?.keywordLimit && (
                   <div>
-                    <Label className="form-label" for="keyword_limit">
+                    <Label className="form-label" for="keywords_limit">
                       {t('Keyword limit')}
                     </Label>
 
                     <Input
                       type="number"
-                      id="keyword_limit"
+                      id="keywords_limit"
                       value={keywordLimit}
                       onChange={onChangeKeywordLimit}
                       min={1}
